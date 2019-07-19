@@ -8,14 +8,14 @@ import java.util.Map;
 import graphics.entity.Entity;
 import graphics.entity.Light;
 import graphics.gui.GUI;
-import graphics.model.TexturedModel;
+import graphics.model.Mesh;
 import graphics.transformation.ViewTransformation;
 
 public class GameScene {
 
 	protected ViewTransformation camera;
 	protected List<GUI> guis = new ArrayList<>();
-	protected Map<TexturedModel, List<Entity>> entities;
+	protected Map<Mesh, List<Entity>> entities;
 	protected List<Light> lights;
 
 	public GameScene() {
@@ -37,12 +37,12 @@ public class GameScene {
 		guis.add(gui);
 	}
 
-	public Map<TexturedModel, List<Entity>> getEntities() {
+	public Map<Mesh, List<Entity>> getEntities() {
 		return entities;
 	}
 
 	protected void addEntity(Entity entity) {
-		TexturedModel entityModel = entity.getModel();
+		Mesh entityModel = entity.getMesh();
 		List<Entity> batch = getEntities().get(entityModel);
 		if (batch != null) {
 			batch.add(entity);

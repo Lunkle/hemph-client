@@ -13,10 +13,6 @@ public class VAO {
 
 	private static List<Integer> vaos = new ArrayList<>();
 
-	public static final int POSITION_INDEX = 1;
-	public static final int TEXTURE_COORDINATES_INDEX = 1 << 1;
-	public static final int NORMALS_INDEX = 1 << 2;
-
 	protected int vaoID;
 	protected int vertexCount;
 

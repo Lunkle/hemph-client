@@ -1,12 +1,11 @@
 package graphics.gui;
 
 import game.Visual;
-import graphics.model.RawModel;
 import graphics.model.VAOBuilder;
 import graphics.transformation.ModelTransformation;
 import graphics.transformation.Transformation;
 
-public class GUI extends RawModel {
+public class GUI {
 
 	// The quad is static because it is going to be the same for every GUI
 	private static final float[] QUAD_VERTICES = { 0, 0, 0, -1, 1, 0, 1, -1 };
