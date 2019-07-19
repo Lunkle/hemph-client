@@ -1,4 +1,4 @@
-package graphics;
+package graphics.scene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,22 +7,41 @@ import java.util.Map;
 
 import graphics.entity.Entity;
 import graphics.entity.Light;
+import graphics.gui.GUI;
 import graphics.model.TexturedModel;
 import graphics.transformation.ViewTransformation;
 
 public class GameScene {
 
-	private ViewTransformation camera;
-	private Map<TexturedModel, List<Entity>> entities;
-	private List<Light> lights;
+	protected ViewTransformation camera;
+	protected List<GUI> guis = new ArrayList<>();
+	protected Map<TexturedModel, List<Entity>> entities;
+	protected List<Light> lights;
 
 	public GameScene() {
 		camera = new ViewTransformation(0, 0, 0, 0, 0, 0);
+		guis = new ArrayList<>();
 		entities = new HashMap<>();
 		lights = new ArrayList<>();
 	}
 
-	public void addEntity(Entity entity) {
+	public ViewTransformation getCamera() {
+		return camera;
+	}
+
+	public List<GUI> getGuis() {
+		return guis;
+	}
+
+	protected void addGUI(GUI gui) {
+		guis.add(gui);
+	}
+
+	public Map<TexturedModel, List<Entity>> getEntities() {
+		return entities;
+	}
+
+	protected void addEntity(Entity entity) {
 		TexturedModel entityModel = entity.getModel();
 		List<Entity> batch = getEntities().get(entityModel);
 		if (batch != null) {
@@ -34,20 +53,12 @@ public class GameScene {
 		}
 	}
 
-	public void addLight(Light light) {
-		lights.add(light);
-	}
-
-	public ViewTransformation getCamera() {
-		return camera;
-	}
-
 	public List<Light> getLights() {
 		return lights;
 	}
 
-	public Map<TexturedModel, List<Entity>> getEntities() {
-		return entities;
+	protected void addLight(Light light) {
+		lights.add(light);
 	}
 
 }

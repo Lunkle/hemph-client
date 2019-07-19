@@ -5,37 +5,43 @@ import math.Vector3f;
 
 public class ModelTransformation extends Transformation {
 
-	private Vector3f position = new Vector3f(0, 0, 0);
+	private float posX = 0;
+	private float posY = 0;
+	private float posZ = 0;
 	private float rotX = 0;
 	private float rotY = 0;
 	private float rotZ = 0;
-	private float scale = 1;
+	private float scaleX = 1;
+	private float scaleY = 1;
+	private float scaleZ = 1;
 
-	public ModelTransformation(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scale) {
-		this.position = new Vector3f(posX, posY, posZ);
+	public ModelTransformation(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+		this.posX = posX;
+		this.posY = posY;
+		this.posZ = posZ;
 		this.rotX = rotX;
 		this.rotY = rotY;
 		this.rotZ = rotZ;
-		this.scale = scale;
+		this.scaleX = scaleX;
+		this.scaleY = scaleY;
+		this.scaleZ = scaleZ;
 		calculateMatrix();
 	}
 
 	public Vector3f getPosition() {
-		return position;
-	}
-
-	public void setPosition(Vector3f position) {
-		this.position = position;
+		return new Vector3f(posX, posY, posY);
 	}
 
 	public void setPosition(float x, float y, float z) {
-		position.set(x, y, z);
+		posX = x;
+		posY = y;
+		posZ = z;
 	}
 
 	public void increasePosition(float dx, float dy, float dz) {
-		this.position.x += dx;
-		this.position.y += dy;
-		this.position.z += dz;
+		posX += dx;
+		posY += dy;
+		posZ += dz;
 	}
 
 	public float getRotX() {
@@ -68,23 +74,39 @@ public class ModelTransformation extends Transformation {
 		this.rotZ += dz;
 	}
 
-	public float getScale() {
-		return scale;
+	public float getScaleX() {
+		return scaleX;
 	}
 
-	public void setScale(float scale) {
-		this.scale = scale;
+	public void setScaleX(float scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	public float getScaleY() {
+		return scaleY;
+	}
+
+	public void setScaleY(float scaleY) {
+		this.scaleY = scaleY;
+	}
+
+	public float getScaleZ() {
+		return scaleZ;
+	}
+
+	public void setScaleZ(float scaleZ) {
+		this.scaleZ = scaleZ;
 	}
 
 	@Override
 	protected void calculateMatrix() {
 		matrix = new Matrix4f();
 		matrix.setIdentity();
-		Matrix4f.translate(position, matrix, matrix);
+		Matrix4f.translate(new Vector3f(posX, posY, posZ), matrix, matrix);
 		Matrix4f.rotate((float) Math.toRadians(rotX), new Vector3f(1, 0, 0), matrix, matrix);
 		Matrix4f.rotate((float) Math.toRadians(rotY), new Vector3f(0, 1, 0), matrix, matrix);
 		Matrix4f.rotate((float) Math.toRadians(rotZ), new Vector3f(0, 0, 1), matrix, matrix);
-		Matrix4f.scale(new Vector3f(scale, scale, scale), matrix, matrix);
+		Matrix4f.scale(new Vector3f(scaleX, scaleY, scaleZ), matrix, matrix);
 	}
 
 }

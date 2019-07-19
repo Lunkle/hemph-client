@@ -29,7 +29,9 @@
 	<classpathentry kind="var" path="M2_REPO/com/sun/xml/bind/jaxb-core/2.2.7/jaxb-core-2.2.7.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/sun/istack/istack-commons-runtime/2.16/istack-commons-runtime-2.16.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/sun/xml/fastinfoset/FastInfoset/1.2.12/FastInfoset-1.2.12.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-assimp/3.2.2/lwjgl-assimp-3.2.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl/3.2.2/lwjgl-3.2.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-assimp/3.2.2/lwjgl-assimp-3.2.2-natives-windows.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-glfw/3.2.2/lwjgl-glfw-3.2.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-opengl/3.2.2/lwjgl-opengl-3.2.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl/3.2.2/lwjgl-3.2.2-natives-windows.jar"/>

@@ -7,16 +7,17 @@ import math.Matrix4f;
 public class Entity {
 
 	private TexturedModel model;
-	private float textureXOffset, textureYOffset;
+	private float textureXOffset;
+	private float textureYOffset;
 	private ModelTransformation transformation;
 
-	public Entity(TexturedModel model, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scale) {
-		transformation = new ModelTransformation(posX, posY, posZ, rotX, rotY, rotZ, scale);
+	public Entity(TexturedModel model, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+		transformation = new ModelTransformation(posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ);
 	}
 
-	public Entity(TexturedModel model, int textureIndex, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scale) {
+	public Entity(TexturedModel model, int textureIndex, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
 		calculateTextureOffsets(textureIndex);
-		transformation = new ModelTransformation(posX, posY, posZ, rotX, rotY, rotZ, scale);
+		transformation = new ModelTransformation(posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ);
 	}
 
 	public void increasePosition(float dx, float dy, float dz) {

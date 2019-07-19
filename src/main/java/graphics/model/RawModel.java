@@ -2,13 +2,8 @@ package graphics.model;
 
 public class RawModel {
 
-	private int vaoID;
-	private int vertexCount;
-
-	public RawModel(int vaoID, int vertexCount) {
-		this.vaoID = vaoID;
-		this.vertexCount = vertexCount;
-	}
+	protected int vaoID;
+	protected int vertexCount;
 
 	public int getVaoID() {
 		return vaoID;

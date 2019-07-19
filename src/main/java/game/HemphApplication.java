@@ -13,7 +13,7 @@ public class HemphApplication {
 	private Visual visuals;
 
 	public void run() {
-		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
+		System.out.println("LWJGL Version: " + Version.getVersion());
 		init();
 		loop();
 		cleanUp();
