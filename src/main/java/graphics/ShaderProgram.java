@@ -27,7 +27,6 @@ public abstract class ShaderProgram {
 		fragmentShaderID = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
 		GL20.glAttachShader(programID, vertexShaderID);
 		GL20.glAttachShader(programID, fragmentShaderID);
-		bindAttributes();
 		GL20.glLinkProgram(programID);
 		GL20.glDetachShader(programID, vertexShaderID);
 		GL20.glDetachShader(programID, fragmentShaderID);
@@ -54,12 +53,6 @@ public abstract class ShaderProgram {
 
 	protected int getUniformLocation(String uniformName) {
 		return GL20.glGetUniformLocation(programID, uniformName);
-	}
-
-	protected abstract void bindAttributes();
-
-	protected void bindAttribute(int attribute, String variableName) {
-		GL20.glBindAttribLocation(programID, attribute, variableName);
 	}
 
 	protected void loadInt(int location, int value) {

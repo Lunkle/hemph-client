@@ -19,6 +19,15 @@ public class EBO {
 		ebos.add(eboID);
 	}
 
+	public void loadData(List<Integer> data) {
+		int numberOfElements = data.size();
+		int[] arrayData = new int[numberOfElements];
+		for (int i = 0; i < numberOfElements; i++) {
+			arrayData[i] = data.get(i);
+		}
+		loadData(arrayData);
+	}
+
 	protected void loadData(int[] data) {
 		IntBuffer buffer = convertToIntBuffer(data);
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);

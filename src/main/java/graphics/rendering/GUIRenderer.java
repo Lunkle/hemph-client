@@ -22,18 +22,19 @@ public class GUIRenderer {
 	}
 
 	public void render(List<GUI> guis) {
+		shader.start();
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL30.glBindVertexArray(GUI.getGuiVaoID());
 		GL20.glEnableVertexAttribArray(0);
-		shader.start();
 		for (GUI gui : guis) {
 			Transformation t = gui.getModelTransformation();
 			Matrix4f matrix = t.getMatrix();
 			shader.loadModelMatrix(matrix);
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, QUAD_VERTEX_COUNT);
 		}
-		shader.stop();
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
+		shader.stop();
 	}
 
 	public void cleanUp() {

@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import graphics.model.EBO;
+import graphics.model.Texture;
 import graphics.model.VAO;
 import graphics.model.VBO;
 import graphics.rendering.Renderer;
@@ -38,22 +39,6 @@ public class Visual {
 		renderer = new Renderer();
 	}
 
-	public void refresh() {
-		GL11.glViewport(0, 0, windowWidth, windowHeight);
-		renderer.render(page, scene);
-		GLFW.glfwSwapBuffers(windowID);
-	}
-
-	public void cleanUp() {
-		VAO.cleanUp();
-		EBO.cleanUp();
-		VBO.cleanUp();
-		Callbacks.glfwFreeCallbacks(windowID); // Release window callbacks
-		GLFW.glfwDestroyWindow(windowID); // Release window
-		GLFW.glfwTerminate(); // Terminate GLFW
-		GLFW.glfwSetErrorCallback(null).free(); // Release the GLFWerrorfun
-	}
-
 	private void createDisplay() {
 		GLFWErrorCallback.createPrint(System.err).set();
 		if (!GLFW.glfwInit())
@@ -74,6 +59,23 @@ public class Visual {
 		GL.createCapabilities();
 		GLFW.glfwSwapInterval(1); // Enable v-sync
 		GLFW.glfwShowWindow(windowID); // Make the window visible
+	}
+
+	public void refresh() {
+		GL11.glViewport(0, 0, windowWidth, windowHeight);
+		renderer.render(page, scene);
+		GLFW.glfwSwapBuffers(windowID);
+	}
+
+	public void cleanUp() {
+		VAO.cleanUp();
+		EBO.cleanUp();
+		VBO.cleanUp();
+		Texture.cleanup();
+		Callbacks.glfwFreeCallbacks(windowID); // Release window callbacks
+		GLFW.glfwDestroyWindow(windowID); // Release window
+		GLFW.glfwTerminate(); // Terminate GLFW
+		GLFW.glfwSetErrorCallback(null).free(); // Release the GLFWerrorfun
 	}
 
 	public boolean shouldCloseWindow() {

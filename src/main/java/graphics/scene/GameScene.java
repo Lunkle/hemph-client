@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import graphics.entity.Entity;
-import graphics.entity.Light;
 import graphics.gui.GUI;
 import graphics.model.Mesh;
 import graphics.transformation.ViewTransformation;
@@ -15,14 +14,12 @@ public class GameScene {
 
 	protected ViewTransformation camera;
 	protected List<GUI> guis = new ArrayList<>();
-	protected Map<Mesh, List<Entity>> entities;
-	protected List<Light> lights;
+	protected Map<Mesh, List<Entity>> meshEntityMap = new HashMap<>();
 
 	public GameScene() {
 		camera = new ViewTransformation(0, 0, 0, 0, 0, 0);
 		guis = new ArrayList<>();
-		entities = new HashMap<>();
-		lights = new ArrayList<>();
+		meshEntityMap = new HashMap<>();
 	}
 
 	public ViewTransformation getCamera() {
@@ -37,28 +34,21 @@ public class GameScene {
 		guis.add(gui);
 	}
 
-	public Map<Mesh, List<Entity>> getEntities() {
-		return entities;
+	public Map<Mesh, List<Entity>> getMeshes() {
+		return meshEntityMap;
 	}
 
 	protected void addEntity(Entity entity) {
-		Mesh entityModel = entity.getMesh();
-		List<Entity> batch = getEntities().get(entityModel);
-		if (batch != null) {
-			batch.add(entity);
-		} else {
-			List<Entity> newBatch = new ArrayList<Entity>();
-			newBatch.add(entity);
-			getEntities().put(entityModel, newBatch);
+		List<Mesh> meshes = entity.getModel().getMeshes();
+		for (Mesh mesh : meshes) {
+			if (meshEntityMap.containsKey(mesh)) {
+				meshEntityMap.get(mesh).add(entity);
+			} else {
+				List<Entity> entityList = new ArrayList<>();
+				entityList.add(entity);
+				meshEntityMap.put(mesh, entityList);
+			}
 		}
-	}
-
-	public List<Light> getLights() {
-		return lights;
-	}
-
-	protected void addLight(Light light) {
-		lights.add(light);
 	}
 
 }

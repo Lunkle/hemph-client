@@ -15,11 +15,6 @@ public class GUIShader extends ShaderProgram {
 	}
 
 	@Override
-	protected void bindAttributes() {
-		super.bindAttribute(0, "vertexPosition");
-	}
-
-	@Override
 	protected void getAllUniformLocations() {
 		location_modelMatrix = super.getUniformLocation("modelMatrix");
 	}
@@ -27,5 +22,4 @@ public class GUIShader extends ShaderProgram {
 	public void loadModelMatrix(Matrix4f matrix) {
 		super.loadMatrix(location_modelMatrix, matrix);
 	}
-
 }

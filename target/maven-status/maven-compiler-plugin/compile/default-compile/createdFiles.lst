@@ -25,13 +25,14 @@ math\Vector4f.class
 graphics\transformation\ViewTransformation.class
 math\Vector2f.class
 graphics\scene\GameScene.class
+graphics\model\Model.class
 game\HemphApplication.class
-graphics\model\TexturedModel.class
 graphics\transformation\ProjectionTransformation.class
 input\command\Command.class
 game\Logic.class
 input\command\CloseWindowCommand.class
 logics\page\GamePage.class
+graphics\model\Texture.class
 input\key\KeyHandler.class
 math\Vector.class
 math\ReadableVector.class
@@ -43,7 +44,6 @@ graphics\model\VAO.class
 logics\GameState.class
 game\Visual.class
 graphics\entity\EntityShader.class
-graphics\model\RawModel.class
 math\ReadableVector3f.class
 graphics\textures\ModelTexture.class
 graphics\model\EBO.class

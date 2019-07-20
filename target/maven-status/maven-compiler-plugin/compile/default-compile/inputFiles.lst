@@ -15,6 +15,7 @@ C:\Workspace\HemphClient\src\main\java\graphics\ShaderProgram.java
 C:\Workspace\HemphClient\src\main\java\graphics\scene\GameScene.java
 C:\Workspace\HemphClient\src\main\java\math\Matrix4f.java
 C:\Workspace\HemphClient\src\main\java\math\WritableVector3f.java
+C:\Workspace\HemphClient\src\main\java\graphics\model\Model.java
 C:\Workspace\HemphClient\src\main\java\graphics\transformation\Transformation.java
 C:\Workspace\HemphClient\src\main\java\math\WritableVector2f.java
 C:\Workspace\HemphClient\src\main\java\graphics\model\VAO.java
@@ -22,7 +23,6 @@ C:\Workspace\HemphClient\src\main\java\math\Vector2f.java
 C:\Workspace\HemphClient\src\main\java\graphics\entity\Light.java
 C:\Workspace\HemphClient\src\main\java\graphics\gui\GUI.java
 C:\Workspace\HemphClient\src\main\java\math\ReadableVector2f.java
-C:\Workspace\HemphClient\src\main\java\graphics\model\RawModel.java
 C:\Workspace\HemphClient\src\main\java\input\command\CloseWindowCommand.java
 C:\Workspace\HemphClient\src\main\java\game\HemphApplication.java
 C:\Workspace\HemphClient\src\main\java\game\Logic.java
@@ -54,4 +54,3 @@ C:\Workspace\HemphClient\src\main\java\math\ReadableVector4f.java
 C:\Workspace\HemphClient\src\main\java\graphics\model\Mesh.java
 C:\Workspace\HemphClient\src\main\java\logics\page\GamePage.java
 C:\Workspace\HemphClient\src\main\java\math\WritableVector4f.java
-C:\Workspace\HemphClient\src\main\java\graphics\model\TexturedModel.java

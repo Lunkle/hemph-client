@@ -3,6 +3,7 @@ package graphics.rendering;
 import org.lwjgl.opengl.GL11;
 
 import graphics.scene.GameScene;
+import graphics.transformation.ProjectionTransformation;
 import logics.page.GamePage;
 
 public class Renderer {
@@ -11,18 +12,17 @@ public class Renderer {
 	private static final float GREEN = 138 / 255.0f;
 	private static final float BLUE = 149 / 255.0f;
 
-//	private ProjectionTransformation projectionTransformation;
+	private ProjectionTransformation projectionTransformation;
 
-//	private EntityShader entityShader = new EntityShader();
-
-//	private EntityRenderer renderer;
+	private EntityRenderer renderer;
 	private GUIRenderer guiRenderer;
 //	private SkyboxRenderer skyboxRenderer;
 
 	public Renderer() {
 		enableCulling();
-//		projectionTransformation = new ProjectionTransformation();
-//		renderer = new EntityRenderer(entityShader, projectionTransformation);
+		projectionTransformation = new ProjectionTransformation();
+		renderer = new EntityRenderer();
+		renderer.loadProjectionMatrix(projectionTransformation);
 		guiRenderer = new GUIRenderer();
 //		skyboxRenderer = new SkyboxRenderer(projectionMatrix);
 	}
@@ -39,10 +39,10 @@ public class Renderer {
 //		entityShader.loadSkyColour(RED, GREEN, BLUE);
 //		entityShader.loadLight(scene.getLights());
 //		entityShader.loadViewMatrix(scene.getCamera().getMatrix());
-//		renderer.render(scene.getEntities());
+		renderer.render(scene.getMeshes());
 //		entityShader.stop();
 //		skyboxRenderer.render(camera);
-		guiRenderer.render(scene.getGuis());
+//		guiRenderer.render(scene.getGuis());
 	}
 
 	public void cleanUp() {

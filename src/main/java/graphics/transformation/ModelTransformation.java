@@ -36,66 +36,45 @@ public class ModelTransformation extends Transformation {
 		posX = x;
 		posY = y;
 		posZ = z;
+		calculateMatrix();
 	}
 
 	public void increasePosition(float dx, float dy, float dz) {
 		posX += dx;
 		posY += dy;
 		posZ += dz;
+		calculateMatrix();
 	}
 
 	public float getRotX() {
 		return rotX;
 	}
 
-	public void setRotX(float rotX) {
-		this.rotX = rotX;
-	}
-
 	public float getRotY() {
 		return rotY;
-	}
-
-	public void setRotY(float rotY) {
-		this.rotY = rotY;
 	}
 
 	public float getRotZ() {
 		return rotZ;
 	}
 
-	public void setRotZ(float rotZ) {
-		this.rotZ = rotZ;
-	}
-
 	public void increaseRotation(float dx, float dy, float dz) {
 		this.rotX += dx;
 		this.rotY += dy;
 		this.rotZ += dz;
+		calculateMatrix();
 	}
 
 	public float getScaleX() {
 		return scaleX;
 	}
 
-	public void setScaleX(float scaleX) {
-		this.scaleX = scaleX;
-	}
-
 	public float getScaleY() {
 		return scaleY;
 	}
 
-	public void setScaleY(float scaleY) {
-		this.scaleY = scaleY;
-	}
-
 	public float getScaleZ() {
 		return scaleZ;
-	}
-
-	public void setScaleZ(float scaleZ) {
-		this.scaleZ = scaleZ;
 	}
 
 	@Override
