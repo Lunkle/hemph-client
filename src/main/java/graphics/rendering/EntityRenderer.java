@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -27,8 +28,8 @@ public class EntityRenderer {
 			GL20.glEnableVertexAttribArray(0);
 			List<Entity> entityBatch = meshEntityMap.get(mesh);
 			for (Entity entity : entityBatch) {
-//				GL13.glActiveTexture(GL13.GL_TEXTURE0);
-//				GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getModel().getTextureID());
+				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getModel().getTextureID());
 				shader.loadModelMatrix(entity.getModelMatrix());
 				GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 			}

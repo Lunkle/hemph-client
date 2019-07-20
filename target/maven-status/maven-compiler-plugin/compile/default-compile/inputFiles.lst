@@ -1,5 +1,6 @@
 C:\Workspace\HemphClient\src\main\java\graphics\entity\EntityShader.java
 C:\Workspace\HemphClient\src\main\java\graphics\loader\TextureCache.java
+C:\Workspace\HemphClient\src\main\java\graphics\misc\Light.java
 C:\Workspace\HemphClient\src\main\java\graphics\rendering\EntityRenderer.java
 C:\Workspace\HemphClient\src\main\java\input\key\KeyHandler.java
 C:\Workspace\HemphClient\src\main\java\graphics\loader\StaticMeshLoader.java
@@ -9,7 +10,6 @@ C:\Workspace\HemphClient\src\main\java\graphics\transformation\ProjectionTransfo
 C:\Workspace\HemphClient\src\main\java\graphics\transformation\ModelTransformation.java
 C:\Workspace\HemphClient\src\main\java\graphics\transformation\ViewTransformation.java
 C:\Workspace\HemphClient\src\main\java\math\Matrix.java
-C:\Workspace\HemphClient\src\main\java\graphics\textures\TerrainTexturePack.java
 C:\Workspace\HemphClient\src\main\java\graphics\gui\GUIShader.java
 C:\Workspace\HemphClient\src\main\java\graphics\ShaderProgram.java
 C:\Workspace\HemphClient\src\main\java\graphics\scene\GameScene.java
@@ -20,7 +20,6 @@ C:\Workspace\HemphClient\src\main\java\graphics\transformation\Transformation.ja
 C:\Workspace\HemphClient\src\main\java\math\WritableVector2f.java
 C:\Workspace\HemphClient\src\main\java\graphics\model\VAO.java
 C:\Workspace\HemphClient\src\main\java\math\Vector2f.java
-C:\Workspace\HemphClient\src\main\java\graphics\entity\Light.java
 C:\Workspace\HemphClient\src\main\java\graphics\gui\GUI.java
 C:\Workspace\HemphClient\src\main\java\math\ReadableVector2f.java
 C:\Workspace\HemphClient\src\main\java\input\command\CloseWindowCommand.java
@@ -39,9 +38,7 @@ C:\Workspace\HemphClient\src\main\java\graphics\model\VAOBuilder.java
 C:\Workspace\HemphClient\src\main\java\input\command\Command.java
 C:\Workspace\HemphClient\src\main\java\game\Input.java
 C:\Workspace\HemphClient\src\main\java\graphics\rendering\GUIRenderer.java
-C:\Workspace\HemphClient\src\main\java\graphics\textures\TerrainTexture.java
 C:\Workspace\HemphClient\src\main\java\input\key\MainMenuKeyHandler.java
-C:\Workspace\HemphClient\src\main\java\graphics\textures\ModelTexture.java
 C:\Workspace\HemphClient\src\main\java\math\Matrix3f.java
 C:\Workspace\HemphClient\src\main\java\input\command\CommandLoader.java
 C:\Workspace\HemphClient\src\main\java\math\Vector4f.java
@@ -49,8 +46,8 @@ C:\Workspace\HemphClient\src\main\java\math\ReadableVector.java
 C:\Workspace\HemphClient\src\main\java\graphics\model\EBO.java
 C:\Workspace\HemphClient\src\main\java\logics\GameState.java
 C:\Workspace\HemphClient\src\main\java\input\misc\ResizeHandler.java
-C:\Workspace\HemphClient\src\main\java\graphics\textures\TextureData.java
 C:\Workspace\HemphClient\src\main\java\math\ReadableVector4f.java
 C:\Workspace\HemphClient\src\main\java\graphics\model\Mesh.java
 C:\Workspace\HemphClient\src\main\java\logics\page\GamePage.java
 C:\Workspace\HemphClient\src\main\java\math\WritableVector4f.java
+C:\Workspace\HemphClient\src\main\java\graphics\misc\Camera.java

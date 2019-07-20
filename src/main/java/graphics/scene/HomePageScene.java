@@ -26,7 +26,7 @@ public class HomePageScene extends GameScene {
 		Model model = new Model(new Texture("dukemascot"));
 		model.addMesh(mesh);
 		Entity entity = new Entity(model, 0, 0, 0, 0, 0, 0, 1, 1, 1);
-		entity.increasePosition(0, 0, -500);
+		entity.increasePosition(0, 0, -4);
 		addEntity(entity);
 	}
 

@@ -29,7 +29,6 @@ public class VAO {
 		EBO ebo = new EBO();
 		ebo.bindEBO();
 		ebo.loadData(data);
-		ebo.unbindEBO();
 	}
 
 	protected void attachVBO(int attributeIndex, int dimensions, float[] data) {

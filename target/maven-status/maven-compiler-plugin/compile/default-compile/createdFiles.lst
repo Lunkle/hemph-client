@@ -16,8 +16,6 @@ graphics\ShaderProgram.class
 graphics\loader\StaticMeshLoader.class
 graphics\model\VBO.class
 math\ReadableVector4f.class
-graphics\entity\Light.class
-graphics\textures\TerrainTexturePack.class
 input\command\CommandLoader.class
 game\Input.class
 graphics\rendering\GUIRenderer.class
@@ -39,16 +37,15 @@ math\ReadableVector.class
 graphics\rendering\Renderer.class
 graphics\gui\GUIBuilder.class
 graphics\rendering\EntityRenderer.class
-graphics\textures\TextureData.class
 graphics\model\VAO.class
 logics\GameState.class
 game\Visual.class
 graphics\entity\EntityShader.class
 math\ReadableVector3f.class
-graphics\textures\ModelTexture.class
+graphics\misc\Light.class
 graphics\model\EBO.class
 math\Vector3f.class
-graphics\textures\TerrainTexture.class
+graphics\misc\Camera.class
 graphics\scene\HomePageScene.class
 input\misc\ResizeHandler.class
 graphics\gui\GUI.class

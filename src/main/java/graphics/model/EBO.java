@@ -47,11 +47,6 @@ public class EBO {
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);
 	}
 
-	// Unbinding the buffer object so opengl knows to not read or write to it
-	public void unbindEBO() {
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-
 	// Method for deleting all the buffer objects when program is closing
 	// Called in Visual class's cleanUp method
 	public static void cleanUp() {
