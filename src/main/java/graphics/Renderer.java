@@ -1,10 +1,11 @@
-package graphics.rendering;
+package graphics;
 
 import org.lwjgl.opengl.GL11;
 
-import graphics.scene.GameScene;
+import graphics.entity.EntityRenderer;
+import graphics.gui.GUIRenderer;
 import graphics.transformation.ProjectionTransformation;
-import logics.page.GamePage;
+import logics.GameState;
 
 public class Renderer {
 
@@ -28,12 +29,12 @@ public class Renderer {
 	}
 
 	public void prepare() {
-//		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glClearColor(RED, GREEN, BLUE, 1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT); // | GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 
-	public void render(GamePage page, GameScene scene) {
+	public void render(GameState scene) {
 		prepare();
 //		entityShader.start();
 //		entityShader.loadSkyColour(RED, GREEN, BLUE);
@@ -42,7 +43,7 @@ public class Renderer {
 		renderer.render(scene.getMeshes());
 //		entityShader.stop();
 //		skyboxRenderer.render(camera);
-//		guiRenderer.render(scene.getGuis());
+		guiRenderer.render(scene.getGuis());
 	}
 
 	public void cleanUp() {
@@ -51,8 +52,8 @@ public class Renderer {
 	}
 
 	public static void enableCulling() {
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glCullFace(GL11.GL_BACK);
+//		GL11.glEnable(GL11.GL_CULL_FACE);
+//		GL11.glCullFace(GL11.GL_BACK);
 	}
 
 	public static void disableCulling() {

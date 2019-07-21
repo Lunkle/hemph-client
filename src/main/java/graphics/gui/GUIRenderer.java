@@ -1,4 +1,4 @@
-package graphics.rendering;
+package graphics.gui;
 
 import java.util.List;
 
@@ -6,8 +6,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import graphics.gui.GUI;
-import graphics.gui.GUIShader;
 import graphics.transformation.Transformation;
 import math.Matrix4f;
 

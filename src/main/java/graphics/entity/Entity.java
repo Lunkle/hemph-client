@@ -73,6 +73,10 @@ public class Entity {
 		return model;
 	}
 
+	public int getTextureID() {
+		return model.getTextureID();
+	}
+
 	public Matrix4f getModelMatrix() {
 		return transformation.getMatrix();
 	}

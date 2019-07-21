@@ -8,14 +8,12 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
+import graphics.Renderer;
 import graphics.model.EBO;
 import graphics.model.Texture;
 import graphics.model.VAO;
 import graphics.model.VBO;
-import graphics.rendering.Renderer;
-import graphics.scene.GameScene;
-import graphics.scene.HomePageScene;
-import logics.page.GamePage;
+import logics.GameState;
 
 public class Visual {
 
@@ -24,19 +22,16 @@ public class Visual {
 	private static int windowWidth = 1280;
 	private static int windowHeight = 720;
 
-	private GamePage page;
-	private GameScene scene;
+	private GameState gameState;
 	private Renderer renderer;
 
 	public Visual() {
 		createDisplay();
-		init();
+		renderer = new Renderer();
 	}
 
-	public void init() {
-		page = new GamePage();
-		scene = new HomePageScene();
-		renderer = new Renderer();
+	public void setGameState(GameState state) {
+		this.gameState = state;
 	}
 
 	private void createDisplay() {
@@ -63,7 +58,7 @@ public class Visual {
 
 	public void refresh() {
 		GL11.glViewport(0, 0, windowWidth, windowHeight);
-		renderer.render(page, scene);
+		renderer.render(gameState);
 		GLFW.glfwSwapBuffers(windowID);
 	}
 

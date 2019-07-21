@@ -1,4 +1,4 @@
-package graphics.rendering;
+package graphics.entity;
 
 import java.util.List;
 import java.util.Map;
@@ -8,8 +8,6 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import graphics.entity.Entity;
-import graphics.entity.EntityShader;
 import graphics.model.Mesh;
 import graphics.transformation.ProjectionTransformation;
 
@@ -29,7 +27,7 @@ public class EntityRenderer {
 			List<Entity> entityBatch = meshEntityMap.get(mesh);
 			for (Entity entity : entityBatch) {
 				GL13.glActiveTexture(GL13.GL_TEXTURE0);
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getModel().getTextureID());
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getTextureID());
 				shader.loadModelMatrix(entity.getModelMatrix());
 				GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 			}

@@ -22,7 +22,7 @@ public abstract class KeyHandler extends GLFWKeyCallback {
 		if (command != null) {
 			if (action == GLFW.GLFW_PRESS)
 				command.onPress();
-			else
+			else if (action == GLFW.GLFW_RELEASE)
 				command.onRelease();
 		}
 	}

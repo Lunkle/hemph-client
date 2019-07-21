@@ -24,6 +24,7 @@ public class HemphApplication {
 		visuals = new Visual();
 		logics = new Logic();
 		inputs = new Input();
+		visuals.setGameState(logics.getGameState());
 	}
 
 	private void loop() {
