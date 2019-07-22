@@ -25,7 +25,6 @@ public class ModelTransformation extends Transformation {
 		this.scaleX = scaleX;
 		this.scaleY = scaleY;
 		this.scaleZ = scaleZ;
-		calculateMatrix();
 	}
 
 	public Vector3f getPosition() {
@@ -36,14 +35,11 @@ public class ModelTransformation extends Transformation {
 		posX = x;
 		posY = y;
 		posZ = z;
-		calculateMatrix();
+		setFlag();
 	}
 
 	public void increasePosition(float dx, float dy, float dz) {
-		posX += dx;
-		posY += dy;
-		posZ += dz;
-		calculateMatrix();
+		setPosition(posX + dx, posY + dy, posZ + dz);
 	}
 
 	public float getRotX() {
@@ -62,7 +58,7 @@ public class ModelTransformation extends Transformation {
 		this.rotX += dx;
 		this.rotY += dy;
 		this.rotZ += dz;
-		calculateMatrix();
+		setFlag();
 	}
 
 	public float getScaleX() {

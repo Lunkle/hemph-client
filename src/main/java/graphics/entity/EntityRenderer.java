@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL30;
 
 import graphics.model.Mesh;
 import graphics.transformation.ProjectionTransformation;
+import logics.GameState;
 
 public class EntityRenderer {
 
@@ -19,11 +20,14 @@ public class EntityRenderer {
 		shader = new EntityShader();
 	}
 
-	public void render(Map<Mesh, List<Entity>> meshEntityMap) {
+	public void render(GameState gameState) {
+		Map<Mesh, List<Entity>> meshEntityMap = gameState.getMeshes();
 		shader.start();
+		shader.loadViewMatrix(gameState.getViewMatrix());
 		for (Mesh mesh : meshEntityMap.keySet()) {
 			GL30.glBindVertexArray(mesh.getVAOID());
 			GL20.glEnableVertexAttribArray(0);
+			GL20.glEnableVertexAttribArray(1);
 			List<Entity> entityBatch = meshEntityMap.get(mesh);
 			for (Entity entity : entityBatch) {
 				GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -32,6 +36,7 @@ public class EntityRenderer {
 				GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 			}
 			GL20.glDisableVertexAttribArray(0);
+			GL20.glDisableVertexAttribArray(1);
 			GL30.glBindVertexArray(0);
 		}
 		shader.stop();

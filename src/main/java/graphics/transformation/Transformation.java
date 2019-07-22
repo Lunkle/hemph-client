@@ -9,6 +9,10 @@ public abstract class Transformation {
 
 	protected abstract void calculateMatrix();
 
+	public final void setFlag() {
+		isDirty = true;
+	}
+
 	public final Matrix4f getMatrix() {
 		if (isDirty) {
 			calculateMatrix();

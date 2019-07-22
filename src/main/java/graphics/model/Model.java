@@ -23,7 +23,6 @@ public class Model {
 
 	public int getTextureID() {
 		return texture.getID();
-
 	}
 
 }

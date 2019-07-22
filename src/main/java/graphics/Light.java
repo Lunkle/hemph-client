@@ -1,4 +1,4 @@
-package graphics.misc;
+package graphics;
 
 public class Light {
 

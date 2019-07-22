@@ -5,26 +5,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import graphics.Camera;
 import graphics.entity.Entity;
 import graphics.gui.GUI;
 import graphics.model.Mesh;
-import graphics.transformation.ViewTransformation;
+import math.Matrix4f;
 
 public abstract class GameState {
 
-	protected ViewTransformation camera;
+	protected Camera camera;
 	protected List<GUI> guis = new ArrayList<>();
 	protected Map<Mesh, List<Entity>> meshEntityMap = new HashMap<>();
 
 	public GameState() {
-		camera = new ViewTransformation(0, 0, 0, 0, 0, 0);
+		camera = new Camera();
 		guis = new ArrayList<>();
 		meshEntityMap = new HashMap<>();
 	}
 
 	public abstract void update();
 
-	public ViewTransformation getCamera() {
+	public Camera getCamera() {
 		return camera;
 	}
 
@@ -53,4 +54,7 @@ public abstract class GameState {
 		}
 	}
 
+	public Matrix4f getViewMatrix() {
+		return camera.getViewMatrix();
+	}
 }

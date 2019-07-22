@@ -1,6 +1,7 @@
 package graphics.gui;
 
 import game.Visual;
+import graphics.model.Texture;
 import graphics.model.VAOBuilder;
 import graphics.transformation.ModelTransformation;
 import graphics.transformation.Transformation;
@@ -10,6 +11,7 @@ public class GUI {
 	// The quad is static because it is going to be the same for every GUI
 	private static final float[] QUAD_VERTICES = { 0, 0, 0, -1, 1, 0, 1, -1 };
 	private static int guiVaoID;
+	private Texture texture;
 
 	private ModelTransformation modelTransformation;
 
@@ -26,6 +28,17 @@ public class GUI {
 
 	public Transformation getModelTransformation() {
 		return modelTransformation;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+
+	public int getTextureID() {
+		if (texture != null) {
+			return texture.getID();
+		}
+		return -1;
 	}
 
 	public static int getGuiVaoID() {

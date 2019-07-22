@@ -34,16 +34,15 @@ public class Renderer {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 
-	public void render(GameState scene) {
+	public void render(GameState gameState) {
 		prepare();
-//		entityShader.start();
 //		entityShader.loadSkyColour(RED, GREEN, BLUE);
 //		entityShader.loadLight(scene.getLights());
 //		entityShader.loadViewMatrix(scene.getCamera().getMatrix());
-		renderer.render(scene.getMeshes());
+		renderer.render(gameState);
 //		entityShader.stop();
 //		skyboxRenderer.render(camera);
-		guiRenderer.render(scene.getGuis());
+		guiRenderer.render(gameState.getGuis());
 	}
 
 	public void cleanUp() {

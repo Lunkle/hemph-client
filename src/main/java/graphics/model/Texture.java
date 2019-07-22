@@ -26,13 +26,6 @@ public class Texture {
 	}
 
 	/**
-	 * Binding the texture so opengl knows the current texture is this one
-	 */
-	public void bindTexture() {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-	}
-
-	/**
 	 * Gets the handle of the texture
 	 */
 	public int getID() {
@@ -43,27 +36,27 @@ public class Texture {
 	 * Loads a png texture from src/main/resources/textures
 	 */
 	private void loadTexture(String fileName) {
-		ByteBuffer image;
+		ByteBuffer imageBuffer;
 		try (MemoryStack stack = MemoryStack.stackPush()) {
 			IntBuffer w = stack.mallocInt(1); // Buffer to store width
 			IntBuffer h = stack.mallocInt(1); // Buffer to store height
 			IntBuffer comp = stack.mallocInt(1); // Buffer to store number of components
 			STBImage.stbi_set_flip_vertically_on_load(true); // Flip the image vertically
-			image = STBImage.stbi_load("src/main/resources/textures/" + fileName + ".png", w, h, comp, 4); // Load the image
-			if (image == null) {
+			imageBuffer = STBImage.stbi_load("src/main/resources/textures/" + fileName + ".png", w, h, comp, 4); // Load the image
+			if (imageBuffer == null) {
 				throw new RuntimeException("Failed to load a texture file!" + System.lineSeparator() + STBImage.stbi_failure_reason()); // Print problem if error occurs
 			}
-			textureHeight = w.get();
+			textureWidth = w.get();
 			textureHeight = h.get();
 		}
-		bindTexture();
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, textureWidth, textureHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image); // Upload the texture data
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, textureWidth, textureHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, imageBuffer); // Upload the texture data
 		GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D); // Generate Mipmap
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL15.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL15.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-		STBImage.stbi_image_free(image);
+		STBImage.stbi_image_free(imageBuffer);
 	}
 
 	public static void cleanup() {
