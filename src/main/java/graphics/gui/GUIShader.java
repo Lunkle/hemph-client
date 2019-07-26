@@ -1,6 +1,6 @@
 package graphics.gui;
 
-import graphics.ShaderProgram;
+import graphics.rendering.ShaderProgram;
 import math.Matrix4f;
 
 public class GUIShader extends ShaderProgram {

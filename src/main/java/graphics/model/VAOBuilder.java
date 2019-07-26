@@ -1,5 +1,7 @@
 package graphics.model;
 
+import java.util.List;
+
 public class VAOBuilder {
 
 	private VAO vao;
@@ -35,12 +37,39 @@ public class VAOBuilder {
 
 	public VAOBuilder addIndices(int[] indices) {
 		vao.attachEBO(indices);
+		vao.vertexCount = indices.length;
 		return this;
 	}
 
 	public VAO create() {
 		vao.unbindVAO();
 		return vao;
+	}
+
+	public static VAO createVAO(List<Float> positions, List<Float> textureCoordinates, List<Float> normals, List<Integer> indices) {
+		return createVAO(toFloatArray(positions), toFloatArray(textureCoordinates), toFloatArray(normals), toIntArray(indices));
+	}
+
+	public static VAO createVAO(float[] positions, float[] textureCoordinates, float[] normals, int[] indices) {
+		return VAOBuilder.newInstance().addIndices(indices).addPositions(positions).addTextureCoordinates(textureCoordinates).addNormals(normals).create();
+	}
+
+	private static int[] toIntArray(List<Integer> data) {
+		int numberOfElements = data.size();
+		int[] dataArray = new int[numberOfElements];
+		for (int i = 0; i < numberOfElements; i++) {
+			dataArray[i] = data.get(i);
+		}
+		return dataArray;
+	}
+
+	private static float[] toFloatArray(List<Float> data) {
+		int numberOfElements = data.size();
+		float[] dataArray = new float[numberOfElements];
+		for (int i = 0; i < numberOfElements; i++) {
+			dataArray[i] = data.get(i);
+		}
+		return dataArray;
 	}
 
 }

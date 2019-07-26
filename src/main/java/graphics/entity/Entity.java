@@ -1,7 +1,7 @@
 package graphics.entity;
 
 import graphics.model.Model;
-import graphics.transformation.ModelTransformation;
+import graphics.transformation.WorldTransformation;
 import math.Matrix4f;
 
 public class Entity {
@@ -9,7 +9,7 @@ public class Entity {
 	private Model model;
 	private float textureXOffset;
 	private float textureYOffset;
-	private ModelTransformation transformation;
+	private WorldTransformation transformation;
 
 	/**
 	 * Initializes the entity with default transformation
@@ -38,7 +38,7 @@ public class Entity {
 	 */
 	public Entity(Model model, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
 		this.model = model;
-		transformation = new ModelTransformation(posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ);
+		transformation = new WorldTransformation(posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ);
 	}
 
 	/**

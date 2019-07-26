@@ -1,8 +1,5 @@
 package input.command;
 
-import org.lwjgl.glfw.GLFW;
-
-import game.Visual;
 import graphics.Camera;
 
 public class MoveCameraForwardCommand extends Command {
@@ -18,7 +15,7 @@ public class MoveCameraForwardCommand extends Command {
 
 	@Override
 	public void onRelease() {
-		GLFW.glfwSetWindowShouldClose(Visual.getWindowID(), true);
+		state.getCamera().addDirection(Camera.Directions.BACK);
 	}
 
 }

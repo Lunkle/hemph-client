@@ -17,6 +17,10 @@ public abstract class Command {
 
 	public abstract void onRelease();
 
+	public final static void setState(GameState state) {
+		Command.state = state;
+	}
+
 	public final static void addCommand(Command command) {
 		if (!commandMap.containsKey(command.commandID)) {
 			commandMap.put(command.commandID, command);

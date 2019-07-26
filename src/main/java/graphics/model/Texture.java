@@ -42,7 +42,7 @@ public class Texture {
 			IntBuffer h = stack.mallocInt(1); // Buffer to store height
 			IntBuffer comp = stack.mallocInt(1); // Buffer to store number of components
 			STBImage.stbi_set_flip_vertically_on_load(true); // Flip the image vertically
-			imageBuffer = STBImage.stbi_load("src/main/resources/textures/" + fileName + ".png", w, h, comp, 4); // Load the image
+			imageBuffer = STBImage.stbi_load("src/main/resources/" + fileName + ".png", w, h, comp, 4); // Load the image
 			if (imageBuffer == null) {
 				throw new RuntimeException("Failed to load a texture file!" + System.lineSeparator() + STBImage.stbi_failure_reason()); // Print problem if error occurs
 			}

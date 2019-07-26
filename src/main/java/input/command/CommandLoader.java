@@ -8,10 +8,10 @@ public class CommandLoader extends Thread {
 
 	public void urgentCommandLoading() {
 		Command.addCommand(new CloseWindowCommand());
+		Command.addCommand(new MoveCameraForwardCommand());
 	}
 
 	@Override
 	public void run() {
-
 	}
 }

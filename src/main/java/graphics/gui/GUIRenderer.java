@@ -28,7 +28,7 @@ public class GUIRenderer {
 			int textureID = gui.getTextureID();
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-			shader.loadModelMatrix(gui.getModelTransformation().getMatrix());
+			shader.loadModelMatrix(gui.getWorldTransformation().getMatrix());
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, QUAD_VERTEX_COUNT);
 		}
 		GL11.glDisable(GL11.GL_BLEND);

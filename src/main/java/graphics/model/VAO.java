@@ -14,6 +14,7 @@ public class VAO {
 	private static List<Integer> vaos = new ArrayList<>();
 
 	protected int vaoID;
+	protected int vertexCount;
 
 	// Creates a new attribute object
 	protected VAO() {
@@ -49,8 +50,12 @@ public class VAO {
 		GL30.glBindVertexArray(0);
 	}
 
-	public int getVaoID() {
+	public int getVaoId() {
 		return vaoID;
+	}
+
+	public int getVertexCount() {
+		return vertexCount;
 	}
 
 	// Method for deleting all the attribute objects when program is closing

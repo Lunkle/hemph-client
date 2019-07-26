@@ -8,11 +8,11 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
-import graphics.Renderer;
 import graphics.model.EBO;
 import graphics.model.Texture;
 import graphics.model.VAO;
 import graphics.model.VBO;
+import graphics.rendering.Renderer;
 import logics.GameState;
 
 public class Visual {

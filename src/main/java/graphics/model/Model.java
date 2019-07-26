@@ -1,24 +1,17 @@
 package graphics.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Model {
 
-	private List<Mesh> meshes;
+	private VAO mesh;
 	private Texture texture;
 
-	public Model(Texture texture) {
-		meshes = new ArrayList<>();
+	public Model(VAO mesh, Texture texture) {
+		this.mesh = mesh;
 		this.texture = texture;
 	}
 
-	public void addMesh(Mesh mesh) {
-		meshes.add(mesh);
-	}
-
-	public List<Mesh> getMeshes() {
-		return meshes;
+	public VAO getMesh() {
+		return mesh;
 	}
 
 	public int getTextureID() {

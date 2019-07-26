@@ -2,6 +2,7 @@ package game;
 
 import org.lwjgl.Version;
 
+import input.command.Command;
 import input.command.CommandLoader;
 
 public class HemphApplication {
@@ -24,6 +25,7 @@ public class HemphApplication {
 		visuals = new Visual();
 		logics = new Logic();
 		inputs = new Input();
+		Command.setState(logics.getGameState());
 		visuals.setGameState(logics.getGameState());
 	}
 

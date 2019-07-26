@@ -7,7 +7,7 @@ import math.Vector3f;
 public class Camera {
 
 	private ViewTransformation transformation;
-	private Vector3f cameraMoveDirection;
+	private Vector3f cameraMoveDirection = new Vector3f(0, 0, 0);
 	private float cameraSpeed = 0.1f;
 
 	public enum Directions {
@@ -23,20 +23,24 @@ public class Camera {
 	}
 
 	public void update() {
-		cameraMoveDirection.normalise().scale(cameraSpeed);
-		transformation.increasePosition(cameraMoveDirection.x, cameraMoveDirection.y, cameraMoveDirection.z);
+		if (cameraMoveDirection.lengthSquared() != 0) {
+			Vector3f movementVector = new Vector3f(cameraMoveDirection);
+			movementVector.normalise().scale(cameraSpeed);
+			transformation.increasePosition(movementVector.x, movementVector.y, movementVector.z);
+		}
 	}
 
 	public void addDirection(Directions addDirection) {
 		switch (addDirection) {
 			case FRONT:
-				Vector3f.add(cameraMoveDirection, new Vector3f(0, 0, 0), cameraMoveDirection);
+				Vector3f.add(cameraMoveDirection, new Vector3f(1, 0, 0), cameraMoveDirection);
 				break;
 			case LEFT:
 				break;
 			case RIGHT:
 				break;
 			case BACK:
+				Vector3f.add(cameraMoveDirection, new Vector3f(-1, 0, 0), cameraMoveDirection);
 				break;
 			case UP:
 				break;

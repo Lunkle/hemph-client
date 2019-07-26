@@ -1,6 +1,6 @@
 package graphics.entity;
 
-import graphics.ShaderProgram;
+import graphics.rendering.ShaderProgram;
 import math.Matrix4f;
 
 public class EntityShader extends ShaderProgram {

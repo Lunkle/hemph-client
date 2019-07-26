@@ -3,7 +3,7 @@ package graphics.gui;
 import game.Visual;
 import graphics.model.Texture;
 import graphics.model.VAOBuilder;
-import graphics.transformation.ModelTransformation;
+import graphics.transformation.WorldTransformation;
 import graphics.transformation.Transformation;
 
 public class GUI {
@@ -13,21 +13,21 @@ public class GUI {
 	private static int guiVaoID;
 	private Texture texture;
 
-	private ModelTransformation modelTransformation;
+	private WorldTransformation worldTransformation;
 
 	static {
-		guiVaoID = VAOBuilder.newInstance().addPositions(2, QUAD_VERTICES).create().getVaoID();
+		guiVaoID = VAOBuilder.newInstance().addPositions(2, QUAD_VERTICES).create().getVaoId();
 	}
 
 	protected GUI() {
 	}
 
 	protected void setDimensions(float posX, float posY, float width, float height) {
-		modelTransformation = new ModelTransformation(2.0f * posX / Visual.getWindowWidth() - 1.0f, 1.0f - 2.0f * posY / Visual.getWindowHeight(), 0, 0, 0, 0, 2.0f * width / Visual.getWindowWidth(), 2.0f * height / Visual.getWindowHeight(), 1);
+		worldTransformation = new WorldTransformation(2.0f * posX / Visual.getWindowWidth() - 1.0f, 1.0f - 2.0f * posY / Visual.getWindowHeight(), 0, 0, 0, 0, 2.0f * width / Visual.getWindowWidth(), 2.0f * height / Visual.getWindowHeight(), 1);
 	}
 
-	public Transformation getModelTransformation() {
-		return modelTransformation;
+	public Transformation getWorldTransformation() {
+		return worldTransformation;
 	}
 
 	public void setTexture(Texture texture) {

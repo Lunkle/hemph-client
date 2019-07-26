@@ -3,7 +3,7 @@ package graphics.transformation;
 import math.Matrix4f;
 import math.Vector3f;
 
-public class ModelTransformation extends Transformation {
+public class WorldTransformation extends Transformation {
 
 	private float posX = 0;
 	private float posY = 0;
@@ -15,7 +15,7 @@ public class ModelTransformation extends Transformation {
 	private float scaleY = 1;
 	private float scaleZ = 1;
 
-	public ModelTransformation(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+	public WorldTransformation(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
 		this.posX = posX;
 		this.posY = posY;
 		this.posZ = posZ;
