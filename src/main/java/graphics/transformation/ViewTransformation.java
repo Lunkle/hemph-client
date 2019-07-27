@@ -22,7 +22,7 @@ public class ViewTransformation extends Transformation {
 	}
 
 	public Vector3f getPosition() {
-		return new Vector3f(posX, posY, posY);
+		return new Vector3f(posX, posY, posZ);
 	}
 
 	public void setPosition(float x, float y, float z) {
@@ -46,6 +46,12 @@ public class ViewTransformation extends Transformation {
 
 	public float getRoll() {
 		return roll;
+	}
+
+	public void setRotation(float rotX, float rotY, float rotZ) {
+		pitch = rotX;
+		roll = rotY;
+		yaw = rotZ;
 	}
 
 	@Override

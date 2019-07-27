@@ -5,7 +5,7 @@ import graphics.Camera;
 public class MoveCameraBackwardCommand extends Command {
 
 	public MoveCameraBackwardCommand() {
-		commandID = "moveForward";
+		commandID = "moveBackward";
 	}
 
 	@Override

@@ -56,6 +56,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * 
 	 * @see org.lwjgl.util.vector.WritableVector2f#set(float, float)
 	 */
+	@Override
 	public void set(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -66,6 +67,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * 
 	 * @see org.lwjgl.util.vector.WritableVector3f#set(float, float, float)
 	 */
+	@Override
 	public void set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
@@ -117,15 +119,27 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 */
 	public static Vector3f add(Vector3f left, Vector3f right, Vector3f dest) {
 		if (dest == null)
-			return new Vector3f(left.x + right.x, left.y + right.y, left.z + right.z);
+			return add(left, right);
 		else {
-			dest.set(left.x + right.x, left.y + right.y, left.z + right.z);
+			dest.set(add(left, right));
 			return dest;
 		}
 	}
 
 	/**
-	 * Subtract a vector from another vector and place the result in a destination vector.
+	 * Add a vector to another vector and return the result.
+	 * 
+	 * @param left  The LHS vector
+	 * @param right The RHS vector
+	 * @return the sum of left and right
+	 */
+	public static Vector3f add(Vector3f left, Vector3f right) {
+		return new Vector3f(left.x + right.x, left.y + right.y, left.z + right.z);
+	}
+
+	/**
+	 * Subtract a vector from another vector and place the result in a destination
+	 * vector.
 	 * 
 	 * @param left  The LHS vector
 	 * @param right The RHS vector
@@ -142,7 +156,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	}
 
 	/**
-	 * The cross product of two vectors.
+	 * The cross product of two vectors placed in a destination vector.
 	 *
 	 * @param left  The LHS vector
 	 * @param right The RHS vector
@@ -150,13 +164,19 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * @return left cross right
 	 */
 	public static Vector3f cross(Vector3f left, Vector3f right, Vector3f dest) {
-
-		if (dest == null)
-			dest = new Vector3f();
-
-		dest.set(left.y * right.z - left.z * right.y, right.x * left.z - right.z * left.x, left.x * right.y - left.y * right.x);
-
+		dest = cross(left, right);
 		return dest;
+	}
+
+	/**
+	 * Returns the cross product of two vectors.
+	 *
+	 * @param left  The LHS vector
+	 * @param right The RHS vector
+	 * @return left cross right
+	 */
+	public static Vector3f cross(Vector3f left, Vector3f right) {
+		return new Vector3f(left.y * right.z - left.z * right.y, right.x * left.z - right.z * left.x, left.x * right.y - left.y * right.x);
 	}
 
 	/**
@@ -205,7 +225,8 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	}
 
 	/**
-	 * The dot product of two vectors is calculated as v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
+	 * The dot product of two vectors is calculated as v1.x * v2.x + v1.y * v2.y +
+	 * v1.z * v2.z
 	 * 
 	 * @param left  The LHS vector
 	 * @param right The RHS vector
@@ -250,7 +271,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * @see org.lwjgl.vector.Vector#scale(float)
 	 */
 	@Override
-	public Vector scale(float scale) {
+	public Vector3f scale(float scale) {
 
 		x *= scale;
 		y *= scale;
@@ -297,6 +318,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/**
 	 * @return x
 	 */
+	@Override
 	public final float getX() {
 		return x;
 	}
@@ -304,6 +326,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/**
 	 * @return y
 	 */
+	@Override
 	public final float getY() {
 		return y;
 	}
@@ -313,6 +336,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * 
 	 * @param x
 	 */
+	@Override
 	public final void setX(float x) {
 		this.x = x;
 	}
@@ -322,6 +346,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * 
 	 * @param y
 	 */
+	@Override
 	public final void setY(float y) {
 		this.y = y;
 	}
@@ -331,6 +356,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * 
 	 * @param z
 	 */
+	@Override
 	public void setZ(float z) {
 		this.z = z;
 	}
@@ -340,6 +366,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * 
 	 * @see org.lwjgl.vector.ReadableVector3f#getZ()
 	 */
+	@Override
 	public float getZ() {
 		return z;
 	}

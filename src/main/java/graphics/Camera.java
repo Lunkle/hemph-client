@@ -11,7 +11,7 @@ public class Camera {
 	private float cameraSpeed = 0.1f;
 
 	public enum Directions {
-		FRONT, LEFT, RIGHT, BACK, UP, DOWN,
+		FRONT, BACK, LEFT, RIGHT, UP, DOWN,
 	}
 
 	public Camera() {
@@ -20,6 +20,18 @@ public class Camera {
 
 	public Matrix4f getViewMatrix() {
 		return transformation.getMatrix();
+	}
+
+	public void setPosition(float posX, float posY, float posZ) {
+		transformation.setPosition(posX, posY, posZ);
+	}
+
+	public Vector3f getPosition() {
+		return transformation.getPosition();
+	}
+
+	public void setRotation(float rotX, float rotY, float rotZ) {
+		transformation.setRotation(rotX, rotY, rotZ);
 	}
 
 	public void update() {
@@ -33,18 +45,22 @@ public class Camera {
 	public void addDirection(Directions addDirection) {
 		switch (addDirection) {
 			case FRONT:
-				Vector3f.add(cameraMoveDirection, new Vector3f(1, 0, 0), cameraMoveDirection);
-				break;
-			case LEFT:
-				break;
-			case RIGHT:
+				Vector3f.add(cameraMoveDirection, new Vector3f(0, 0, -1), cameraMoveDirection);
 				break;
 			case BACK:
+				Vector3f.add(cameraMoveDirection, new Vector3f(0, 0, 1), cameraMoveDirection);
+				break;
+			case LEFT:
 				Vector3f.add(cameraMoveDirection, new Vector3f(-1, 0, 0), cameraMoveDirection);
 				break;
+			case RIGHT:
+				Vector3f.add(cameraMoveDirection, new Vector3f(1, 0, 0), cameraMoveDirection);
+				break;
 			case UP:
+				Vector3f.add(cameraMoveDirection, new Vector3f(0, 1, 0), cameraMoveDirection);
 				break;
 			case DOWN:
+				Vector3f.add(cameraMoveDirection, new Vector3f(0, -1, 0), cameraMoveDirection);
 				break;
 		}
 	}

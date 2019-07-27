@@ -9,6 +9,11 @@ public class CommandLoader extends Thread {
 	public void urgentCommandLoading() {
 		Command.addCommand(new CloseWindowCommand());
 		Command.addCommand(new MoveCameraForwardCommand());
+		Command.addCommand(new MoveCameraBackwardCommand());
+		Command.addCommand(new MoveCameraLeftCommand());
+		Command.addCommand(new MoveCameraRightCommand());
+		Command.addCommand(new MoveCameraUpCommand());
+		Command.addCommand(new MoveCameraDownCommand());
 	}
 
 	@Override

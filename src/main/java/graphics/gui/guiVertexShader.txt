@@ -8,7 +8,7 @@ uniform mat4 modelMatrix;
 
 void main(){
 
-	fragmentTextureCoordinates = vec2(vertexPosition.x, 1 + vertexPosition.y);
+	fragmentTextureCoordinates = vec2(vertexPosition.x, - vertexPosition.y);
 	gl_Position = modelMatrix * vec4(vertexPosition, 0.0, 1.0);
 
 }
