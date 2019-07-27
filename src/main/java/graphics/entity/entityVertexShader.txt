@@ -4,6 +4,7 @@ layout (location = 0) in vec3 vertexPosition;
 layout (location = 1) in vec2 vertexTextureCoordinates;
 layout (location = 2) in vec3 vertexNormal;
 
+out vec3 fragmentPosition;
 out vec2 fragmentTextureCoordinates;
 out vec3 fragmentNormal;
 
@@ -12,9 +13,11 @@ uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
 void main(){
-
+	
+	vec4 worldPosition = modelMatrix * vec4(vertexPosition, 1.0); 
+	fragmentPosition = worldPosition.xyz;
 	fragmentTextureCoordinates = vertexTextureCoordinates;
 	fragmentNormal = vertexNormal;
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertexPosition, 1.0);
+	gl_Position = projectionMatrix * viewMatrix * worldPosition;
 	
 }

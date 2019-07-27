@@ -8,18 +8,21 @@ import java.util.Map;
 import graphics.Camera;
 import graphics.entity.Entity;
 import graphics.gui.GUI;
+import graphics.light.Light;
 import graphics.model.VAO;
 import math.Matrix4f;
 
 public abstract class GameState {
 
 	protected Camera camera;
-	protected List<GUI> guis = new ArrayList<>();
-	protected Map<VAO, List<Entity>> meshEntityMap = new HashMap<>();
+	protected List<GUI> guis;
+	protected List<Light> lights;
+	protected Map<VAO, List<Entity>> meshEntityMap;
 
 	public GameState() {
 		camera = new Camera();
 		guis = new ArrayList<>();
+		lights = new ArrayList<>();
 		meshEntityMap = new HashMap<>();
 	}
 
@@ -35,6 +38,14 @@ public abstract class GameState {
 
 	protected void addGUI(GUI gui) {
 		guis.add(gui);
+	}
+
+	public List<Light> getLights() {
+		return lights;
+	}
+
+	protected void addLight(Light light) {
+		lights.add(light);
 	}
 
 	public Map<VAO, List<Entity>> getMeshes() {

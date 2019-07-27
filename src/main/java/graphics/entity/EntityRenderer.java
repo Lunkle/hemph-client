@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import graphics.light.Light;
 import graphics.model.VAO;
 import graphics.transformation.ProjectionTransformation;
 import logics.GameState;
@@ -21,8 +22,10 @@ public class EntityRenderer {
 	}
 
 	public void render(GameState gameState) {
+		List<Light> lights = gameState.getLights();
 		Map<VAO, List<Entity>> meshEntityMap = gameState.getMeshes();
 		shader.start();
+		shader.loadLights(lights);
 		shader.loadViewMatrix(gameState.getViewMatrix());
 		for (VAO mesh : meshEntityMap.keySet()) {
 			GL30.glBindVertexArray(mesh.getVaoId());

@@ -3,6 +3,8 @@ package logics;
 import graphics.entity.Entity;
 import graphics.gui.GUI;
 import graphics.gui.GUIBuilder;
+import graphics.light.DirectionalLight;
+import graphics.light.Light;
 import graphics.loader.OBJLoader;
 import graphics.model.Model;
 import graphics.model.Texture;
@@ -28,6 +30,12 @@ public class HomePageState extends GameState {
 		Model model = new Model(OBJLoader.loadObjMesh("table"), texture);
 		cubeEntity = new Entity(model, 0, 0, -5, 0, 0, 0, 1, 1, 1);
 		addEntity(cubeEntity);
+
+		Light directionalLight1 = new DirectionalLight(1, -1, 0);
+		directionalLight1.setAmbient(0.5f, 0.4f, 0.2f);
+		directionalLight1.setDiffuse(1f, 0.9f, 0.45f);
+		directionalLight1.setSpecular(1f, 0.9f, 0.97f);
+		addLight(directionalLight1);
 
 	}
 
