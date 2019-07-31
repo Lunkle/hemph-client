@@ -12,6 +12,7 @@ public class GUIShader extends ShaderProgram {
 
 	public GUIShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
+		getAllUniformLocations();
 	}
 
 	@Override

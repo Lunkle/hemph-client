@@ -73,8 +73,12 @@ public class Entity {
 		return model;
 	}
 
-	public int getTextureID() {
-		return model.getTextureID();
+	/**
+	 * Activates all the textures.
+	 */
+	public void activateTextures() {
+		model.getDiffuseTexture().activateTexture();
+		model.getSpecularTexture().activateTexture();
 	}
 
 	public Matrix4f getModelMatrix() {

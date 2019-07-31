@@ -7,11 +7,13 @@ import graphics.light.DirectionalLight;
 import graphics.light.Light;
 import graphics.loader.OBJLoader;
 import graphics.model.Model;
+import graphics.model.ModelBuilder;
 import graphics.model.Texture;
+import graphics.model.VAO;
 
 public class HomePageState extends GameState {
 
-	Entity cubeEntity;
+	Entity tableEntity;
 
 	public HomePageState() {
 		super();
@@ -19,22 +21,29 @@ public class HomePageState extends GameState {
 		camera.setPosition(0, 11.5f, 1);
 		camera.setRotation(45, 0, 0);
 
-		Texture guiTexture1 = new Texture("dukemascot");
-		GUI testGUI = GUIBuilder.newInstance().setDimensions(500, 30, 100, 100).setTexture(guiTexture1).create();
+		GUI testGUI = GUIBuilder.newInstance().setDimensions(500, 30, 100, 100).setTexture("dukemascot").create();
 		addGUI(testGUI);
-		Texture guiTexture2 = new Texture("table");
-		GUI testGUI2 = GUIBuilder.newInstance().setDimensions(800, 300, 200, 100).setTexture(guiTexture2).create();
+		GUI testGUI2 = GUIBuilder.newInstance().setDimensions(800, 300, 200, 100).setTexture("table").create();
 		addGUI(testGUI2);
-
+//
 		Texture texture = new Texture("table");
-		Model model = new Model(OBJLoader.loadObjMesh("table"), texture);
-		cubeEntity = new Entity(model, 0, 0, -5, 0, 0, 0, 1, 1, 1);
-		addEntity(cubeEntity);
+		Texture tableSpecularTexture = new Texture("tableSpecularMap");
+		VAO tableMesh = OBJLoader.loadObjMesh("table");
+		Model model = ModelBuilder.newInstance().setMesh(tableMesh).setDiffuseTexture(texture).setSpecularTexture(tableSpecularTexture).create();
+		tableEntity = new Entity(model, 0, 0, -5, 0, 0, 0, 1, 1, 1);
+		addEntity(tableEntity);
 
-		Light directionalLight1 = new DirectionalLight(1, -1, 0);
-		directionalLight1.setAmbient(0.5f, 0.4f, 0.2f);
-		directionalLight1.setDiffuse(1f, 0.9f, 0.45f);
-		directionalLight1.setSpecular(1f, 0.9f, 0.97f);
+		Texture roomTexture = new Texture("room");
+		Texture roomSpecularTexture = new Texture("roomSpecularMap");
+		VAO roomMesh = OBJLoader.loadObjMesh("room");
+		Model roomModel = ModelBuilder.newInstance().setMesh(roomMesh).setDiffuseTexture(roomTexture).setSpecularTexture(roomSpecularTexture).create();
+		tableEntity = new Entity(roomModel, -0.5f, 0, -2, 0, 90, 0, 1, 1, 1);
+		addEntity(tableEntity);
+
+		Light directionalLight1 = new DirectionalLight(0, -1, 1f);
+		directionalLight1.setAmbient(0.5f, 0.3f, 0.3f);
+		directionalLight1.setDiffuse(1f, 1f, 1f);
+		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
 		addLight(directionalLight1);
 
 	}
@@ -42,7 +51,6 @@ public class HomePageState extends GameState {
 	@Override
 	public void update() {
 		camera.update();
-		System.out.println(camera.getPosition());
 	}
 
 }

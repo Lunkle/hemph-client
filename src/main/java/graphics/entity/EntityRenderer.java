@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import graphics.light.Light;
 import graphics.model.VAO;
 import graphics.transformation.ProjectionTransformation;
 import logics.GameState;
@@ -22,10 +20,11 @@ public class EntityRenderer {
 	}
 
 	public void render(GameState gameState) {
-		List<Light> lights = gameState.getLights();
 		Map<VAO, List<Entity>> meshEntityMap = gameState.getMeshes();
 		shader.start();
-		shader.loadLights(lights);
+		shader.loadDirectionalLights(gameState.getDirectionalLights());
+//		shader.loadPointLights(gameState.getPointLights());
+//		shader.loadSpotLights(gameState.getSpotLights());
 		shader.loadViewMatrix(gameState.getViewMatrix());
 		for (VAO mesh : meshEntityMap.keySet()) {
 			GL30.glBindVertexArray(mesh.getVaoId());
@@ -34,8 +33,7 @@ public class EntityRenderer {
 			GL20.glEnableVertexAttribArray(2);
 			List<Entity> entityBatch = meshEntityMap.get(mesh);
 			for (Entity entity : entityBatch) {
-				GL13.glActiveTexture(GL13.GL_TEXTURE0);
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, entity.getTextureID());
+				entity.activateTextures();
 				shader.loadModelMatrix(entity.getModelMatrix());
 				GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 			}

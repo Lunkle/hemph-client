@@ -1,4 +1,4 @@
-package graphics.model;
+package graphics.primitive;
 
 public class Triangle {
 

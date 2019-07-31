@@ -1,4 +1,4 @@
-#version 400 core
+#version 430 core
 
 layout (location = 0) in vec3 vertexPosition;
 layout (location = 1) in vec2 vertexTextureCoordinates;
@@ -13,11 +13,12 @@ uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
 void main(){
-	
-	vec4 worldPosition = modelMatrix * vec4(vertexPosition, 1.0); 
-	fragmentPosition = worldPosition.xyz;
+
 	fragmentTextureCoordinates = vertexTextureCoordinates;
-	fragmentNormal = vertexNormal;
-	gl_Position = projectionMatrix * viewMatrix * worldPosition;
+	mat4 modelViewMatrix = viewMatrix * modelMatrix;
+	vec4 viewPosition = modelViewMatrix * vec4(vertexPosition, 1.0); 
+	fragmentPosition = viewPosition.xyz;
+	fragmentNormal = vec3(modelViewMatrix * vec4(vertexNormal, 0.0));
+	gl_Position = projectionMatrix * viewPosition;
 	
 }

@@ -26,4 +26,5 @@ public class DirectionalLight extends Light {
 	public Vector3f getDirection() {
 		return new Vector3f(dirX, dirY, dirZ);
 	}
+
 }

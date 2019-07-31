@@ -41,11 +41,12 @@ public class Quaternion {
 		return new Vector3f(x, y, z);
 	}
 
-	public void multiply(Quaternion quaternion) {
-		Vector3f sImaginary = quaternion.getImaginary();
-		Vector3f rImaginary = getImaginary();
-		float real = quaternion.w * w - Vector3f.dot(sImaginary, rImaginary);
-		Vector3f imaginary = Vector3f.add(Vector3f.add(getImaginary().scale(quaternion.w), quaternion.getImaginary().scale(w)), Vector3f.cross(rImaginary, sImaginary));// + Vector3f.cross(left, right, dest);
+	public Quaternion multiply(Quaternion quaternion) {
+		float newW = -x * quaternion.x - y * quaternion.y - z * quaternion.z + w * quaternion.w;
+		float newX = x * quaternion.w + y * quaternion.z - z * quaternion.y + w * quaternion.x;
+		float newY = -x * quaternion.z + y * quaternion.w + z * quaternion.x + w * quaternion.y;
+		float newZ = x * quaternion.y - y * quaternion.x + z * quaternion.w + w * quaternion.z;
+		return new Quaternion(newW, newX, newY, newZ);
 	}
 
 	/**

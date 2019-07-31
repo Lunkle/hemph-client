@@ -21,6 +21,7 @@ public class GUIBuilder {
 	}
 
 	public GUIBuilder setTexture(Texture texture) {
+		texture.setAsDiffuseTexture();
 		gui.setTexture(texture);
 		return this;
 	}

@@ -33,7 +33,6 @@ public abstract class ShaderProgram {
 		GL20.glDeleteShader(vertexShaderID);
 		GL20.glDeleteShader(fragmentShaderID);
 		GL20.glValidateProgram(programID);
-		getAllUniformLocations();
 	}
 
 	public void start() {
@@ -49,6 +48,10 @@ public abstract class ShaderProgram {
 		GL20.glDeleteProgram(programID);
 	}
 
+	/**
+	 * Finds all of the uniform locations in the shaders. Should be called in every
+	 * shader program constructor.
+	 */
 	protected abstract void getAllUniformLocations();
 
 	protected int getUniformLocation(String uniformName) {

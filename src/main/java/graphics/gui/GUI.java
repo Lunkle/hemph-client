@@ -4,7 +4,7 @@ import game.Visual;
 import graphics.model.Texture;
 import graphics.model.VAOBuilder;
 import graphics.transformation.WorldTransformation;
-import graphics.transformation.Transformation;
+import math.Matrix4f;
 
 public class GUI {
 
@@ -26,11 +26,11 @@ public class GUI {
 		worldTransformation = new WorldTransformation(2.0f * posX / Visual.getWindowWidth() - 1.0f, 1.0f - 2.0f * posY / Visual.getWindowHeight(), 0, 0, 0, 0, 2.0f * width / Visual.getWindowWidth(), 2.0f * height / Visual.getWindowHeight(), 1);
 	}
 
-	public Transformation getWorldTransformation() {
-		return worldTransformation;
+	public Matrix4f getTransformationMatrix() {
+		return worldTransformation.getMatrix();
 	}
 
-	public void setTexture(Texture texture) {
+	protected void setTexture(Texture texture) {
 		this.texture = texture;
 	}
 
@@ -39,6 +39,10 @@ public class GUI {
 			return texture.getID();
 		}
 		return -1;
+	}
+
+	public void activateTextures() {
+		texture.activateTexture();
 	}
 
 	public static int getGuiVaoID() {

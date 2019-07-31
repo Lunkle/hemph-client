@@ -3,19 +3,36 @@ package graphics.model;
 public class Model {
 
 	private VAO mesh;
-	private Texture texture;
+	private Texture diffuseTexture;
+	private Texture specularTexture;
 
-	public Model(VAO mesh, Texture texture) {
-		this.mesh = mesh;
-		this.texture = texture;
+	protected Model() {
 	}
 
 	public VAO getMesh() {
 		return mesh;
 	}
 
-	public int getTextureID() {
-		return texture.getID();
+	protected void setMesh(VAO mesh) {
+		this.mesh = mesh;
+	}
+
+	public Texture getDiffuseTexture() {
+		return diffuseTexture;
+	}
+
+	protected void setDiffuseTexture(Texture diffuseTexture) {
+		diffuseTexture.setAsDiffuseTexture();
+		this.diffuseTexture = diffuseTexture;
+	}
+
+	public Texture getSpecularTexture() {
+		return specularTexture;
+	}
+
+	protected void setSpecularTexture(Texture specularTexture) {
+		specularTexture.setAsSpecularTexture();
+		this.specularTexture = specularTexture;
 	}
 
 }
