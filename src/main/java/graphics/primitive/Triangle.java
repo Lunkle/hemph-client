@@ -1,39 +1,25 @@
 package graphics.primitive;
 
+import math.Vector3f;
+
 public class Triangle {
 
 	private Point[] points;
 	private int pointIndex = -1;
-	private Edge[] edges;
-	private int edgeIndex = -1;
+	private Vector3f triangleNormal;
 
 	public Triangle(Point p1, Point p2, Point p3) {
 		points = new Point[] { p1, p2, p3 };
-		edges = new Edge[] { new Edge(p1, p2), new Edge(p1, p3), new Edge(p2, p3) };
+
+		triangleNormal = calculateNormal();
 	}
 
-	public Edge getEdge1() {
-		return edges[0];
-	}
-
-	public Edge getEdge2() {
-		return edges[1];
-	}
-
-	public Edge getEdge3() {
-		return edges[2];
-	}
-
-	public Edge getNextEdge() {
-		edgeIndex++;
-		if (edgeIndex == 3) {
-			edgeIndex = 0;
-		}
-		return edges[edgeIndex];
-	}
-
-	public Edge[] getEdges() {
-		return edges;
+	private Vector3f calculateNormal() {
+		Vector3f planeVector1 = Vector3f.sub(getPoint2().vector(), getPoint1().vector());
+		Vector3f planeVector2 = Vector3f.sub(getPoint3().vector(), getPoint1().vector());
+		Vector3f cross = new Vector3f(Vector3f.cross(planeVector1, planeVector2));
+		cross.normalise();
+		return cross;
 	}
 
 	public Point getPoint1() {
@@ -58,6 +44,10 @@ public class Triangle {
 
 	public Point[] getPoints() {
 		return points;
+	}
+
+	public Vector3f getTriangleNormal() {
+		return triangleNormal;
 	}
 
 }

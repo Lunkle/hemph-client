@@ -11,36 +11,95 @@ public class Quaternion {
 	private float z;
 
 	/**
-	 * Creates a quaternion and normalizes it.
+	 * Creates an empty quaternion with w = 1 and x, y, z = 0.
+	 */
+	public Quaternion() {
+		this.w = 1;
+		this.w = 0;
+		this.w = 0;
+		this.w = 0;
+	}
+
+	/**
+	 * Creates an quaternion with components as specified.
 	 * 
+	 * @param w
 	 * @param x
 	 * @param y
 	 * @param z
-	 * @param w
 	 */
 	public Quaternion(float w, float x, float y, float z) {
+		setComponents(w, x, y, z);
+	}
+
+	/**
+	 * Sets this quaternion through individual components.
+	 * 
+	 * @param w
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return this quaternion
+	 */
+	public Quaternion setComponents(float w, float x, float y, float z) {
 		this.w = w;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		normalize();
+		return this;
+	}
+
+	/**
+	 * Sets this quaternion by an angle of rotation about an axis.
+	 * 
+	 * @param theta
+	 * @param axisX
+	 * @param axisY
+	 * @param axisZ
+	 * @return this quaternion
+	 */
+	public Quaternion setAngleAxis(float theta, float axisX, float axisY, float axisZ) {
+		double angle = Math.toRadians(theta);
+		this.w = (float) Math.cos(angle);
+		Vector3f axis = new Vector3f(axisX, axisY, axisZ);
+		axis.normalise();
+		axis.scale((float) Math.sin(angle));
+		this.x = axis.x;
+		this.y = axis.y;
+		this.z = axis.z;
+		return this;
 	}
 
 	/**
 	 * Normalizes the quaternion.
+	 * 
+	 * @return this quaternion
 	 */
-	public void normalize() {
+	public Quaternion normalize() {
 		float mag = (float) Math.sqrt(w * w + x * x + y * y + z * z);
 		w /= mag;
 		x /= mag;
 		y /= mag;
 		z /= mag;
+		return this;
 	}
 
-	public Vector3f getImaginary() {
-		return new Vector3f(x, y, z);
+	/**
+	 * Gets the invertse of this quaternion;
+	 * 
+	 * @return the inverse quaternion
+	 */
+	public Quaternion inverse() {
+		return new Quaternion(w, -x, -y, -z);
 	}
 
+	/**
+	 * Multiplies this quaternion by the parameter quaternion.
+	 * 
+	 * @param quaternion
+	 * @return the resultant quaternion
+	 */
 	public Quaternion multiply(Quaternion quaternion) {
 		float newW = -x * quaternion.x - y * quaternion.y - z * quaternion.z + w * quaternion.w;
 		float newX = x * quaternion.w + y * quaternion.z - z * quaternion.y + w * quaternion.x;

@@ -1,4 +1,4 @@
-package graphics;
+package graphics.rendering;
 
 import graphics.transformation.ViewTransformation;
 import math.Matrix4f;
@@ -8,7 +8,7 @@ public class Camera {
 
 	private ViewTransformation transformation;
 	private Vector3f cameraMoveDirection = new Vector3f(0, 0, 0);
-	private float cameraSpeed = 0.1f;
+	private float cameraSpeed = 0.3f;
 
 	public enum Directions {
 		FRONT, BACK, LEFT, RIGHT, UP, DOWN,

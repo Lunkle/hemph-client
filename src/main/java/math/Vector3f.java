@@ -131,7 +131,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * 
 	 * @param left  The LHS vector
 	 * @param right The RHS vector
-	 * @return the sum of left and right
+	 * @return left plus right
 	 */
 	public static Vector3f add(Vector3f left, Vector3f right) {
 		return new Vector3f(left.x + right.x, left.y + right.y, left.z + right.z);
@@ -148,11 +148,22 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 */
 	public static Vector3f sub(Vector3f left, Vector3f right, Vector3f dest) {
 		if (dest == null)
-			return new Vector3f(left.x - right.x, left.y - right.y, left.z - right.z);
+			return sub(left, right);
 		else {
-			dest.set(left.x - right.x, left.y - right.y, left.z - right.z);
+			dest.set(sub(left, right));
 			return dest;
 		}
+	}
+
+	/**
+	 * Subtract a vector from another vector and return the result.
+	 * 
+	 * @param left  The LHS vector
+	 * @param right The RHS vector
+	 * @return left minus right
+	 */
+	public static Vector3f sub(Vector3f left, Vector3f right) {
+		return new Vector3f(left.x - right.x, left.y - right.y, left.z - right.z);
 	}
 
 	/**

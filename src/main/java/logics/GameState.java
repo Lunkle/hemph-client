@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import graphics.Camera;
 import graphics.entity.Entity;
 import graphics.gui.GUI;
 import graphics.light.DirectionalLight;
@@ -13,6 +12,7 @@ import graphics.light.Light;
 import graphics.light.PointLight;
 import graphics.light.SpotLight;
 import graphics.model.VAO;
+import graphics.rendering.Camera;
 import math.Matrix4f;
 
 public abstract class GameState {

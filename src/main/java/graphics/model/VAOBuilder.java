@@ -25,9 +25,17 @@ public class VAOBuilder {
 		return this;
 	}
 
+	public VAOBuilder addPositions(List<Float> positions) {
+		return addPositions(toFloatArray(positions));
+	}
+
 	public VAOBuilder addTextureCoordinates(float[] textureCoordinates) {
 		vao.attachVBO(1, 2, textureCoordinates);
 		return this;
+	}
+
+	public VAOBuilder addTextureCoordinates(List<Float> textureCoordinates) {
+		return addTextureCoordinates(toFloatArray(textureCoordinates));
 	}
 
 	public VAOBuilder addNormals(float[] normals) {
@@ -35,10 +43,18 @@ public class VAOBuilder {
 		return this;
 	}
 
+	public VAOBuilder addNormals(List<Float> normals) {
+		return addNormals(toFloatArray(normals));
+	}
+
 	public VAOBuilder addIndices(int[] indices) {
 		vao.attachEBO(indices);
 		vao.vertexCount = indices.length;
 		return this;
+	}
+
+	public VAOBuilder addIndices(List<Integer> indices) {
+		return addIndices(toIntArray(indices));
 	}
 
 	public VAO create() {

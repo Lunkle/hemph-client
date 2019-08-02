@@ -60,7 +60,7 @@ void main(){
 
 vec3 calculateDirectionalLight(DirectionalLight light, vec3 textureColour, vec3 normal) {
 	vec3 toLightVector = vec3(viewMatrix * vec4(-light.direction, 0.0));
-	float diffuseFactor = max(dot(fragmentNormal, toLightVector), 0);
+	float diffuseFactor = (0.2 + max(dot(fragmentNormal, toLightVector), -0.2) / 1.2);
 	vec3 reflectedLightVector = reflect(-toLightVector, normal);
 	float specularFactor = pow(max(dot(normalize(-fragmentPosition), reflectedLightVector), 0.0), 16);
 	vec3 specularMaterial = vec3(texture(material.specular, fragmentTextureCoordinates));

@@ -20,6 +20,7 @@ public class EntityRenderer {
 	}
 
 	public void render(GameState gameState) {
+		enableCulling();
 		Map<VAO, List<Entity>> meshEntityMap = gameState.getMeshes();
 		shader.start();
 		shader.loadDirectionalLights(gameState.getDirectionalLights());
@@ -43,6 +44,11 @@ public class EntityRenderer {
 			GL30.glBindVertexArray(0);
 		}
 		shader.stop();
+	}
+
+	public static void enableCulling() {
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(GL11.GL_BACK);
 	}
 
 	public void loadProjectionMatrix(ProjectionTransformation projectionTransformation) {

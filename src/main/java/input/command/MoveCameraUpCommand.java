@@ -1,6 +1,6 @@
 package input.command;
 
-import graphics.Camera;
+import graphics.rendering.Camera;
 
 public class MoveCameraUpCommand extends Command {
 

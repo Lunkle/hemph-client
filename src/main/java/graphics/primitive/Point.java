@@ -3,39 +3,50 @@ package graphics.primitive;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Point {
+import math.Vector3f;
 
-	private float x;
-	private float y;
-	private float z;
+public class Point implements Cloneable {
 
-	private List<HalfEdge> halfEdges;
+	protected Vector3f position;
+	protected List<Point> adjacentPoints;
 
 	public Point(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		halfEdges = new ArrayList<>();
+		position = new Vector3f(x, y, z);
+		adjacentPoints = new ArrayList<>();
+	}
+
+	public Point(Vector3f vector) {
+		this(vector.x, vector.y, vector.z);
 	}
 
 	public float getX() {
-		return x;
+		return position.x;
 	}
 
 	public float getY() {
-		return y;
+		return position.y;
 	}
 
 	public float getZ() {
-		return z;
+		return position.z;
 	}
 
-	public void addHalfEdge(HalfEdge halfEdge) {
-		halfEdges.add(halfEdge);
+	public Vector3f vector() {
+		return position;
 	}
 
-	public List<HalfEdge> getHalfEdges() {
-		return halfEdges;
+	public void addAdjacentPoint(Point point) {
+		adjacentPoints.add(point);
+	}
+
+	public List<Point> getAdjacentPoints() {
+		return adjacentPoints;
+	}
+
+	@Override
+	public Point clone() {
+		Point newPoint = new Point(position);
+		return newPoint;
 	}
 
 }
