@@ -8,7 +8,7 @@ public class WorldTransformation extends Transformation {
 	private float posX = 0;
 	private float posY = 0;
 	private float posZ = 0;
-	private Quaternion rotation;
+//	private Quaternion rotation;
 	private float rotX = 0;
 	private float rotY = 0;
 	private float rotZ = 0;

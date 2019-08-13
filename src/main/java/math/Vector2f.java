@@ -56,6 +56,7 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	 * 
 	 * @see org.lwjgl.util.vector.WritableVector2f#set(float, float)
 	 */
+	@Override
 	public void set(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -138,7 +139,8 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	}
 
 	/**
-	 * The dot product of two vectors is calculated as v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
+	 * The dot product of two vectors is calculated as v1.x * v2.x + v1.y * v2.y +
+	 * v1.z * v2.z
 	 * 
 	 * @param left  The LHS vector
 	 * @param right The RHS vector
@@ -182,7 +184,8 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	}
 
 	/**
-	 * Subtract a vector from another vector and place the result in a destination vector.
+	 * Subtract a vector from another vector and place the result in a destination
+	 * vector.
 	 * 
 	 * @param left  The LHS vector
 	 * @param right The RHS vector
@@ -191,11 +194,22 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	 */
 	public static Vector2f sub(Vector2f left, Vector2f right, Vector2f dest) {
 		if (dest == null)
-			return new Vector2f(left.x - right.x, left.y - right.y);
+			return sub(left, right);
 		else {
-			dest.set(left.x - right.x, left.y - right.y);
+			dest.set(sub(left, right));
 			return dest;
 		}
+	}
+
+	/**
+	 * Subtract a vector from another vector and return the result.
+	 * 
+	 * @param left  The LHS vector
+	 * @param right The RHS vector
+	 * @return the resulting vector
+	 */
+	public static Vector2f sub(Vector2f left, Vector2f right) {
+		return new Vector2f(left.x - right.x, left.y - right.y);
 	}
 
 	/**
@@ -258,6 +272,7 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	/**
 	 * @return x
 	 */
+	@Override
 	public final float getX() {
 		return x;
 	}
@@ -265,6 +280,7 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	/**
 	 * @return y
 	 */
+	@Override
 	public final float getY() {
 		return y;
 	}
@@ -274,6 +290,7 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	 * 
 	 * @param x
 	 */
+	@Override
 	public final void setX(float x) {
 		this.x = x;
 	}
@@ -283,6 +300,7 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	 * 
 	 * @param y
 	 */
+	@Override
 	public final void setY(float y) {
 		this.y = y;
 	}

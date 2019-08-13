@@ -7,9 +7,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import graphics.model.VAO;
 import graphics.transformation.ProjectionTransformation;
-import logics.GameState;
+import graphics.vao.VAO;
+import logics.state.GameState;
 
 public class EntityRenderer {
 

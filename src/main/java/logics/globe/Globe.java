@@ -1,8 +1,8 @@
 package logics.globe;
 
-import graphics.model.VAO;
 import graphics.primitive.Point;
 import graphics.primitive.Triangle;
+import graphics.vao.VAO;
 import math.Vector2f;
 import math.Vector3f;
 

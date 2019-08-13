@@ -1,6 +1,6 @@
 package graphics.gui;
 
-import graphics.model.Texture;
+import graphics.texture.Texture;
 
 public class GUIBuilder {
 
@@ -24,10 +24,6 @@ public class GUIBuilder {
 		texture.setAsDiffuseTexture();
 		gui.setTexture(texture);
 		return this;
-	}
-
-	public GUIBuilder setTexture(String string) {
-		return setTexture(new Texture(string));
 	}
 
 	public GUI create() {

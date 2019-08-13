@@ -1,5 +1,8 @@
 package graphics.model;
 
+import graphics.texture.Texture;
+import graphics.vao.VAO;
+
 public class ModelBuilder {
 
 	private Model model;

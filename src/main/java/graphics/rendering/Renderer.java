@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import graphics.entity.EntityRenderer;
 import graphics.gui.GUIRenderer;
 import graphics.transformation.ProjectionTransformation;
-import logics.GameState;
+import logics.state.GameState;
 
 public class Renderer {
 

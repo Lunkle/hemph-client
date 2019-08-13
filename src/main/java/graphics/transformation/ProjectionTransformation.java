@@ -1,6 +1,6 @@
 package graphics.transformation;
 
-import game.Visual;
+import graphics.Visual;
 import math.Matrix4f;
 
 public class ProjectionTransformation extends Transformation {

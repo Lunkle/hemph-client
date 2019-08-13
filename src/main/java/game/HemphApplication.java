@@ -2,13 +2,18 @@ package game;
 
 import org.lwjgl.Version;
 
-import input.command.Command;
-import input.command.CommandLoader;
+import graphics.Visual;
+import graphics.loader.GraphicsDataConnecter;
+import graphics.loader.ResourceLoaderThread;
+import input.Input;
+import logics.Logic;
+import logics.state.GameState;
+import logics.state.LoadingScreenState;
 
 public class HemphApplication {
 
-	private CommandLoader commandLoader;
-
+	private ResourceLoaderThread loaderThread;
+	private GraphicsDataConnecter connecter;
 	private Input inputs;
 	private Logic logics;
 	private Visual visuals;
@@ -21,24 +26,26 @@ public class HemphApplication {
 	}
 
 	private void init() {
-		commandLoader = new CommandLoader();
+		loaderThread = new ResourceLoaderThread();
+		loaderThread.start();
+		connecter = new GraphicsDataConnecter();
+		GameState state = new LoadingScreenState(loaderThread, connecter);
 		visuals = new Visual();
-		logics = new Logic();
 		inputs = new Input();
-		Command.setState(logics.getGameState());
-		visuals.setGameState(logics.getGameState());
+		logics = new Logic(state, inputs);
 	}
 
 	private void loop() {
-		commandLoader.start();
 		logics.start();
 		while (!visuals.shouldCloseWindow()) {
-			inputs.handle();
-			visuals.refresh();
+			inputs.handleEvents();
+			visuals.refresh(logics.getGameState());
+			connecter.connectResources();
 		}
 	}
 
 	private void cleanUp() {
+		loaderThread.end();
 		logics.end();
 		visuals.cleanUp();
 	}

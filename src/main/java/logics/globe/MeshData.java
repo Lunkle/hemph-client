@@ -3,10 +3,9 @@ package logics.globe;
 import java.util.ArrayList;
 import java.util.List;
 
-import graphics.model.VAO;
-import graphics.model.VAOBuilder;
 import graphics.primitive.Point;
 import graphics.primitive.Triangle;
+import graphics.vao.VAO;
 import math.Vector3f;
 
 public class MeshData {
@@ -56,7 +55,8 @@ public class MeshData {
 			textureCoordinates.add(1.0f);
 			textureCoordinates.add(0.0f);
 		}
-		return VAOBuilder.newInstance().addPositions(positions).addTextureCoordinates(textureCoordinates).addNormals(normals).addIndices(indices).create();
+		return new VAO();
+//		return VAOBuilder.newInstance().addPositions(positions).addTextureCoordinates(textureCoordinates).addNormals(normals).addIndices(indices).create();
 	}
 
 }

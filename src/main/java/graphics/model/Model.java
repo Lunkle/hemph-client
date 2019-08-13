@@ -1,13 +1,13 @@
 package graphics.model;
 
+import graphics.texture.Texture;
+import graphics.vao.VAO;
+
 public class Model {
 
 	private VAO mesh;
 	private Texture diffuseTexture;
 	private Texture specularTexture;
-
-	protected Model() {
-	}
 
 	public VAO getMesh() {
 		return mesh;

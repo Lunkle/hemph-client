@@ -3,9 +3,12 @@ package input.misc;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL11;
 
-import game.Visual;
+import graphics.Visual;
 
 public class ResizeHandler extends GLFWFramebufferSizeCallback {
+
+	public ResizeHandler() {
+	}
 
 	@Override
 	public void invoke(long windowID, int width, int height) {
