@@ -2,7 +2,7 @@ package graphics.loader;
 
 import graphics.gui.GUIMeshData;
 import graphics.texture.ByteBufferImageRawData;
-import graphics.vao.OBJMeshRawData;
+import graphics.vao.MeshRawData;
 
 /**
  * Represents any class with data that is ready to be used by opengl directly.
@@ -14,8 +14,8 @@ public interface InterpretedData {
 
 	public default void interpret(ByteBufferImageRawData data) {}
 
-	public default void interpret(OBJMeshRawData data) {}
-
 	public default void interpret(GUIMeshData guiMeshData) {}
+
+	public default void interpret(MeshRawData data) {}
 
 }

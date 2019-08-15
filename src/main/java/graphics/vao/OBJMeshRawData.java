@@ -12,18 +12,12 @@ import graphics.loader.RawData;
 import math.Vector2f;
 import math.Vector3f;
 
-public class OBJMeshRawData implements RawData {
+public class OBJMeshRawData extends MeshRawData implements RawData {
 
-	private float[] verticesArray;
+	private float[] positionsArray;
 	private float[] normalsArray;
 	private float[] textureArray;
 	private int[] indicesArray;
-
-	public OBJMeshRawData() {}
-
-	public OBJMeshRawData(String filePath) {
-		load(filePath);
-	}
 
 	@Override
 	public void load(String filePath) {
@@ -79,13 +73,13 @@ public class OBJMeshRawData implements RawData {
 			e.printStackTrace();
 		}
 
-		verticesArray = new float[vertices.size() * 3];
+		positionsArray = new float[vertices.size() * 3];
 		indicesArray = new int[indices.size()];
 		int vertexPointer = 0;
 		for (Vector3f vertex : vertices) {
-			verticesArray[vertexPointer++] = vertex.x;
-			verticesArray[vertexPointer++] = vertex.y;
-			verticesArray[vertexPointer++] = vertex.z;
+			positionsArray[vertexPointer++] = vertex.x;
+			positionsArray[vertexPointer++] = vertex.y;
+			positionsArray[vertexPointer++] = vertex.z;
 		}
 		for (int i = 0; i < indices.size(); i++) {
 			indicesArray[i] = indices.get(i);
@@ -104,18 +98,22 @@ public class OBJMeshRawData implements RawData {
 		normalsArray[currentVertexPointer * 3 + 2] = currentNorm.z;
 	}
 
-	public float[] getVerticesArray() {
-		return verticesArray;
+	@Override
+	public float[] getPositionsArray() {
+		return positionsArray;
 	}
 
+	@Override
 	public float[] getNormalsArray() {
 		return normalsArray;
 	}
 
+	@Override
 	public float[] getTextureArray() {
 		return textureArray;
 	}
 
+	@Override
 	public int[] getIndicesArray() {
 		return indicesArray;
 	}

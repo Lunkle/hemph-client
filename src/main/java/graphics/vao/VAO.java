@@ -19,14 +19,6 @@ public class VAO implements InterpretedData {
 	protected int vaoID;
 	protected int vertexCount;
 
-	// Creates a new attribute object
-	public VAO() {}
-
-	public VAO(OBJMeshRawData data) {
-		this();
-		interpret(data);
-	}
-
 	// Must bind and unbind VAO before attaching VBO/EBOs
 	// The VAO is already deafult bound upon creation so do not create any other
 	// VAOs until finished attaching VBO and EBOs for the most recently created vao
@@ -71,11 +63,11 @@ public class VAO implements InterpretedData {
 	}
 
 	@Override
-	public void interpret(OBJMeshRawData data) {
+	public void interpret(MeshRawData data) {
 		vaoID = GL30.glGenVertexArrays();
 		vaos.add(vaoID);
 		bindVAO();
-		attachVBO(0, 3, data.getVerticesArray());
+		attachVBO(0, 3, data.getPositionsArray());
 		attachVBO(1, 2, data.getTextureArray());
 		attachVBO(2, 3, data.getNormalsArray());
 		int[] indices = data.getIndicesArray();

@@ -1,5 +1,7 @@
 package logics.state;
 
+import org.lwjgl.glfw.GLFW;
+
 import graphics.loader.GraphicsDataConnecter;
 import graphics.loader.ResourceLoaderThread;
 import graphics.loader.ResourceLoadingTask;
@@ -13,10 +15,12 @@ import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
+import logics.globe.GlobeRawData;
 
 public class LoadingScreenState extends GameState {
 
 	private boolean finishedLoading = false;
+	private double startTime;
 
 	private ResourceLoadingTask loadTask;
 	private ResourcePack resourcePack;
@@ -35,11 +39,19 @@ public class LoadingScreenState extends GameState {
 	private Texture roomSpecularTexture;
 	private OBJMeshRawData roomRawMeshData;
 	private VAO roomMesh;
+	private ByteBufferImageRawData greenRawTextureData;
+	private Texture greenTexture;
+	private ByteBufferImageRawData globeSpecularRawTextureData;
+	private Texture globeSpecularTexture;
+	private GlobeRawData globeRawMeshData;
+	private VAO globeMesh;
 
 	public LoadingScreenState(ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter) {
 		super();
 		setLoadingThread(loaderThread);
 		setConnecter(connecter);
+
+		startTime = GLFW.glfwGetTime();
 
 		setFlagToClearObservers();
 
@@ -56,6 +68,9 @@ public class LoadingScreenState extends GameState {
 		roomRawTextureData = new ByteBufferImageRawData();
 		roomSpecularRawTextureData = new ByteBufferImageRawData();
 		roomRawMeshData = new OBJMeshRawData();
+		greenRawTextureData = new ByteBufferImageRawData();
+		globeSpecularRawTextureData = new ByteBufferImageRawData();
+		globeRawMeshData = new GlobeRawData();
 
 		loadTask.addItem(dukerawTextureData, "dukemascot.png");
 		loadTask.addItem(tableRawTextureData, "table.png");
@@ -64,6 +79,9 @@ public class LoadingScreenState extends GameState {
 		loadTask.addItem(roomRawTextureData, "room.png");
 		loadTask.addItem(roomSpecularRawTextureData, "roomSpecularMap.png");
 		loadTask.addItem(roomRawMeshData, "room.obj");
+		loadTask.addItem(greenRawTextureData, "green.png");
+		loadTask.addItem(globeSpecularRawTextureData, "globeSpecularMap.png");
+		loadTask.addItem(globeRawMeshData, "");
 
 		loaderThread.queueTask(loadTask);
 	}
@@ -85,6 +103,12 @@ public class LoadingScreenState extends GameState {
 		unconnectedData.addData(roomSpecularTexture, roomSpecularRawTextureData);
 		roomMesh = new VAO();
 		unconnectedData.addData(roomMesh, roomRawMeshData);
+		greenTexture = new Texture();
+		unconnectedData.addData(greenTexture, greenRawTextureData);
+		globeSpecularTexture = new Texture();
+		unconnectedData.addData(globeSpecularTexture, globeSpecularRawTextureData);
+		globeMesh = new VAO();
+		unconnectedData.addData(globeMesh, globeRawMeshData);
 
 		unconnectedData.addNotifier(this);
 		connecter.queueTask(unconnectedData);
@@ -107,6 +131,9 @@ public class LoadingScreenState extends GameState {
 		resourcePack.addTexture(roomTexture, "roomTexture");
 		resourcePack.addTexture(roomSpecularTexture, "roomSpecularMap");
 		resourcePack.addMesh(roomMesh, "roomMesh");
+		resourcePack.addTexture(greenTexture, "greenTexture");
+		resourcePack.addTexture(globeSpecularTexture, "globeSpecularMap");
+		resourcePack.addMesh(globeMesh, "globeMesh");
 	}
 
 	@Override
@@ -114,13 +141,16 @@ public class LoadingScreenState extends GameState {
 		if (!finishedLoading) {
 			double percentage = loadTask.getProgressPercentage();
 			if (percentage < 100) {
-
+				System.out.println(Math.round(percentage) + "%");
 			} else {
 				finishedLoading = true;
 			}
 		} else {
 			connectFirstDataBatch();
 			generateResourcePack();
+			double endTime = GLFW.glfwGetTime();
+			double timeTaken = endTime - startTime;
+			System.out.println("Finished loading in " + timeTaken + " seconds.");
 			return new TableTopState(resourcePack);
 		}
 		return this;
