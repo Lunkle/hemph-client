@@ -36,6 +36,20 @@ public class Primitive {
 		return new HalfEdge(to);
 	}
 
+	public static FullAdjacencyVertex getMidpointOfHalfEdge(HalfEdge edge) {
+		FullAdjacencyVertex midpoint = edge.getMidpoint();
+		if (midpoint != null) {
+			return midpoint;
+		}
+		Vector3f to = edge.getVertex().getPosition();
+		Vector3f from = edge.getNext().getNext().getVertex().getPosition();
+		Vector3f midpointVector = Vector3f.add(to, from).scale(0.5f);
+		midpoint = new FullAdjacencyVertex(midpointVector.x, midpointVector.y, midpointVector.z);
+		edge.setMidpoint(midpoint);
+		edge.getPair().setMidpoint(midpoint);
+		return midpoint;
+	}
+
 	public static void pairEdges(HalfEdge edge1, HalfEdge edge2) {
 		edge1.setPair(edge2);
 		edge2.setPair(edge1);

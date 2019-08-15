@@ -33,4 +33,11 @@ public class FullAdjacencyVertex extends Vertex {
 		return emanatingEdges;
 	}
 
+	public FullAdjacencyVertex normalizeLength() {
+		Vector3f normalizedPosition = getPosition();
+		normalizedPosition.normalise();
+		setPosition(normalizedPosition);
+		return this;
+	}
+
 }

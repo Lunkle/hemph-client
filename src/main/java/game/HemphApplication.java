@@ -27,7 +27,6 @@ public class HemphApplication {
 
 	private void init() {
 		loaderThread = new ResourceLoaderThread();
-		loaderThread.start();
 		connecter = new GraphicsDataConnecter();
 		GameState state = new LoadingScreenState(loaderThread, connecter);
 		visuals = new Visual();
@@ -37,6 +36,7 @@ public class HemphApplication {
 
 	private void loop() {
 		logics.start();
+		loaderThread.start();
 		while (!visuals.shouldCloseWindow()) {
 			inputs.handleEvents();
 			visuals.refresh(logics.getGameState());

@@ -6,6 +6,9 @@ public class HalfEdge {
 	private HalfEdge pair;
 	private HalfEdge next;
 
+	// Utilitary data, not needed in final mesh
+	private FullAdjacencyVertex midpoint;
+
 	public HalfEdge(FullAdjacencyVertex to) {
 		this.to = to;
 	}
@@ -28,6 +31,14 @@ public class HalfEdge {
 
 	public HalfEdge getPair() {
 		return pair;
+	}
+
+	public FullAdjacencyVertex getMidpoint() {
+		return midpoint;
+	}
+
+	public void setMidpoint(FullAdjacencyVertex midpoint) {
+		this.midpoint = midpoint;
 	}
 
 }

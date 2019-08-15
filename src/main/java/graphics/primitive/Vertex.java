@@ -12,6 +12,10 @@ public class Vertex implements Cloneable {
 		position = new Vector3f(x, y, z);
 	}
 
+	public void setPosition(Vector3f position) {
+		this.position = position;
+	}
+
 	public Vector3f getPosition() {
 		return position;
 	}
