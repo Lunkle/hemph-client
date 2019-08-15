@@ -56,4 +56,8 @@ public class EntityRenderer {
 		shader.loadProjectionMatrix(projectionTransformation.getMatrix());
 		shader.stop();
 	}
+
+	public void cleanUp() {
+		shader.cleanUp();
+	}
 }

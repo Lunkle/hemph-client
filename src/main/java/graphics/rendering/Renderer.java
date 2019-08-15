@@ -35,17 +35,12 @@ public class Renderer {
 
 	public void render(GameState gameState) {
 		prepare();
-//		entityShader.loadSkyColour(RED, GREEN, BLUE);
-//		entityShader.loadLight(scene.getLights());
-//		entityShader.loadViewMatrix(scene.getCamera().getMatrix());
 		renderer.render(gameState);
-//		entityShader.stop();
-//		skyboxRenderer.render(camera);
 		guiRenderer.render(gameState.getGuis());
 	}
 
 	public void cleanUp() {
-//		entityShader.cleanUp();
+		renderer.cleanUp();
 		guiRenderer.cleanUp();
 	}
 

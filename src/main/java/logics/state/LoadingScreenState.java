@@ -15,6 +15,7 @@ import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
+import logics.globe.Globe;
 import logics.globe.GlobeRawData;
 
 public class LoadingScreenState extends GameState {
@@ -45,6 +46,7 @@ public class LoadingScreenState extends GameState {
 	private Texture globeSpecularTexture;
 	private GlobeRawData globeRawMeshData;
 	private VAO globeMesh;
+	private Globe globe;
 
 	public LoadingScreenState(ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter) {
 		super();
@@ -103,6 +105,22 @@ public class LoadingScreenState extends GameState {
 		unconnectedData.addData(roomSpecularTexture, roomSpecularRawTextureData);
 		roomMesh = new VAO();
 		unconnectedData.addData(roomMesh, roomRawMeshData);
+
+		unconnectedData.addNotifier(this);
+		connecter.queueTask(unconnectedData);
+
+		while (!unconnectedData.isConnected()) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private synchronized void connectSceondDataBatch() {
+		UnconnectedData unconnectedData = connecter.generateNewTask();
+
 		greenTexture = new Texture();
 		unconnectedData.addData(greenTexture, greenRawTextureData);
 		globeSpecularTexture = new Texture();
@@ -147,11 +165,12 @@ public class LoadingScreenState extends GameState {
 			}
 		} else {
 			connectFirstDataBatch();
+			connectSceondDataBatch();
 			generateResourcePack();
 			double endTime = GLFW.glfwGetTime();
 			double timeTaken = endTime - startTime;
 			System.out.println("Finished loading in " + timeTaken + " seconds.");
-			return new TableTopState(resourcePack);
+			return new TableTopState(resourcePack, globe);
 		}
 		return this;
 	}

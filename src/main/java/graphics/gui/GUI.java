@@ -3,21 +3,12 @@ package graphics.gui;
 import graphics.Visual;
 import graphics.texture.Texture;
 import graphics.transformation.WorldTransformation;
-import graphics.vao.VAO;
 import math.Matrix4f;
 
 public class GUI {
 
-	private static int guiVaoID;
 	private Texture texture;
-
 	private WorldTransformation worldTransformation;
-
-	static {
-		VAO guiVAO = new VAO();
-		guiVAO.interpret(new GUIMeshData());
-		guiVaoID = guiVAO.getVaoId();
-	}
 
 	protected GUI() {}
 
@@ -42,10 +33,6 @@ public class GUI {
 
 	public void activateTextures() {
 		texture.activateTexture();
-	}
-
-	public static int getGuiVaoID() {
-		return guiVaoID;
 	}
 
 }

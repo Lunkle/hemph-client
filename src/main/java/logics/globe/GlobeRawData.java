@@ -28,9 +28,7 @@ public class GlobeRawData extends MeshRawData implements RawData {
 	@Override
 	public void load(String filePath) {
 		generateIcosaherdron();
-		subdivide();
-		subdivide();
-		subdivide();
+		subdivide(3);
 		translateToRawData();
 	}
 
@@ -106,30 +104,32 @@ public class GlobeRawData extends MeshRawData implements RawData {
 		addTriangle(new Triangle(p4, p7, p9));
 	}
 
-	private void subdivide() {
-		List<Triangle> oldTriangles = triangles;
-		triangles = new ArrayList<>();
-		int index = vertices.size();
-		for (Triangle triangle : oldTriangles) {
-			HalfEdge edge = triangle.getEdge();
-			HalfEdge next = edge.getNext();
-			HalfEdge previous = next.getNext();
-			FullAdjacencyVertex p1 = previous.getVertex();
-			FullAdjacencyVertex p2 = edge.getVertex();
-			FullAdjacencyVertex p3 = next.getVertex();
-			FullAdjacencyVertex p4 = Primitive.getMidpointOfHalfEdge(previous).normalizeLength();
-			p4.setIndex(index++);
-			vertices.add(p4);
-			FullAdjacencyVertex p5 = Primitive.getMidpointOfHalfEdge(edge).normalizeLength();
-			p5.setIndex(index++);
-			vertices.add(p5);
-			FullAdjacencyVertex p6 = Primitive.getMidpointOfHalfEdge(next).normalizeLength();
-			p6.setIndex(index++);
-			vertices.add(p6);
-			triangles.add(new Triangle(p1, p5, p4));
-			triangles.add(new Triangle(p5, p2, p6));
-			triangles.add(new Triangle(p4, p5, p6));
-			triangles.add(new Triangle(p4, p6, p3));
+	private void subdivide(int iterations) {
+		for (int i = 0; i < iterations; i++) {
+			List<Triangle> oldTriangles = triangles;
+			triangles = new ArrayList<>();
+			int index = vertices.size();
+			for (Triangle triangle : oldTriangles) {
+				HalfEdge edge = triangle.getEdge();
+				HalfEdge next = edge.getNext();
+				HalfEdge previous = next.getNext();
+				FullAdjacencyVertex p1 = previous.getVertex();
+				FullAdjacencyVertex p2 = edge.getVertex();
+				FullAdjacencyVertex p3 = next.getVertex();
+				FullAdjacencyVertex p4 = Primitive.getMidpointOfHalfEdge(previous).normalizeLength();
+				p4.setIndex(index++);
+				vertices.add(p4);
+				FullAdjacencyVertex p5 = Primitive.getMidpointOfHalfEdge(edge).normalizeLength();
+				p5.setIndex(index++);
+				vertices.add(p5);
+				FullAdjacencyVertex p6 = Primitive.getMidpointOfHalfEdge(next).normalizeLength();
+				p6.setIndex(index++);
+				vertices.add(p6);
+				triangles.add(new Triangle(p1, p5, p4));
+				triangles.add(new Triangle(p5, p2, p6));
+				triangles.add(new Triangle(p4, p5, p6));
+				triangles.add(new Triangle(p4, p6, p3));
+			}
 		}
 	}
 

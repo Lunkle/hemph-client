@@ -15,31 +15,19 @@ import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
+import logics.globe.Globe;
 
 public class TableTopState extends GameState {
 
 	private Entity globeEntity;
+	private Globe globe;
 
-	public TableTopState(ResourcePack resourcePack) {
+	public TableTopState(ResourcePack resourcePack, Globe globe) {
 		setFlagToClearObservers();
+		setCameraMovementKeyCommands();
+		positionCamera();
 
-		KeyObserver cameraControlKeyObserver = new KeyObserver();
-		Command front = new Command(() -> getCamera().addDirection(Directions.FRONT));
-		Command back = new Command(() -> getCamera().addDirection(Directions.BACK));
-		Command left = new Command(() -> getCamera().addDirection(Directions.LEFT));
-		Command right = new Command(() -> getCamera().addDirection(Directions.RIGHT));
-		Command up = new Command(() -> getCamera().addDirection(Directions.UP));
-		Command down = new Command(() -> getCamera().addDirection(Directions.DOWN));
-		cameraControlKeyObserver.addCommand(Keys.KEY_W, new KeyCommand(front, back));
-		cameraControlKeyObserver.addCommand(Keys.KEY_A, new KeyCommand(left, right));
-		cameraControlKeyObserver.addCommand(Keys.KEY_S, new KeyCommand(back, front));
-		cameraControlKeyObserver.addCommand(Keys.KEY_D, new KeyCommand(right, left));
-		cameraControlKeyObserver.addCommand(Keys.KEY_Q, new KeyCommand(down, up));
-		cameraControlKeyObserver.addCommand(Keys.KEY_E, new KeyCommand(up, down));
-		addKeyObserver(cameraControlKeyObserver);
-
-		getCamera().setPosition(0, 11f, 2f);
-		getCamera().setRotation(40, 0, 0);
+		this.globe = globe;
 
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = GUIBuilder.newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
@@ -75,6 +63,28 @@ public class TableTopState extends GameState {
 		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
 		addLight(directionalLight1);
 
+	}
+
+	private void positionCamera() {
+		getCamera().setPosition(0, 11f, 2f);
+		getCamera().setRotation(40, 0, 0);
+	}
+
+	private void setCameraMovementKeyCommands() {
+		KeyObserver cameraControlKeyObserver = new KeyObserver();
+		Command front = new Command(() -> getCamera().addDirection(Directions.FRONT));
+		Command back = new Command(() -> getCamera().addDirection(Directions.BACK));
+		Command left = new Command(() -> getCamera().addDirection(Directions.LEFT));
+		Command right = new Command(() -> getCamera().addDirection(Directions.RIGHT));
+		Command up = new Command(() -> getCamera().addDirection(Directions.UP));
+		Command down = new Command(() -> getCamera().addDirection(Directions.DOWN));
+		cameraControlKeyObserver.addCommand(Keys.KEY_W, new KeyCommand(front, back));
+		cameraControlKeyObserver.addCommand(Keys.KEY_A, new KeyCommand(left, right));
+		cameraControlKeyObserver.addCommand(Keys.KEY_S, new KeyCommand(back, front));
+		cameraControlKeyObserver.addCommand(Keys.KEY_D, new KeyCommand(right, left));
+		cameraControlKeyObserver.addCommand(Keys.KEY_Q, new KeyCommand(down, up));
+		cameraControlKeyObserver.addCommand(Keys.KEY_E, new KeyCommand(up, down));
+		addKeyObserver(cameraControlKeyObserver);
 	}
 
 	@Override

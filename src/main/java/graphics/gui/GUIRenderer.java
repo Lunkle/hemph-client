@@ -6,20 +6,27 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import graphics.vao.VAO;
+
 public class GUIRenderer {
 
-	private static final int QUAD_VERTEX_COUNT = 6;
+	private static final int QUAD_VERTEX_COUNT = 4;
 
 	private GUIShader shader;
+	private int guiVaoID;
 
 	public GUIRenderer() {
 		this.shader = new GUIShader();
+		VAO guiVAO = new VAO();
+		GUIMeshData quadData = new GUIMeshData();
+		quadData.accept(guiVAO); // Interpreting the raw quad data
+		guiVaoID = guiVAO.getVaoId();
 	}
 
 	public void render(List<GUI> guis) {
 		shader.start();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL30.glBindVertexArray(GUI.getGuiVaoID());
+		GL30.glBindVertexArray(guiVaoID);
 		GL20.glEnableVertexAttribArray(0);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

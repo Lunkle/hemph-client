@@ -10,7 +10,7 @@ public class GUIMeshData implements RawData {
 
 	@Override
 	public void load(String filePath) {
-		System.out.println("NO, please man");
+		System.out.println("GUI quad data should not need to be loaded");
 	}
 
 	@Override

@@ -78,6 +78,8 @@ public class VAO implements InterpretedData {
 
 	@Override
 	public void interpret(GUIMeshData data) {
+		vaoID = GL30.glGenVertexArrays();
+		vaos.add(vaoID);
 		bindVAO();
 		attachVBO(0, 2, data.getQuadVertices());
 		vertexCount = 6;
