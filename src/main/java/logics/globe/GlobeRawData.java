@@ -5,7 +5,6 @@ import java.util.List;
 
 import graphics.loader.InterpretedData;
 import graphics.loader.RawData;
-import graphics.primitive.FullAdjacencyVertex;
 import graphics.primitive.HalfEdge;
 import graphics.primitive.Primitive;
 import graphics.primitive.Triangle;
@@ -16,8 +15,14 @@ import math.Vector3f;
 
 public class GlobeRawData extends MeshRawData implements RawData {
 
-	private List<Triangle> triangles;
-	private List<FullAdjacencyVertex> vertices;
+	private int subdivisions = 6;
+	private int numberOfPlates = 50;
+
+	private float perturbAmount = 0.0012f;
+
+	private List<TerrainTriangle> triangles;
+	private List<Vertex> vertices;
+	private List<Plate> plates;
 
 	public GlobeRawData() {
 		super();
@@ -28,7 +33,11 @@ public class GlobeRawData extends MeshRawData implements RawData {
 	@Override
 	public void load(String filePath) {
 		generateIcosaherdron();
-		subdivide(3);
+		subdivide(subdivisions);
+		perturbVertices(perturbAmount);
+		generatePlates();
+		generatePlateMovement();
+		separateTriangles();
 		translateToRawData();
 	}
 
@@ -38,20 +47,20 @@ public class GlobeRawData extends MeshRawData implements RawData {
 		float a = vector.x;
 		float b = vector.y;
 		// XY plane rectangle
-		FullAdjacencyVertex p1 = new FullAdjacencyVertex(-a, b, 0);
-		FullAdjacencyVertex p2 = new FullAdjacencyVertex(a, b, 0);
-		FullAdjacencyVertex p3 = new FullAdjacencyVertex(-a, -b, 0);
-		FullAdjacencyVertex p4 = new FullAdjacencyVertex(a, -b, 0);
+		Vertex p1 = new Vertex(-a, b, 0);
+		Vertex p2 = new Vertex(a, b, 0);
+		Vertex p3 = new Vertex(-a, -b, 0);
+		Vertex p4 = new Vertex(a, -b, 0);
 		// YZ plane rectangle
-		FullAdjacencyVertex p5 = new FullAdjacencyVertex(0, -a, b);
-		FullAdjacencyVertex p6 = new FullAdjacencyVertex(0, a, b);
-		FullAdjacencyVertex p7 = new FullAdjacencyVertex(0, -a, -b);
-		FullAdjacencyVertex p8 = new FullAdjacencyVertex(0, a, -b);
+		Vertex p5 = new Vertex(0, -a, b);
+		Vertex p6 = new Vertex(0, a, b);
+		Vertex p7 = new Vertex(0, -a, -b);
+		Vertex p8 = new Vertex(0, a, -b);
 		// XZ plane rectangle
-		FullAdjacencyVertex p9 = new FullAdjacencyVertex(b, 0, -a);
-		FullAdjacencyVertex p10 = new FullAdjacencyVertex(b, 0, a);
-		FullAdjacencyVertex p11 = new FullAdjacencyVertex(-b, 0, -a);
-		FullAdjacencyVertex p12 = new FullAdjacencyVertex(-b, 0, a);
+		Vertex p9 = new Vertex(b, 0, -a);
+		Vertex p10 = new Vertex(b, 0, a);
+		Vertex p11 = new Vertex(-b, 0, -a);
+		Vertex p12 = new Vertex(-b, 0, a);
 
 		// Add them into the ArrayList;
 		p1.setIndex(0);
@@ -80,55 +89,124 @@ public class GlobeRawData extends MeshRawData implements RawData {
 		vertices.add(p12);
 
 		// Top five triangles around point 1
-		addTriangle(new Triangle(p1, p11, p12));
-		addTriangle(new Triangle(p1, p12, p6));
-		addTriangle(new Triangle(p1, p6, p2));
-		addTriangle(new Triangle(p1, p2, p8));
-		addTriangle(new Triangle(p1, p8, p11));
+		triangles.add(new TerrainTriangle(p1, p11, p12));
+		triangles.add(new TerrainTriangle(p1, p12, p6));
+		triangles.add(new TerrainTriangle(p1, p6, p2));
+		triangles.add(new TerrainTriangle(p1, p2, p8));
+		triangles.add(new TerrainTriangle(p1, p8, p11));
 		// Middle ten triangles forming a strip
-		addTriangle(new Triangle(p12, p11, p3));
-		addTriangle(new Triangle(p12, p3, p5));
-		addTriangle(new Triangle(p6, p12, p5));
-		addTriangle(new Triangle(p6, p5, p10));
-		addTriangle(new Triangle(p2, p6, p10));
-		addTriangle(new Triangle(p2, p10, p9));
-		addTriangle(new Triangle(p8, p2, p9));
-		addTriangle(new Triangle(p8, p9, p7));
-		addTriangle(new Triangle(p11, p8, p7));
-		addTriangle(new Triangle(p11, p7, p3));
+		triangles.add(new TerrainTriangle(p12, p11, p3));
+		triangles.add(new TerrainTriangle(p12, p3, p5));
+		triangles.add(new TerrainTriangle(p6, p12, p5));
+		triangles.add(new TerrainTriangle(p6, p5, p10));
+		triangles.add(new TerrainTriangle(p2, p6, p10));
+		triangles.add(new TerrainTriangle(p2, p10, p9));
+		triangles.add(new TerrainTriangle(p8, p2, p9));
+		triangles.add(new TerrainTriangle(p8, p9, p7));
+		triangles.add(new TerrainTriangle(p11, p8, p7));
+		triangles.add(new TerrainTriangle(p11, p7, p3));
 		// Bottom five triangles around point 4
-		addTriangle(new Triangle(p4, p9, p10));
-		addTriangle(new Triangle(p4, p10, p5));
-		addTriangle(new Triangle(p4, p5, p3));
-		addTriangle(new Triangle(p4, p3, p7));
-		addTriangle(new Triangle(p4, p7, p9));
+		triangles.add(new TerrainTriangle(p4, p9, p10));
+		triangles.add(new TerrainTriangle(p4, p10, p5));
+		triangles.add(new TerrainTriangle(p4, p5, p3));
+		triangles.add(new TerrainTriangle(p4, p3, p7));
+		triangles.add(new TerrainTriangle(p4, p7, p9));
 	}
 
 	private void subdivide(int iterations) {
 		for (int i = 0; i < iterations; i++) {
-			List<Triangle> oldTriangles = triangles;
+			List<TerrainTriangle> oldTriangles = triangles;
 			triangles = new ArrayList<>();
 			int index = vertices.size();
 			for (Triangle triangle : oldTriangles) {
 				HalfEdge edge = triangle.getEdge();
 				HalfEdge next = edge.getNext();
 				HalfEdge previous = next.getNext();
-				FullAdjacencyVertex p1 = previous.getVertex();
-				FullAdjacencyVertex p2 = edge.getVertex();
-				FullAdjacencyVertex p3 = next.getVertex();
-				FullAdjacencyVertex p4 = Primitive.getMidpointOfHalfEdge(previous).normalizeLength();
+				Vertex p1 = previous.getVertex();
+				Vertex p2 = edge.getVertex();
+				Vertex p3 = next.getVertex();
+				Vertex p4 = Primitive.getMidpointOfHalfEdge(previous).normalizeLength();
 				p4.setIndex(index++);
 				vertices.add(p4);
-				FullAdjacencyVertex p5 = Primitive.getMidpointOfHalfEdge(edge).normalizeLength();
+				Vertex p5 = Primitive.getMidpointOfHalfEdge(edge).normalizeLength();
 				p5.setIndex(index++);
 				vertices.add(p5);
-				FullAdjacencyVertex p6 = Primitive.getMidpointOfHalfEdge(next).normalizeLength();
+				Vertex p6 = Primitive.getMidpointOfHalfEdge(next).normalizeLength();
 				p6.setIndex(index++);
 				vertices.add(p6);
-				triangles.add(new Triangle(p1, p5, p4));
-				triangles.add(new Triangle(p5, p2, p6));
-				triangles.add(new Triangle(p4, p5, p6));
-				triangles.add(new Triangle(p4, p6, p3));
+				triangles.add(new TerrainTriangle(p1, p5, p4));
+				triangles.add(new TerrainTriangle(p5, p2, p6));
+				triangles.add(new TerrainTriangle(p4, p5, p6));
+				triangles.add(new TerrainTriangle(p4, p6, p3));
+			}
+		}
+	}
+
+	private void perturbVertices(float radius) {
+		for (Vertex vertex : vertices) {
+			Vector3f perturbVector = getRandomVector();
+			perturbVector.scale(perturbAmount);
+			vertex.setPosition(Vector3f.add(vertex.getPosition(), perturbVector));
+			vertex.normalizeLength();
+		}
+	}
+
+	private void generatePlates() {
+		int numberOfTriangles = triangles.size();
+		plates = new ArrayList<>();
+		for (int i = 0; i < numberOfPlates; i++) {
+			int triangleID = (int) getRandom(0, numberOfTriangles);
+			TerrainTriangle triangle = triangles.get(triangleID);
+			plates.add(new Plate(Biomes.getBiome((int) getRandom(0, Biomes.numberOfBiomes())), triangle));
+		}
+		int numberOfSetTriangles = numberOfPlates;
+		while (numberOfSetTriangles < numberOfTriangles) {
+			Plate plate = plates.get((int) getRandom(0, numberOfPlates));
+			List<TerrainTriangle> triangles = plate.getAdjacentTriangles();
+			boolean success = plate.addTriangle(triangles.get((int) getRandom(0, triangles.size())));
+			if (success) {
+				numberOfSetTriangles++;
+			}
+		}
+	}
+
+	private void generatePlateMovement() {
+		for (Plate plate : plates) {
+			Vector3f rotationAxis = getRandomVector();
+			float factor = (float) getRandom(0, 0.01);
+			for (TerrainTriangle triangle : plate.getTriangles()) {
+				triangle.setMovementVector(Vector3f.cross(rotationAxis, triangle.getCentroid()).scale(factor));
+			}
+		}
+		for (Plate plate : plates) {
+			for (HalfEdge boundary : plate.getBoundaries()) {
+				Vector3f movement1 = ((TerrainTriangle) boundary.getTriangle()).getMovementVector();
+				Vector3f movement2 = ((TerrainTriangle) boundary.getPair().getTriangle()).getMovementVector();
+				Vector3f sum = Vector3f.add(movement1, movement2);
+				Vertex vertex1 = boundary.getVertex();
+				Vertex vertex2 = boundary.getPair().getVertex();
+//				vertex1.setPosition(Vector3f.add(vertex1.getPosition(), sum));
+//				vertex2.setPosition(Vector3f.add(vertex2.getPosition(), sum));
+				vertex1.setPosition(vertex1.getPosition().scale(1.01f));
+				vertex2.setPosition(vertex2.getPosition().scale(1.01f));
+			}
+		}
+	}
+
+	private void separateTriangles() {
+		vertices = new ArrayList<>();
+		int index = 0;
+		for (Triangle triangle : triangles) {
+			HalfEdge edge = triangle.getEdge();
+			for (int i = 0; i < 3; i++) {
+				Vertex originalVertex = edge.getVertex();
+				Vector3f position = originalVertex.getPosition();
+				Vertex copyVertex = new Vertex(position.x, position.y, position.z);
+				copyVertex.setIndex(index++);
+				vertices.add(copyVertex);
+				copyVertex.setEmanatingEdges(originalVertex.getEmanatingEdges());
+				edge.setVertex(copyVertex);
+				edge = edge.getNext();
 			}
 		}
 	}
@@ -143,24 +221,32 @@ public class GlobeRawData extends MeshRawData implements RawData {
 			normals.add(pointNormal.x);
 			normals.add(pointNormal.y);
 			normals.add(pointNormal.z);
-			textureCoordinates.add(0.5f);
-			textureCoordinates.add(1.0f);
-			textureCoordinates.add(0.0f);
-			textureCoordinates.add(0.0f);
-			textureCoordinates.add(1.0f);
-			textureCoordinates.add(0.0f);
 		}
-		for (Triangle triangle : triangles) {
+		for (TerrainTriangle triangle : triangles) {
 			HalfEdge edge = triangle.getEdge();
 			for (int i = 0; i < 3; i++) {
 				indices.add(edge.getVertex().getIndex());
 				edge = edge.getNext();
 			}
+			for (Vector2f textureCoordinate : triangle.getTextureCoordinates()) {
+				textureCoordinates.add(textureCoordinate.x);
+				textureCoordinates.add(textureCoordinate.y);
+			}
 		}
 	}
 
-	public void addTriangle(Triangle triangle) {
-		triangles.add(triangle);
+	private double getRandom(double min, double max) {
+		return (Math.random() * (max - min)) + min;
+	}
+
+	private Vector3f getRandomVector() {
+		double theta = Math.toRadians(getRandom(-180, 180));
+		double phi = Math.acos(2 * getRandom(0, 1) - 1);
+		double sinPhi = Math.sin(phi);
+		float x = (float) (Math.cos(theta) * sinPhi);
+		float y = (float) (Math.sin(theta) * sinPhi);
+		float z = (float) (Math.cos(phi));
+		return new Vector3f(x, y, z);
 	}
 
 	@Override
@@ -170,7 +256,8 @@ public class GlobeRawData extends MeshRawData implements RawData {
 
 	@Override
 	public long getSize(String filePath) {
-		return triangles.size() * 3 * 3 * 4;
+		long size = (long) (20 * Math.pow(4, subdivisions) * numberOfPlates);
+		return size;
 	}
 
 }

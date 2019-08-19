@@ -19,15 +19,12 @@ import logics.globe.Globe;
 
 public class TableTopState extends GameState {
 
-	private Entity globeEntity;
 	private Globe globe;
 
-	public TableTopState(ResourcePack resourcePack, Globe globe) {
+	public TableTopState(ResourcePack resourcePack) {
 		setFlagToClearObservers();
 		setCameraMovementKeyCommands();
 		positionCamera();
-
-		this.globe = globe;
 
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = GUIBuilder.newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
@@ -54,8 +51,9 @@ public class TableTopState extends GameState {
 		Texture globeSpecularTexture = resourcePack.getTexture("globeSpecularMap");
 		VAO globeMesh = resourcePack.getMesh("globeMesh");
 		Model globeModel = ModelBuilder.newInstance().setMesh(globeMesh).setDiffuseTexture(globeTexture).setSpecularTexture(globeSpecularTexture).create();
-		globeEntity = new Entity(globeModel, 0, 6, -5, 0, 0, 0, 1, 1, 1);
-		addEntity(globeEntity);
+		globe = new Globe();
+		globe.setGlobeEntity(new Entity(globeModel, 0, 6, -5, 0, 0, 0, 1, 1, 1));
+		addEntity(globe.getGlobeEntity());
 
 		Light directionalLight1 = new DirectionalLight(0, -1, 1f);
 		directionalLight1.setAmbient(0.5f, 0.3f, 0.3f);
@@ -89,7 +87,8 @@ public class TableTopState extends GameState {
 
 	@Override
 	public GameState update() {
-		globeEntity.increaseRotation(1, 1, 0);
+		Entity globeEntity = globe.getGlobeEntity();
+		globeEntity.increaseRotation(0.5f, 0.5f, 0);
 		getCamera().update();
 		return this;
 	}

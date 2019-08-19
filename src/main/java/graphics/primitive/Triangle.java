@@ -4,20 +4,23 @@ import math.Vector3f;
 
 public class Triangle {
 
-	private HalfEdge edge;
-	private Vector3f triangleNormal;
+	protected HalfEdge edge;
+	protected Vector3f triangleNormal;
 
-	public Triangle(FullAdjacencyVertex p1, FullAdjacencyVertex p2, FullAdjacencyVertex p3) {
+	public Triangle(Vertex p1, Vertex p2, Vertex p3) {
 		edge = Primitive.findHalfEdge(p1, p2);
+		edge.setTriangle(this);
 		p1.setOutgoingHalfEdge(edge);
 		Primitive.pairWithPotentialOtherEdge(edge, p1);
 
 		HalfEdge next = Primitive.findHalfEdge(p2, p3);
+		next.setTriangle(this);
 		edge.setNext(next);
 		p2.setOutgoingHalfEdge(next);
 		Primitive.pairWithPotentialOtherEdge(next, p2);
 
 		HalfEdge previous = Primitive.findHalfEdge(p3, p1);
+		previous.setTriangle(this);
 		next.setNext(previous);
 		p3.setOutgoingHalfEdge(previous);
 		Primitive.pairWithPotentialOtherEdge(previous, p3);
@@ -41,6 +44,15 @@ public class Triangle {
 
 	public HalfEdge getEdge() {
 		return edge;
+	}
+
+	public Vector3f getCentroid() {
+		Vector3f p1 = edge.getVertex().getPosition();
+		Vector3f p2 = edge.getNext().getVertex().getPosition();
+		Vector3f p3 = edge.getNext().getNext().getVertex().getPosition();
+		Vector3f centroid = Vector3f.add(Vector3f.add(p1, p2), p3);
+		centroid.scale(1.0f / 3.0f);
+		return centroid;
 	}
 
 }

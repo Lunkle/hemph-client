@@ -1,8 +1,11 @@
 package graphics.primitive;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import math.Vector3f;
 
-public class Vertex implements Cloneable {
+public class Vertex {
 
 	private Vector3f position;
 	private HalfEdge edge;
@@ -10,6 +13,7 @@ public class Vertex implements Cloneable {
 
 	public Vertex(float x, float y, float z) {
 		position = new Vector3f(x, y, z);
+		emanatingEdges = new ArrayList<>();
 	}
 
 	public void setPosition(Vector3f position) {
@@ -18,12 +22,6 @@ public class Vertex implements Cloneable {
 
 	public Vector3f getPosition() {
 		return position;
-	}
-
-	public void setOutgoingHalfEdge(HalfEdge halfEdge) {
-		if (edge == null) {
-			this.edge = halfEdge;
-		}
 	}
 
 	public HalfEdge getOutgoingHalfEdge() {
@@ -38,16 +36,32 @@ public class Vertex implements Cloneable {
 		this.index = index;
 	}
 
+	private List<HalfEdge> emanatingEdges;
+
+	public void setEmanatingEdges(List<HalfEdge> emanatingEdges) {
+		this.emanatingEdges = emanatingEdges;
+	}
+
+	public List<HalfEdge> getEmanatingEdges() {
+		return emanatingEdges;
+	}
+
+	public Vertex normalizeLength() {
+		Vector3f normalizedPosition = getPosition();
+		normalizedPosition.normalise();
+		setPosition(normalizedPosition);
+		return this;
+	}
+
+	public void setOutgoingHalfEdge(HalfEdge halfEdge) {
+		emanatingEdges.add(halfEdge);
+	}
+
 	public Vector3f calculateNormal() {
-		if (edge == null) {
-			return new Vector3f(0, 1, 0);
-		}
-		HalfEdge outgoingEdge = edge;
 		Vector3f totalNormal = new Vector3f(0, 0, 0);
-		do {
-			totalNormal = Vector3f.add(totalNormal, Primitive.getTriangleNormal(outgoingEdge));
-			outgoingEdge = outgoingEdge.getPair().getNext();
-		} while (outgoingEdge != edge);
+		for (HalfEdge edge : emanatingEdges) {
+			totalNormal = Vector3f.add(totalNormal, Primitive.getTriangleNormal(edge));
+		}
 		totalNormal.normalise();
 		return totalNormal;
 	}

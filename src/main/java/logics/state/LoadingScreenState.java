@@ -15,7 +15,6 @@ import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
-import logics.globe.Globe;
 import logics.globe.GlobeRawData;
 
 public class LoadingScreenState extends GameState {
@@ -46,7 +45,6 @@ public class LoadingScreenState extends GameState {
 	private Texture globeSpecularTexture;
 	private GlobeRawData globeRawMeshData;
 	private VAO globeMesh;
-	private Globe globe;
 
 	public LoadingScreenState(ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter) {
 		super();
@@ -170,7 +168,7 @@ public class LoadingScreenState extends GameState {
 			double endTime = GLFW.glfwGetTime();
 			double timeTaken = endTime - startTime;
 			System.out.println("Finished loading in " + timeTaken + " seconds.");
-			return new TableTopState(resourcePack, globe);
+			return new TableTopState(resourcePack);
 		}
 		return this;
 	}

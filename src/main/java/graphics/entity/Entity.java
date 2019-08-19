@@ -61,6 +61,30 @@ public class Entity {
 		transformation.increaseRotation(dx, dy, dz);
 	}
 
+	public float getScaleX() {
+		return transformation.getScaleX();
+	}
+
+	public float getScaleY() {
+		return transformation.getScaleY();
+	}
+
+	public float getScaleZ() {
+		return transformation.getScaleZ();
+	}
+
+	public void setScaleX(float scaleX) {
+		transformation.setScaleX(scaleX);
+	}
+
+	public void setScaleY(float scaleY) {
+		transformation.setScaleY(scaleY);
+	}
+
+	public void setScaleZ(float scaleZ) {
+		transformation.setScaleZ(scaleZ);
+	}
+
 	public float getTextureXOffset() {
 		return textureXOffset;
 	}

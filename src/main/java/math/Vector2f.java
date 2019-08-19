@@ -176,11 +176,22 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	 */
 	public static Vector2f add(Vector2f left, Vector2f right, Vector2f dest) {
 		if (dest == null)
-			return new Vector2f(left.x + right.x, left.y + right.y);
+			return add(left, right);
 		else {
-			dest.set(left.x + right.x, left.y + right.y);
+			dest.set(add(left, right));
 			return dest;
 		}
+	}
+
+	/**
+	 * Add a vector to another vector return the reult.
+	 * 
+	 * @param left  The LHS vector
+	 * @param right The RHS vector
+	 * @return the sum of left and right
+	 */
+	public static Vector2f add(Vector2f left, Vector2f right) {
+		return new Vector2f(left.x + right.x, left.y + right.y);
 	}
 
 	/**

@@ -2,19 +2,37 @@ package graphics.primitive;
 
 public class HalfEdge {
 
-	private FullAdjacencyVertex to;
+	private Triangle triangle;
+	private Vertex to;
 	private HalfEdge pair;
 	private HalfEdge next;
 
 	// Utilitary data, not needed in final mesh
-	private FullAdjacencyVertex midpoint;
+	private Vertex midpoint;
 
-	public HalfEdge(FullAdjacencyVertex to) {
+	public HalfEdge(Vertex to, Triangle triangle) {
+		this.to = to;
+		this.triangle = triangle;
+	}
+
+	public HalfEdge(Vertex to) {
 		this.to = to;
 	}
 
-	public FullAdjacencyVertex getVertex() {
+	public void setVertex(Vertex vertex) {
+		to = vertex;
+	}
+
+	public Vertex getVertex() {
 		return to;
+	}
+
+	public void setTriangle(Triangle triangle) {
+		this.triangle = triangle;
+	}
+
+	public Triangle getTriangle() {
+		return triangle;
 	}
 
 	public void setNext(HalfEdge edge) {
@@ -33,11 +51,11 @@ public class HalfEdge {
 		return pair;
 	}
 
-	public FullAdjacencyVertex getMidpoint() {
+	public Vertex getMidpoint() {
 		return midpoint;
 	}
 
-	public void setMidpoint(FullAdjacencyVertex midpoint) {
+	public void setMidpoint(Vertex midpoint) {
 		this.midpoint = midpoint;
 	}
 

@@ -74,6 +74,21 @@ public class WorldTransformation extends Transformation {
 		return scaleZ;
 	}
 
+	public void setScaleX(float scaleX) {
+		this.scaleX = scaleX;
+		setFlag();
+	}
+
+	public void setScaleY(float scaleY) {
+		this.scaleY = scaleY;
+		setFlag();
+	}
+
+	public void setScaleZ(float scaleZ) {
+		this.scaleZ = scaleZ;
+		setFlag();
+	}
+
 	@Override
 	protected void calculateMatrix() {
 		matrix = new Matrix4f();

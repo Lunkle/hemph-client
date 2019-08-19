@@ -6,7 +6,7 @@ import math.Matrix4f;
 public class ProjectionTransformation extends Transformation {
 
 	private float fov = 90;
-	private float nearPlane = 0.1f;
+	private float nearPlane = 0.01f;
 	private float farPlane = 1000;
 
 	@Override
