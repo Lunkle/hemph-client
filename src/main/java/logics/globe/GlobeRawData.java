@@ -17,6 +17,10 @@ public class GlobeRawData extends MeshRawData implements RawData {
 
 	private int subdivisions = 6;
 	private int numberOfPlates = 50;
+	private float amplitude = 0.6f;
+
+	private int smoothingIterations = 6; // How many times to smooth out the heights
+	private float smoothingFactor = 0.8f; // How much to smooth each time
 
 	private float perturbAmount = 0.0012f;
 
@@ -171,22 +175,51 @@ public class GlobeRawData extends MeshRawData implements RawData {
 	}
 
 	private void generatePlateMovement() {
+		// Generating movement vectors for each triangle for each plate
 		for (Plate plate : plates) {
 			Vector3f rotationAxis = getRandomVector();
-			float factor = (float) getRandom(0, 0.01);
+			float factor = (float) getRandom(0, amplitude);
 			for (TerrainTriangle triangle : plate.getTriangles()) {
 				triangle.setMovementVector(Vector3f.cross(rotationAxis, triangle.getCentroid()).scale(factor));
 			}
 		}
+		// Raising or lowering the boundaries based on the plate movement
 		for (Plate plate : plates) {
 			for (HalfEdge boundary : plate.getBoundaries()) {
 				Vector3f movement1 = ((TerrainTriangle) boundary.getTriangle()).getMovementVector();
 				Vector3f movement2 = ((TerrainTriangle) boundary.getPair().getTriangle()).getMovementVector();
-				Vector3f sum = Vector3f.add(movement1, movement2);
 				Vertex vertex1 = boundary.getVertex();
 				Vertex vertex2 = boundary.getPair().getVertex();
-//				vertex1.setPosition(Vector3f.add(vertex1.getPosition(), sum));
-//				vertex2.setPosition(Vector3f.add(vertex2.getPosition(), sum));
+				Vector3f triangle1ToTriangle2 = Vector3f.sub(vertex2.getPosition(), vertex1.getPosition());
+				Vector3f triangle2ToTriangle1 = Vector3f.sub(vertex1.getPosition(), vertex2.getPosition());
+				float dot1 = Vector3f.dot(triangle1ToTriangle2, movement1);
+				float dot2 = Vector3f.dot(triangle2ToTriangle1, movement2);
+				float sum = 10 * (dot1 + dot2);
+				vertex1.setPosition(vertex1.getPosition().scale(1 + sum));
+				vertex2.setPosition(vertex2.getPosition().scale(1 + sum));
+			}
+		}
+		// Smoothing out the heights
+		for (int i = 0; i < smoothingIterations; i++) {
+			for (Vertex vertex : vertices) {
+				float totalHeight = 0;
+				for (HalfEdge edge : vertex.getEmanatingEdges()) {
+					totalHeight += edge.getVertex().getPosition().length();
+				}
+				int numberOfAdjacentVertices = vertex.getEmanatingEdges().size();
+				float targetHeight = totalHeight / numberOfAdjacentVertices;
+				float currentHeight = vertex.getPosition().length();
+				float newHeight = smoothingFactor * (targetHeight - currentHeight) + currentHeight;
+				vertex.setPosition(vertex.getPosition().scale(newHeight / currentHeight));
+			}
+		}
+	}
+
+	public void raiseBoundaries() {
+		for (Plate plate : plates) {
+			for (HalfEdge boundary : plate.getBoundaries()) {
+				Vertex vertex1 = boundary.getVertex();
+				Vertex vertex2 = boundary.getPair().getVertex();
 				vertex1.setPosition(vertex1.getPosition().scale(1.01f));
 				vertex2.setPosition(vertex2.getPosition().scale(1.01f));
 			}

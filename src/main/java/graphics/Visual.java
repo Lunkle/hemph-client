@@ -10,6 +10,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import graphics.rendering.Renderer;
 import graphics.texture.Texture;
+import graphics.transformation.ProjectionTransformation;
 import graphics.vao.EBO;
 import graphics.vao.VAO;
 import graphics.vao.VBO;
@@ -22,11 +23,14 @@ public class Visual {
 	private static int windowWidth = 1280;
 	private static int windowHeight = 720;
 
+	private ProjectionTransformation projectionTransformation;
+
 	private Renderer renderer;
 
 	public Visual() {
 		createDisplay();
-		renderer = new Renderer();
+		projectionTransformation = new ProjectionTransformation();
+		renderer = new Renderer(projectionTransformation);
 	}
 
 	private void createDisplay() {
@@ -90,6 +94,10 @@ public class Visual {
 
 	public static void setWindowHeight(int windowHeight) {
 		Visual.windowHeight = windowHeight;
+	}
+
+	public ProjectionTransformation getProjectionTransformation() {
+		return projectionTransformation;
 	}
 
 }

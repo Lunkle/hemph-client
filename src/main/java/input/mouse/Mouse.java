@@ -35,4 +35,9 @@ public class Mouse {
 		zoom += amount;
 	}
 
+	@Override
+	public String toString() {
+		return "Mouse at (" + position.x + ", " + position.y + ")";
+	}
+
 }

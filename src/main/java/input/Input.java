@@ -9,31 +9,39 @@ import input.callback.KeyCallback;
 import input.callback.MouseButtonCallback;
 import input.callback.MouseMovementCallback;
 import input.callback.MouseScrollCallback;
-import input.command.Command;
-import input.command.KeyCommand;
-import input.information.Keys;
 import input.misc.ResizeHandler;
+import input.mouse.Mouse;
+import input.observer.KeyEscapeExitObserver;
 import input.observer.KeyObserver;
 import input.observer.MouseObserver;
+import input.observer.MousePositionUpdaterObserver;
 
 public class Input {
 
-	KeyCallback keyCallback;
-	MouseMovementCallback mouseMovementCallback;
-	MouseButtonCallback mouseButtonCallback;
-	MouseScrollCallback mouseScrollCallback;
+	private Mouse mouse;
+	private MouseObserver mouseObserver;
+	private KeyObserver keyObserver;
 
-	public Input() {
+	public Input(Mouse mouse) {
 		long windowID = Visual.getWindowID();
+		this.mouse = mouse;
 
-		keyCallback = new KeyCallback();
-		mouseMovementCallback = new MouseMovementCallback();
-		mouseButtonCallback = new MouseButtonCallback();
-		mouseScrollCallback = new MouseScrollCallback();
+		KeyCallback keyCallback = new KeyCallback();
+		keyObserver = new KeyEscapeExitObserver();
+		keyCallback.addObserver(keyObserver);
 		GLFW.glfwSetKeyCallback(windowID, keyCallback);
+
+		MouseMovementCallback mouseMovementCallback = new MouseMovementCallback();
+		MouseButtonCallback mouseButtonCallback = new MouseButtonCallback();
+		MouseScrollCallback mouseScrollCallback = new MouseScrollCallback();
+		mouseObserver = new MousePositionUpdaterObserver(mouse);
+		mouseMovementCallback.addObserver(mouseObserver);
+		mouseButtonCallback.addObserver(mouseObserver);
+		mouseScrollCallback.addObserver(mouseObserver);
 		GLFW.glfwSetCursorPosCallback(windowID, mouseMovementCallback);
 		GLFW.glfwSetMouseButtonCallback(windowID, mouseButtonCallback);
 		GLFW.glfwSetScrollCallback(windowID, mouseScrollCallback);
+
 		GLFW.glfwSetFramebufferSizeCallback(Visual.getWindowID(), new ResizeHandler());
 
 		hideCursor();
@@ -41,33 +49,25 @@ public class Input {
 	}
 
 	public void clearKeyCallbackObservers() {
-		keyCallback.clearObservers();
-		// Default close window key command should be in effect at all times
-		KeyObserver escapeCloseWindow = new KeyObserver();
-		Command closeWindow = new Command(() -> GLFW.glfwSetWindowShouldClose(Visual.getWindowID(), true));
-		escapeCloseWindow.addCommand(Keys.KEY_ESC, new KeyCommand(new Command(() -> {}), closeWindow));
-		keyCallback.addObserver(escapeCloseWindow);
+		keyObserver.clearObservers();
 	}
 
 	public void clearMouseCallbackObservers() {
-		mouseMovementCallback.clearObservers();
-		mouseMovementCallback.clearObservers();
-		mouseMovementCallback.clearObservers();
+
+		mouseObserver.clearObservers();
 	}
 
 	public void addKeyCallbackObservers(List<KeyObserver> keyObservers) {
 		// Add all of the key observers
-		for (KeyObserver keyObserver : keyObservers) {
-			keyCallback.addObserver(keyObserver);
+		for (KeyObserver observer : keyObservers) {
+			keyObserver.addObserver(observer);
 		}
 	}
 
 	public void addMouseCallbackObservers(List<MouseObserver> mouseObservers) {
 		// Add all of the mouse observers
-		for (MouseObserver mouseObserver : mouseObservers) {
-			mouseMovementCallback.addObserver(mouseObserver);
-			mouseButtonCallback.addObserver(mouseObserver);
-			mouseScrollCallback.addObserver(mouseObserver);
+		for (MouseObserver observer : mouseObservers) {
+			mouseObserver.addObserver(observer);
 		}
 	}
 

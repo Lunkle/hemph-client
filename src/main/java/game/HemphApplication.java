@@ -6,6 +6,7 @@ import graphics.Visual;
 import graphics.loader.GraphicsDataConnecter;
 import graphics.loader.ResourceLoaderThread;
 import input.Input;
+import input.mouse.Mouse;
 import logics.Logic;
 import logics.state.GameState;
 import logics.state.LoadingScreenState;
@@ -14,6 +15,7 @@ public class HemphApplication {
 
 	private ResourceLoaderThread loaderThread;
 	private GraphicsDataConnecter connecter;
+	private Mouse mouse;
 	private Input inputs;
 	private Logic logics;
 	private Visual visuals;
@@ -29,8 +31,9 @@ public class HemphApplication {
 		loaderThread = new ResourceLoaderThread();
 		connecter = new GraphicsDataConnecter();
 		GameState state = new LoadingScreenState(loaderThread, connecter);
+		mouse = new Mouse();
 		visuals = new Visual();
-		inputs = new Input();
+		inputs = new Input(mouse);
 		logics = new Logic(state, inputs);
 	}
 

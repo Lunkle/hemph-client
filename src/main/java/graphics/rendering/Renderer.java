@@ -13,18 +13,13 @@ public class Renderer {
 	private static final float GREEN = 138 / 255.0f;
 	private static final float BLUE = 149 / 255.0f;
 
-	private ProjectionTransformation projectionTransformation;
-
 	private EntityRenderer renderer;
 	private GUIRenderer guiRenderer;
-//	private SkyboxRenderer skyboxRenderer;
 
-	public Renderer() {
-		projectionTransformation = new ProjectionTransformation();
+	public Renderer(ProjectionTransformation projectionTransformation) {
 		renderer = new EntityRenderer();
 		renderer.loadProjectionMatrix(projectionTransformation);
 		guiRenderer = new GUIRenderer();
-//		skyboxRenderer = new SkyboxRenderer(projectionMatrix);
 	}
 
 	public void prepare() {

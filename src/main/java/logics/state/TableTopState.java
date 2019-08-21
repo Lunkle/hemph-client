@@ -15,6 +15,7 @@ import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
+import input.observer.MouseObserver;
 import logics.globe.Globe;
 
 public class TableTopState extends GameState {
@@ -25,6 +26,7 @@ public class TableTopState extends GameState {
 		setFlagToClearObservers();
 		setCameraMovementKeyCommands();
 		positionCamera();
+		setMouseGlobeSelectionCommands();
 
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = GUIBuilder.newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
@@ -68,6 +70,11 @@ public class TableTopState extends GameState {
 		getCamera().setRotation(40, 0, 0);
 	}
 
+	private void setMouseGlobeSelectionCommands() {
+		MouseObserver globeSelectionObserver = new MouseObserver();
+//		globeSelectionObserver
+	}
+
 	private void setCameraMovementKeyCommands() {
 		KeyObserver cameraControlKeyObserver = new KeyObserver();
 		Command front = new Command(() -> getCamera().addDirection(Directions.FRONT));
@@ -88,7 +95,7 @@ public class TableTopState extends GameState {
 	@Override
 	public GameState update() {
 		Entity globeEntity = globe.getGlobeEntity();
-		globeEntity.increaseRotation(0.5f, 0.5f, 0);
+		globeEntity.increaseRotation(0.1f, 0.1f, 0);
 		getCamera().update();
 		return this;
 	}

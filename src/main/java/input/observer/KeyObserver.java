@@ -28,14 +28,12 @@ public class KeyObserver implements InputObserver, InputObservee {
 
 	@Override
 	public void handleEvent(InputTypes type, Keys input, Actions action, float[] data) {
-		if (type == InputTypes.KEY) {
-			KeyCommand command = getCommand(input);
-			if (command != null) {
-				if (action == Actions.PRESS)
-					command.onPress.execute();
-				else if (action == Actions.RELEASE)
-					command.onRelease.execute();
-			}
+		KeyCommand command = getCommand(input);
+		if (command != null) {
+			if (action == Actions.PRESS)
+				command.onPress.execute();
+			else if (action == Actions.RELEASE)
+				command.onRelease.execute();
 		} else {
 			notifyObservers(type, input, action, data);
 		}
