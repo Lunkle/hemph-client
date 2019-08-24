@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import graphics.Visual;
 import graphics.entity.Entity;
 import graphics.gui.GUI;
 import graphics.light.DirectionalLight;
@@ -17,36 +18,47 @@ import graphics.rendering.Camera;
 import graphics.vao.VAO;
 import input.Input;
 import input.mouse.Mouse;
+import input.mouse.MousePicker;
 import input.observer.KeyObserver;
-import input.observer.MouseObserver;
-import math.Matrix4f;
+import input.observer.MouseButtonObserver;
+import input.observer.MouseMovementObserver;
+import input.observer.MouseScrollObserver;
 
 public abstract class GameState {
 
 	protected static ResourceLoaderThread loaderThread;
 	protected static GraphicsDataConnecter connecter;
 
-	private Mouse mouse;
+	private static Mouse mouse;
 	private Camera camera;
+	private MousePicker mousePicker;
 	private List<GUI> guis;
 	private List<DirectionalLight> directionalLights;
 	private List<PointLight> pointLights;
 	private List<SpotLight> spotLights;
 	private Map<VAO, List<Entity>> meshEntityMap;
 	private List<KeyObserver> keyObservers;
-	private List<MouseObserver> mouseObservers;
+	private List<MouseMovementObserver> mouseMovementObservers;
+	private List<MouseButtonObserver> mouseButtonObservers;
+	private List<MouseScrollObserver> mouseScrollObservers;
 	private boolean clearObservers = false;
 
 	public GameState() {
-		mouse = new Mouse();
 		camera = new Camera();
+		mousePicker = new MousePicker(mouse, camera, Visual.getProjectionTransformation());
 		guis = new ArrayList<>();
 		directionalLights = new ArrayList<>();
 		pointLights = new ArrayList<>();
 		spotLights = new ArrayList<>();
 		meshEntityMap = new HashMap<>();
 		keyObservers = new ArrayList<>();
-		mouseObservers = new ArrayList<>();
+		mouseMovementObservers = new ArrayList<>();
+		mouseButtonObservers = new ArrayList<>();
+		mouseScrollObservers = new ArrayList<>();
+	}
+
+	protected void setMouse(Mouse mouse) {
+		GameState.mouse = mouse;
 	}
 
 	protected static void setLoadingThread(ResourceLoaderThread loaderThread) {
@@ -110,19 +122,27 @@ public abstract class GameState {
 		}
 	}
 
-	public Matrix4f getViewMatrix() {
-		return camera.getViewMatrix();
-	}
-
 	public void addKeyObserver(KeyObserver keyObserver) {
 		synchronized (keyObservers) {
 			keyObservers.add(keyObserver);
 		}
 	}
 
-	public void addMouseObserver(MouseObserver mouseObserver) {
-		synchronized (mouseObservers) {
-			mouseObservers.add(mouseObserver);
+	public void addMouseMovementObserver(MouseMovementObserver mouseMovementObserver) {
+		synchronized (mouseMovementObservers) {
+			mouseMovementObservers.add(mouseMovementObserver);
+		}
+	}
+
+	public void addMouseButtonObserver(MouseButtonObserver mouseButtonObserver) {
+		synchronized (mouseButtonObservers) {
+			mouseButtonObservers.add(mouseButtonObserver);
+		}
+	}
+
+	public void addMouseScrollObserver(MouseScrollObserver mouseScrollObserver) {
+		synchronized (mouseScrollObservers) {
+			mouseScrollObservers.add(mouseScrollObserver);
 		}
 	}
 
@@ -132,8 +152,7 @@ public abstract class GameState {
 
 	public void updateInputObservers(Input inputs) {
 		if (clearObservers) {
-			inputs.clearKeyCallbackObservers();
-			inputs.clearMouseCallbackObservers();
+			inputs.clearAllCallbackObservers();
 			clearObservers = false;
 		}
 		if (keyObservers.size() > 0) {
@@ -143,13 +162,31 @@ public abstract class GameState {
 			}
 			inputs.addKeyCallbackObservers(copyKeyObservers);
 		}
-		if (mouseObservers.size() > 0) {
-			List<MouseObserver> copyMouseObservers = mouseObservers;
-			synchronized (mouseObservers) {
-				keyObservers = new ArrayList<>();
+		if (mouseMovementObservers.size() > 0) {
+			List<MouseMovementObserver> copyMouseMovementObservers = mouseMovementObservers;
+			synchronized (mouseMovementObservers) {
+				mouseMovementObservers = new ArrayList<>();
 			}
-			inputs.addMouseCallbackObservers(copyMouseObservers);
+			inputs.addMouseMovementCallbackObservers(copyMouseMovementObservers);
 		}
+		if (mouseButtonObservers.size() > 0) {
+			List<MouseButtonObserver> copyMouseButtonObservers = mouseButtonObservers;
+			synchronized (mouseButtonObservers) {
+				mouseButtonObservers = new ArrayList<>();
+			}
+			inputs.addMouseButtonCallbackObservers(copyMouseButtonObservers);
+		}
+		if (mouseScrollObservers.size() > 0) {
+			List<MouseScrollObserver> copyMouseScrollObservers = mouseScrollObservers;
+			synchronized (mouseScrollObservers) {
+				mouseScrollObservers = new ArrayList<>();
+			}
+			inputs.addMouseScrollCallbackObservers(copyMouseScrollObservers);
+		}
+	}
+
+	public MousePicker getMousePicker() {
+		return mousePicker;
 	}
 
 	/**

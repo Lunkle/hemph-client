@@ -5,11 +5,11 @@ import input.information.InputTypes;
 import input.information.Keys;
 import input.mouse.Mouse;
 
-public class MousePositionUpdaterObserver extends MouseObserver {
+public class MouseMovementPositionUpdaterObserver extends MouseMovementObserver {
 
 	private Mouse mouse;
 
-	public MousePositionUpdaterObserver(Mouse mouse) {
+	public MouseMovementPositionUpdaterObserver(Mouse mouse) {
 		super();
 		this.mouse = mouse;
 	}

@@ -1,7 +1,6 @@
 package graphics.rendering;
 
 import graphics.transformation.ViewTransformation;
-import math.Matrix4f;
 import math.Vector3f;
 
 public class Camera {
@@ -23,8 +22,8 @@ public class Camera {
 		transformation = new ViewTransformation(0, 0, 0, 0, 0, 0);
 	}
 
-	public Matrix4f getViewMatrix() {
-		return transformation.getMatrix();
+	public ViewTransformation getViewTransformation() {
+		return transformation;
 	}
 
 	public void setPosition(float posX, float posY, float posZ) {

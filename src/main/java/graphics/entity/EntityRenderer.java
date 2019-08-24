@@ -26,7 +26,7 @@ public class EntityRenderer {
 		shader.loadDirectionalLights(gameState.getDirectionalLights());
 //		shader.loadPointLights(gameState.getPointLights());
 //		shader.loadSpotLights(gameState.getSpotLights());
-		shader.loadViewMatrix(gameState.getViewMatrix());
+		shader.loadViewMatrix(gameState.getCamera().getViewTransformation().getMatrix());
 		for (VAO mesh : meshEntityMap.keySet()) {
 			GL30.glBindVertexArray(mesh.getVaoId());
 			GL20.glEnableVertexAttribArray(0);

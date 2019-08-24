@@ -8,13 +8,12 @@ import input.information.Actions;
 import input.information.InputTypes;
 import input.information.Keys;
 
-public class KeyObserver implements InputObserver, InputObservee {
+public class KeyObserver extends BasicObserver {
 
-	private InputObserverNode node;
 	private Map<Keys, KeyCommand> commandMap;
 
 	public KeyObserver() {
-		node = getEmptyObserverNode();
+		super();
 		commandMap = new HashMap<>();
 	}
 
@@ -39,20 +38,4 @@ public class KeyObserver implements InputObserver, InputObservee {
 		}
 	}
 
-	@Override
-	public void notifyObservers(InputTypes type, Keys input, Actions action, float[] data) {
-		node.handle(type, input, action, data);
-	}
-
-	@Override
-	public void addObserver(InputObserver newObserver) {
-		InputObserverNode newNode = new InputObserverNode(newObserver);
-		newNode.setNextNode(node);
-		node = newNode;
-	}
-
-	@Override
-	public void clearObservers() {
-		node = getEmptyObserverNode();
-	}
 }

@@ -167,7 +167,8 @@ public class Matrix4f extends Matrix implements Serializable {
 	}
 
 	/**
-	 * Load from a float buffer. The buffer stores the matrix in column major (OpenGL) order.
+	 * Load from a float buffer. The buffer stores the matrix in column major
+	 * (OpenGL) order.
 	 *
 	 * @param buf A float buffer to read from
 	 * @return this
@@ -196,7 +197,8 @@ public class Matrix4f extends Matrix implements Serializable {
 	}
 
 	/**
-	 * Load from a float buffer. The buffer stores the matrix in row major (maths) order.
+	 * Load from a float buffer. The buffer stores the matrix in row major (maths)
+	 * order.
 	 *
 	 * @param buf A float buffer to read from
 	 * @return this
@@ -225,7 +227,8 @@ public class Matrix4f extends Matrix implements Serializable {
 	}
 
 	/**
-	 * Store this matrix in a float buffer. The matrix is stored in column major (openGL) order.
+	 * Store this matrix in a float buffer. The matrix is stored in column major
+	 * (openGL) order.
 	 * 
 	 * @param buf The buffer to store this matrix in
 	 */
@@ -251,7 +254,8 @@ public class Matrix4f extends Matrix implements Serializable {
 	}
 
 	/**
-	 * Store this matrix in a float buffer. The matrix is stored in row major (maths) order.
+	 * Store this matrix in a float buffer. The matrix is stored in row major
+	 * (maths) order.
 	 * 
 	 * @param buf The buffer to store this matrix in
 	 */
@@ -277,7 +281,8 @@ public class Matrix4f extends Matrix implements Serializable {
 	}
 
 	/**
-	 * Store the rotation portion of this matrix in a float buffer. The matrix is stored in column major (openGL) order.
+	 * Store the rotation portion of this matrix in a float buffer. The matrix is
+	 * stored in column major (openGL) order.
 	 * 
 	 * @param buf The buffer to store this matrix in
 	 */
@@ -327,7 +332,8 @@ public class Matrix4f extends Matrix implements Serializable {
 	}
 
 	/**
-	 * Subtract the right matrix from the left and place the result in a third matrix.
+	 * Subtract the right matrix from the left and place the result in a third
+	 * matrix.
 	 * 
 	 * @param left  The left source matrix
 	 * @param right The right source matrix
@@ -359,16 +365,14 @@ public class Matrix4f extends Matrix implements Serializable {
 	}
 
 	/**
-	 * Multiply the right matrix by the left and place the result in a third matrix.
+	 * Multiply the right matrix by the left and return the result.
 	 * 
 	 * @param left  The left source matrix
 	 * @param right The right source matrix
-	 * @param dest  The destination matrix, or null if a new one is to be created
-	 * @return the destination matrix
+	 * @return the resulting matrix
 	 */
-	public static Matrix4f mul(Matrix4f left, Matrix4f right, Matrix4f dest) {
-		if (dest == null)
-			dest = new Matrix4f();
+	public static Matrix4f mul(Matrix4f left, Matrix4f right) {
+		Matrix4f result = new Matrix4f();
 
 		float m00 = left.m00 * right.m00 + left.m10 * right.m01 + left.m20 * right.m02 + left.m30 * right.m03;
 		float m01 = left.m01 * right.m00 + left.m11 * right.m01 + left.m21 * right.m02 + left.m31 * right.m03;
@@ -387,49 +391,47 @@ public class Matrix4f extends Matrix implements Serializable {
 		float m32 = left.m02 * right.m30 + left.m12 * right.m31 + left.m22 * right.m32 + left.m32 * right.m33;
 		float m33 = left.m03 * right.m30 + left.m13 * right.m31 + left.m23 * right.m32 + left.m33 * right.m33;
 
-		dest.m00 = m00;
-		dest.m01 = m01;
-		dest.m02 = m02;
-		dest.m03 = m03;
-		dest.m10 = m10;
-		dest.m11 = m11;
-		dest.m12 = m12;
-		dest.m13 = m13;
-		dest.m20 = m20;
-		dest.m21 = m21;
-		dest.m22 = m22;
-		dest.m23 = m23;
-		dest.m30 = m30;
-		dest.m31 = m31;
-		dest.m32 = m32;
-		dest.m33 = m33;
+		result.m00 = m00;
+		result.m01 = m01;
+		result.m02 = m02;
+		result.m03 = m03;
+		result.m10 = m10;
+		result.m11 = m11;
+		result.m12 = m12;
+		result.m13 = m13;
+		result.m20 = m20;
+		result.m21 = m21;
+		result.m22 = m22;
+		result.m23 = m23;
+		result.m30 = m30;
+		result.m31 = m31;
+		result.m32 = m32;
+		result.m33 = m33;
 
-		return dest;
+		return result;
 	}
 
 	/**
-	 * Transform a Vector by a matrix and return the result in a destination vector.
+	 * Transform a Vector by a matrix and return the result.
 	 * 
 	 * @param left  The left matrix
 	 * @param right The right vector
-	 * @param dest  The destination vector, or null if a new one is to be created
-	 * @return the destination vector
+	 * @return the result
 	 */
-	public static Vector4f transform(Matrix4f left, Vector4f right, Vector4f dest) {
-		if (dest == null)
-			dest = new Vector4f();
+	public static Vector4f transform(Matrix4f left, Vector4f right) {
+		Vector4f result = new Vector4f();
 
 		float x = left.m00 * right.x + left.m10 * right.y + left.m20 * right.z + left.m30 * right.w;
 		float y = left.m01 * right.x + left.m11 * right.y + left.m21 * right.z + left.m31 * right.w;
 		float z = left.m02 * right.x + left.m12 * right.y + left.m22 * right.z + left.m32 * right.w;
 		float w = left.m03 * right.x + left.m13 * right.y + left.m23 * right.z + left.m33 * right.w;
 
-		dest.x = x;
-		dest.y = y;
-		dest.z = z;
-		dest.w = w;
+		result.x = x;
+		result.y = y;
+		result.z = z;
+		result.w = w;
 
-		return dest;
+		return result;
 	}
 
 	/**
@@ -514,7 +516,8 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * 
 	 * @param angle the angle, in radians.
 	 * @param axis  The vector representing the rotation axis. Must be normalized.
-	 * @param dest  The matrix to put the result, or null if a new matrix is to be created
+	 * @param dest  The matrix to put the result, or null if a new matrix is to be
+	 *              created
 	 * @return The rotated matrix
 	 */
 	public Matrix4f rotate(float angle, Vector3f axis, Matrix4f dest) {
@@ -522,12 +525,14 @@ public class Matrix4f extends Matrix implements Serializable {
 	}
 
 	/**
-	 * Rotates the source matrix around the given axis the specified angle and put the result in the destination matrix.
+	 * Rotates the source matrix around the given axis the specified angle and put
+	 * the result in the destination matrix.
 	 * 
 	 * @param angle the angle, in radians.
 	 * @param axis  The vector representing the rotation axis. Must be normalized.
 	 * @param src   The matrix to rotate
-	 * @param dest  The matrix to put the result, or null if a new matrix is to be created
+	 * @param dest  The matrix to put the result, or null if a new matrix is to be
+	 *              created
 	 * @return The rotated matrix
 	 */
 	public static Matrix4f rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f dest) {
@@ -726,25 +731,23 @@ public class Matrix4f extends Matrix implements Serializable {
 	 */
 	@Override
 	public Matrix invert() {
-		return invert(this, this);
+		return invert(this);
 	}
 
 	/**
-	 * Invert the source matrix and put the result in the destination
+	 * Invert the source matrix and return the result
 	 * 
-	 * @param src  The source matrix
-	 * @param dest The destination matrix, or null if a new matrix is to be created
+	 * @param src The source matrix
 	 * @return The inverted matrix if successful, null otherwise
 	 */
-	public static Matrix4f invert(Matrix4f src, Matrix4f dest) {
+	public static Matrix4f invert(Matrix4f src) {
 		float determinant = src.determinant();
 
+		Matrix4f dest = new Matrix4f();
 		if (determinant != 0) {
 			/*
 			 * m00 m01 m02 m03 m10 m11 m12 m13 m20 m21 m22 m23 m30 m31 m32 m33
 			 */
-			if (dest == null)
-				dest = new Matrix4f();
 			float determinant_inv = 1f / determinant;
 
 			// first row

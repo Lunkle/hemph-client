@@ -13,18 +13,20 @@ import input.misc.ResizeHandler;
 import input.mouse.Mouse;
 import input.observer.KeyEscapeExitObserver;
 import input.observer.KeyObserver;
-import input.observer.MouseObserver;
-import input.observer.MousePositionUpdaterObserver;
+import input.observer.MouseButtonObserver;
+import input.observer.MouseMovementObserver;
+import input.observer.MouseMovementPositionUpdaterObserver;
+import input.observer.MouseScrollObserver;
 
 public class Input {
 
-	private Mouse mouse;
-	private MouseObserver mouseObserver;
+	private MouseMovementObserver mouseMovementObserver;
+	private MouseButtonObserver mouseButtonObserver;
+	private MouseScrollObserver mouseScrollObserver;
 	private KeyObserver keyObserver;
 
 	public Input(Mouse mouse) {
 		long windowID = Visual.getWindowID();
-		this.mouse = mouse;
 
 		KeyCallback keyCallback = new KeyCallback();
 		keyObserver = new KeyEscapeExitObserver();
@@ -34,10 +36,12 @@ public class Input {
 		MouseMovementCallback mouseMovementCallback = new MouseMovementCallback();
 		MouseButtonCallback mouseButtonCallback = new MouseButtonCallback();
 		MouseScrollCallback mouseScrollCallback = new MouseScrollCallback();
-		mouseObserver = new MousePositionUpdaterObserver(mouse);
-		mouseMovementCallback.addObserver(mouseObserver);
-		mouseButtonCallback.addObserver(mouseObserver);
-		mouseScrollCallback.addObserver(mouseObserver);
+		mouseMovementObserver = new MouseMovementPositionUpdaterObserver(mouse);
+		mouseButtonObserver = new MouseButtonObserver();
+		mouseScrollObserver = new MouseScrollObserver();
+		mouseMovementCallback.addObserver(mouseMovementObserver);
+		mouseButtonCallback.addObserver(mouseButtonObserver);
+		mouseScrollCallback.addObserver(mouseScrollObserver);
 		GLFW.glfwSetCursorPosCallback(windowID, mouseMovementCallback);
 		GLFW.glfwSetMouseButtonCallback(windowID, mouseButtonCallback);
 		GLFW.glfwSetScrollCallback(windowID, mouseScrollCallback);
@@ -52,22 +56,46 @@ public class Input {
 		keyObserver.clearObservers();
 	}
 
-	public void clearMouseCallbackObservers() {
+	public void clearMouseMovementCallbackObservers() {
+		mouseMovementObserver.clearObservers();
+	}
 
-		mouseObserver.clearObservers();
+	public void clearMouseButtonCallbackObservers() {
+		mouseButtonObserver.clearObservers();
+	}
+
+	public void clearMouseScrollCallbackObservers() {
+		mouseScrollObserver.clearObservers();
+	}
+
+	public void clearAllCallbackObservers() {
+		clearKeyCallbackObservers();
+		clearMouseMovementCallbackObservers();
+		clearMouseButtonCallbackObservers();
+		clearMouseScrollCallbackObservers();
 	}
 
 	public void addKeyCallbackObservers(List<KeyObserver> keyObservers) {
-		// Add all of the key observers
 		for (KeyObserver observer : keyObservers) {
 			keyObserver.addObserver(observer);
 		}
 	}
 
-	public void addMouseCallbackObservers(List<MouseObserver> mouseObservers) {
-		// Add all of the mouse observers
-		for (MouseObserver observer : mouseObservers) {
-			mouseObserver.addObserver(observer);
+	public void addMouseMovementCallbackObservers(List<MouseMovementObserver> mouseMovementObservers) {
+		for (MouseMovementObserver observer : mouseMovementObservers) {
+			mouseMovementObserver.addObserver(observer);
+		}
+	}
+
+	public void addMouseButtonCallbackObservers(List<MouseButtonObserver> mouseButtonObservers) {
+		for (MouseButtonObserver observer : mouseButtonObservers) {
+			mouseButtonObserver.addObserver(observer);
+		}
+	}
+
+	public void addMouseScrollCallbackObservers(List<MouseScrollObserver> mouseScrollObservers) {
+		for (MouseScrollObserver observer : mouseScrollObservers) {
+			mouseScrollObserver.addObserver(observer);
 		}
 	}
 

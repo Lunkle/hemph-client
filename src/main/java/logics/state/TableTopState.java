@@ -15,7 +15,6 @@ import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
-import input.observer.MouseObserver;
 import logics.globe.Globe;
 
 public class TableTopState extends GameState {
@@ -26,7 +25,12 @@ public class TableTopState extends GameState {
 		setFlagToClearObservers();
 		setCameraMovementKeyCommands();
 		positionCamera();
-		setMouseGlobeSelectionCommands();
+
+		Light directionalLight1 = new DirectionalLight(0, -1, 1f);
+		directionalLight1.setAmbient(0.5f, 0.3f, 0.3f);
+		directionalLight1.setDiffuse(1f, 1f, 1f);
+		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
+		addLight(directionalLight1);
 
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = GUIBuilder.newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
@@ -57,11 +61,7 @@ public class TableTopState extends GameState {
 		globe.setGlobeEntity(new Entity(globeModel, 0, 6, -5, 0, 0, 0, 1, 1, 1));
 		addEntity(globe.getGlobeEntity());
 
-		Light directionalLight1 = new DirectionalLight(0, -1, 1f);
-		directionalLight1.setAmbient(0.5f, 0.3f, 0.3f);
-		directionalLight1.setDiffuse(1f, 1f, 1f);
-		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
-		addLight(directionalLight1);
+		setMouseGlobeSelectionCommands();
 
 	}
 
@@ -71,8 +71,8 @@ public class TableTopState extends GameState {
 	}
 
 	private void setMouseGlobeSelectionCommands() {
-		MouseObserver globeSelectionObserver = new MouseObserver();
-//		globeSelectionObserver
+		addMouseButtonObserver(globe.getGlobeSelectionObserver(getCamera(), getMousePicker()));
+		addMouseButtonObserver(globe.getGlobeDeselectionObserver());
 	}
 
 	private void setCameraMovementKeyCommands() {
@@ -94,8 +94,8 @@ public class TableTopState extends GameState {
 
 	@Override
 	public GameState update() {
-		Entity globeEntity = globe.getGlobeEntity();
-		globeEntity.increaseRotation(0.1f, 0.1f, 0);
+		System.out.println(globe.isSelected());
+		globe.update();
 		getCamera().update();
 		return this;
 	}

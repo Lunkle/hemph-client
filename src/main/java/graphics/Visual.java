@@ -23,7 +23,7 @@ public class Visual {
 	private static int windowWidth = 1280;
 	private static int windowHeight = 720;
 
-	private ProjectionTransformation projectionTransformation;
+	private static ProjectionTransformation projectionTransformation;
 
 	private Renderer renderer;
 
@@ -96,7 +96,7 @@ public class Visual {
 		Visual.windowHeight = windowHeight;
 	}
 
-	public ProjectionTransformation getProjectionTransformation() {
+	public static ProjectionTransformation getProjectionTransformation() {
 		return projectionTransformation;
 	}
 

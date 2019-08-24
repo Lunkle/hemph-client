@@ -14,6 +14,7 @@ import graphics.vao.VAO;
 import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
+import input.mouse.Mouse;
 import input.observer.KeyObserver;
 import logics.globe.GlobeRawData;
 
@@ -46,8 +47,10 @@ public class LoadingScreenState extends GameState {
 	private GlobeRawData globeRawMeshData;
 	private VAO globeMesh;
 
-	public LoadingScreenState(ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter) {
+	public LoadingScreenState(Mouse mouse, ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter) {
 		super();
+
+		setMouse(mouse);
 		setLoadingThread(loaderThread);
 		setConnecter(connecter);
 

@@ -15,7 +15,7 @@ import math.Vector3f;
 
 public class GlobeRawData extends MeshRawData implements RawData {
 
-	private int subdivisions = 6;
+	private int subdivisions = 5;
 	private int numberOfPlates = 50;
 	private float amplitude = 0.6f;
 

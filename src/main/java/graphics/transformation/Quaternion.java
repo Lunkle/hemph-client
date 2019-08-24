@@ -21,6 +21,14 @@ public class Quaternion {
 	}
 
 	/**
+	 * Creates an quaternion with axis and angle as specified.
+	 * 
+	 */
+	public Quaternion(Vector3f axis, float theta) {
+		setAngleAxis(axis, theta);
+	}
+
+	/**
 	 * Creates an quaternion with components as specified.
 	 * 
 	 * @param w
@@ -59,7 +67,7 @@ public class Quaternion {
 	 * @param axisZ
 	 * @return this quaternion
 	 */
-	public Quaternion setAngleAxis(float theta, float axisX, float axisY, float axisZ) {
+	public Quaternion setAngleAxis(float axisX, float axisY, float axisZ, float theta) {
 		double angle = Math.toRadians(theta);
 		this.w = (float) Math.cos(angle);
 		Vector3f axis = new Vector3f(axisX, axisY, axisZ);
@@ -69,6 +77,19 @@ public class Quaternion {
 		this.y = axis.y;
 		this.z = axis.z;
 		return this;
+	}
+
+	/**
+	 * Sets this quaternion by an angle of rotation about an axis.
+	 * 
+	 * @param theta
+	 * @param axisX
+	 * @param axisY
+	 * @param axisZ
+	 * @return this quaternion
+	 */
+	public Quaternion setAngleAxis(Vector3f axisOfRotation, float theta) {
+		return setAngleAxis(axisOfRotation.x, axisOfRotation.y, axisOfRotation.z, theta);
 	}
 
 	/**

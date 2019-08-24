@@ -9,7 +9,7 @@ public class Entity {
 	private Model model;
 	private float textureXOffset;
 	private float textureYOffset;
-	private WorldTransformation transformation;
+	private WorldTransformation worldTransformation;
 
 	/**
 	 * Initializes the entity with default transformation
@@ -38,7 +38,7 @@ public class Entity {
 	 */
 	public Entity(Model model, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
 		this.model = model;
-		transformation = new WorldTransformation(posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ);
+		worldTransformation = new WorldTransformation(posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ);
 	}
 
 	/**
@@ -53,36 +53,44 @@ public class Entity {
 //		textureYOffset = row / (float) model.getTexture().getTextureGridSize();
 	}
 
+	public WorldTransformation getWorldTransformation() {
+		return worldTransformation;
+	}
+
 	public void increasePosition(float dx, float dy, float dz) {
-		transformation.increasePosition(dx, dy, dz);
+		worldTransformation.increasePosition(dx, dy, dz);
+	}
+
+	public void setRotation(float rotX, float rotY, float rotZ) {
+		worldTransformation.setRotation(rotX, rotY, rotZ);
 	}
 
 	public void increaseRotation(float dx, float dy, float dz) {
-		transformation.increaseRotation(dx, dy, dz);
+		worldTransformation.increaseRotation(dx, dy, dz);
 	}
 
 	public float getScaleX() {
-		return transformation.getScaleX();
+		return worldTransformation.getScaleX();
 	}
 
 	public float getScaleY() {
-		return transformation.getScaleY();
+		return worldTransformation.getScaleY();
 	}
 
 	public float getScaleZ() {
-		return transformation.getScaleZ();
+		return worldTransformation.getScaleZ();
 	}
 
 	public void setScaleX(float scaleX) {
-		transformation.setScaleX(scaleX);
+		worldTransformation.setScaleX(scaleX);
 	}
 
 	public void setScaleY(float scaleY) {
-		transformation.setScaleY(scaleY);
+		worldTransformation.setScaleY(scaleY);
 	}
 
 	public void setScaleZ(float scaleZ) {
-		transformation.setScaleZ(scaleZ);
+		worldTransformation.setScaleZ(scaleZ);
 	}
 
 	public float getTextureXOffset() {
@@ -106,7 +114,7 @@ public class Entity {
 	}
 
 	public Matrix4f getModelMatrix() {
-		return transformation.getMatrix();
+		return worldTransformation.getMatrix();
 	}
 
 }

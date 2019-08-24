@@ -29,7 +29,7 @@ public class WorldTransformation extends Transformation {
 	}
 
 	public Vector3f getPosition() {
-		return new Vector3f(posX, posY, posY);
+		return new Vector3f(posX, posY, posZ);
 	}
 
 	public void setPosition(float x, float y, float z) {
@@ -55,11 +55,15 @@ public class WorldTransformation extends Transformation {
 		return rotZ;
 	}
 
-	public void increaseRotation(float dx, float dy, float dz) {
-		this.rotX += dx;
-		this.rotY += dy;
-		this.rotZ += dz;
+	public void setRotation(float rotX, float rotY, float rotZ) {
+		this.rotX = rotX;
+		this.rotY = rotY;
+		this.rotZ = rotZ;
 		setFlag();
+	}
+
+	public void increaseRotation(float dx, float dy, float dz) {
+		setRotation(rotX + dx, rotY + dy, rotZ + dz);
 	}
 
 	public float getScaleX() {
