@@ -17,6 +17,7 @@ public class Globe {
 	private Entity globeEntity;
 	private Quaternion rotation;
 	private boolean selected;
+	private Vector3f currentIntersection = null;
 	private Vector3f previousIntersection = null;
 
 	public Globe() {
@@ -65,8 +66,9 @@ public class Globe {
 			float t2 = (-b - sqrtDiscriminant) / (2 * a);
 			if (t1 >= 0 || t2 >= 0) {
 				float target = t1 < 0 ? t2 : (t2 < 0 ? t1 : Math.min(t1, t2));
-				previousIntersection = Vector3f.add(origin, direction.scale(target));
-				return previousIntersection;
+				previousIntersection = currentIntersection;
+				currentIntersection = Vector3f.add(origin, direction.scale(target));
+				return currentIntersection;
 			}
 		}
 		return null;
@@ -93,9 +95,9 @@ public class Globe {
 		return globeDeselectionObserver;
 	}
 
-	public MouseMovementObserver getGlobeRotationObserver() {
+	public MouseMovementObserver getGlobeRotationObserver(Camera camera, MousePicker mousePicker) {
 		MouseMovementObserver globeRotationObserver = new MouseMovementObserver();
-		Command rotateGlobe = new Command(() -> deselectGlobe());
+		Command rotateGlobe = new Command(() -> rotateGlobe(camera.getPosition(), mousePicker.calculateMouseRay()));
 		MouseCheck selectedCheck = () -> {
 			return selected;
 		};
@@ -103,9 +105,20 @@ public class Globe {
 		return globeRotationObserver;
 	}
 
+	private void rotateGlobe(Vector3f origin, Vector3f direction) {
+		getIntersection(origin, direction);
+		if (isSelected() && previousIntersection != null) {
+			Quaternion previousQuaternion = new Quaternion(0, previousIntersection.x, previousIntersection.y, previousIntersection.z);
+			Quaternion currentQuaternion = new Quaternion(0, currentIntersection.x, currentIntersection.y, currentIntersection.z);
+			Quaternion rotation = currentQuaternion.multiply(previousQuaternion.inverse());
+			globeEntity.increaseRotation(new Vector3f(0, 1, 0), 0.5f);
+		}
+	}
+
 	public void update() {
+
+//		System.out.println(previousIntersection);
 //		globeEntity.setRotation(rotX, rotY, rotZ);
-		globeEntity.increaseRotation(0.1f, 0.1f, 0);
 	}
 
 }

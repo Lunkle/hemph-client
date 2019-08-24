@@ -14,10 +14,7 @@ public class Quaternion {
 	 * Creates an empty quaternion with w = 1 and x, y, z = 0.
 	 */
 	public Quaternion() {
-		this.w = 1;
-		this.w = 0;
-		this.w = 0;
-		this.w = 0;
+		reset();
 	}
 
 	/**
@@ -245,6 +242,18 @@ public class Quaternion {
 		}
 		result.normalize();
 		return result;
+	}
+
+	public void applyRotation(Vector3f axisOfRotation, float angle) {
+		Quaternion q = new Quaternion(axisOfRotation, angle / 2);
+		Quaternion qi = q.inverse();
+		Quaternion r = q.multiply(this).multiply(qi);
+		r = this.multiply(new Quaternion(axisOfRotation, angle));
+		this.setComponents(r.w, r.x, r.y, r.z);
+	}
+
+	public void reset() {
+		this.setComponents(1, 0, 0, 0);
 	}
 
 }

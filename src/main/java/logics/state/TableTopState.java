@@ -16,6 +16,7 @@ import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
 import logics.globe.Globe;
+import math.Vector3f;
 
 public class TableTopState extends GameState {
 
@@ -34,23 +35,23 @@ public class TableTopState extends GameState {
 
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = GUIBuilder.newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
-		addGUI(testGUI);
+//		addGUI(testGUI);
 
 		Texture wood = resourcePack.getTexture("tableTexture");
 		GUI testGUI2 = GUIBuilder.newInstance().setDimensions(1170, 10, 100, 100).setTexture(wood).create();
-		addGUI(testGUI2);
+//		addGUI(testGUI2);
 
 		Texture tableSpecularTexture = resourcePack.getTexture("tableSpecularMap");
 		VAO tableMesh = resourcePack.getMesh("tableMesh");
 		Model model = ModelBuilder.newInstance().setMesh(tableMesh).setDiffuseTexture(wood).setSpecularTexture(tableSpecularTexture).create();
-		Entity tableEntity = new Entity(model, 0, 0, -5, 0, 0, 0, 1, 1, 1);
+		Entity tableEntity = new Entity(model, 0, 0, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1);
 		addEntity(tableEntity);
 
 		Texture roomTexture = resourcePack.getTexture("roomTexture");
 		Texture roomSpecularTexture = resourcePack.getTexture("roomSpecularMap");
 		VAO roomMesh = resourcePack.getMesh("roomMesh");
 		Model roomModel = ModelBuilder.newInstance().setMesh(roomMesh).setDiffuseTexture(roomTexture).setSpecularTexture(roomSpecularTexture).create();
-		Entity roomEntity = new Entity(roomModel, -3, 0, -4, 0, 90, 0, 1.2f, 1.2f, 1.4f);
+		Entity roomEntity = new Entity(roomModel, -2, 0, -4, new Vector3f(0, 1, 0), -45, 1.2f, 1.2f, 1.4f);
 		addEntity(roomEntity);
 
 		Texture globeTexture = resourcePack.getTexture("greenTexture");
@@ -58,7 +59,7 @@ public class TableTopState extends GameState {
 		VAO globeMesh = resourcePack.getMesh("globeMesh");
 		Model globeModel = ModelBuilder.newInstance().setMesh(globeMesh).setDiffuseTexture(globeTexture).setSpecularTexture(globeSpecularTexture).create();
 		globe = new Globe();
-		globe.setGlobeEntity(new Entity(globeModel, 0, 6, -5, 0, 0, 0, 1, 1, 1));
+		globe.setGlobeEntity(new Entity(globeModel, 0, 6, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1));
 		addEntity(globe.getGlobeEntity());
 
 		setMouseGlobeSelectionCommands();
@@ -66,13 +67,14 @@ public class TableTopState extends GameState {
 	}
 
 	private void positionCamera() {
-		getCamera().setPosition(0, 11f, 2f);
-		getCamera().setRotation(40, 0, 0);
+		getCamera().setPosition(0, 9f, 1f);
+		getCamera().setRotation(30, 0, 0);
 	}
 
 	private void setMouseGlobeSelectionCommands() {
 		addMouseButtonObserver(globe.getGlobeSelectionObserver(getCamera(), getMousePicker()));
 		addMouseButtonObserver(globe.getGlobeDeselectionObserver());
+		addMouseMovementObserver(globe.getGlobeRotationObserver(getCamera(), getMousePicker()));
 	}
 
 	private void setCameraMovementKeyCommands() {
@@ -94,7 +96,6 @@ public class TableTopState extends GameState {
 
 	@Override
 	public GameState update() {
-		System.out.println(globe.isSelected());
 		globe.update();
 		getCamera().update();
 		return this;

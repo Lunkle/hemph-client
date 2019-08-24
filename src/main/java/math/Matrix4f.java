@@ -371,7 +371,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * @param right The right source matrix
 	 * @return the resulting matrix
 	 */
-	public static Matrix4f mul(Matrix4f left, Matrix4f right) {
+	public static Matrix4f multiply(Matrix4f left, Matrix4f right) {
 		Matrix4f result = new Matrix4f();
 
 		float m00 = left.m00 * right.m00 + left.m10 * right.m01 + left.m20 * right.m02 + left.m30 * right.m03;

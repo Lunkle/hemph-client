@@ -1,8 +1,10 @@
 package graphics.entity;
 
 import graphics.model.Model;
+import graphics.transformation.Quaternion;
 import graphics.transformation.WorldTransformation;
 import math.Matrix4f;
+import math.Vector3f;
 
 public class Entity {
 
@@ -18,7 +20,7 @@ public class Entity {
 	 * @param texture
 	 */
 	public Entity(Model model) {
-		this(model, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		this(model, 0, 0, 0, new Vector3f(0, 1, 0), 0, 0, 0, 0);
 	}
 
 	/**
@@ -36,9 +38,9 @@ public class Entity {
 	 * @param scaleY
 	 * @param scaleZ
 	 */
-	public Entity(Model model, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+	public Entity(Model model, float posX, float posY, float posZ, Vector3f axis, float angle, float scaleX, float scaleY, float scaleZ) {
 		this.model = model;
-		worldTransformation = new WorldTransformation(posX, posY, posZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ);
+		worldTransformation = new WorldTransformation(posX, posY, posZ, axis, angle, scaleX, scaleY, scaleZ);
 	}
 
 	/**
@@ -61,12 +63,16 @@ public class Entity {
 		worldTransformation.increasePosition(dx, dy, dz);
 	}
 
-	public void setRotation(float rotX, float rotY, float rotZ) {
-		worldTransformation.setRotation(rotX, rotY, rotZ);
+	public void setRotation(Vector3f axis, float angle) {
+		worldTransformation.setRotation(axis, angle);
 	}
 
-	public void increaseRotation(float dx, float dy, float dz) {
-		worldTransformation.increaseRotation(dx, dy, dz);
+	public void increaseRotation(Vector3f axis, float angle) {
+		worldTransformation.increaseRotation(axis, angle);
+	}
+
+	public void increaseRotation(Quaternion rotation) {
+		worldTransformation.increaseRotation(rotation);
 	}
 
 	public float getScaleX() {

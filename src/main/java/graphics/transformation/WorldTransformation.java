@@ -8,21 +8,17 @@ public class WorldTransformation extends Transformation {
 	private float posX = 0;
 	private float posY = 0;
 	private float posZ = 0;
-//	private Quaternion rotation;
-	private float rotX = 0;
-	private float rotY = 0;
-	private float rotZ = 0;
 	private float scaleX = 1;
 	private float scaleY = 1;
 	private float scaleZ = 1;
+	private Quaternion quaternion;
 
-	public WorldTransformation(float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+	public WorldTransformation(float posX, float posY, float posZ, Vector3f axisOfRotation, float angle, float scaleX, float scaleY, float scaleZ) {
 		this.posX = posX;
 		this.posY = posY;
 		this.posZ = posZ;
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
+		quaternion = new Quaternion();
+		quaternion.applyRotation(axisOfRotation, angle);
 		this.scaleX = scaleX;
 		this.scaleY = scaleY;
 		this.scaleZ = scaleZ;
@@ -43,27 +39,20 @@ public class WorldTransformation extends Transformation {
 		setPosition(posX + dx, posY + dy, posZ + dz);
 	}
 
-	public float getRotX() {
-		return rotX;
-	}
-
-	public float getRotY() {
-		return rotY;
-	}
-
-	public float getRotZ() {
-		return rotZ;
-	}
-
-	public void setRotation(float rotX, float rotY, float rotZ) {
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
+	public void setRotation(Vector3f axisOfRotation, float angle) {
+		quaternion.reset();
+		quaternion.applyRotation(axisOfRotation, angle);
 		setFlag();
 	}
 
-	public void increaseRotation(float dx, float dy, float dz) {
-		setRotation(rotX + dx, rotY + dy, rotZ + dz);
+	public void increaseRotation(Vector3f axisOfRotation, float angle) {
+		quaternion.applyRotation(axisOfRotation, angle);
+		setFlag();
+	}
+
+	public void increaseRotation(Quaternion rotation) {
+		quaternion.multiply(rotation);
+		setFlag();
 	}
 
 	public float getScaleX() {
@@ -96,11 +85,8 @@ public class WorldTransformation extends Transformation {
 	@Override
 	protected void calculateMatrix() {
 		matrix = new Matrix4f();
-		matrix.setIdentity();
 		Matrix4f.translate(new Vector3f(posX, posY, posZ), matrix, matrix);
-		Matrix4f.rotate((float) Math.toRadians(rotX), new Vector3f(1, 0, 0), matrix, matrix);
-		Matrix4f.rotate((float) Math.toRadians(rotY), new Vector3f(0, 1, 0), matrix, matrix);
-		Matrix4f.rotate((float) Math.toRadians(rotZ), new Vector3f(0, 0, 1), matrix, matrix);
+		matrix = Matrix4f.multiply(matrix, quaternion.toRotationMatrix());
 		Matrix4f.scale(new Vector3f(scaleX, scaleY, scaleZ), matrix, matrix);
 	}
 

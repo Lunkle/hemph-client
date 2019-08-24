@@ -7,7 +7,7 @@ public class Camera {
 
 	private ViewTransformation transformation;
 	private Vector3f cameraMoveDirection = new Vector3f(0, 0, 0);
-	private float cameraSpeed = 0.06f;
+	private float cameraSpeed = 0.12f;
 
 	public enum Directions {
 		FRONT,
