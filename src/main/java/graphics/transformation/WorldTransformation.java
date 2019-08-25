@@ -17,8 +17,7 @@ public class WorldTransformation extends Transformation {
 		this.posX = posX;
 		this.posY = posY;
 		this.posZ = posZ;
-		quaternion = new UnitQuaternion();
-		quaternion.applyRotation(axisOfRotation, angle);
+		quaternion = new UnitQuaternion(axisOfRotation, angle / 2);
 		this.scaleX = scaleX;
 		this.scaleY = scaleY;
 		this.scaleZ = scaleZ;

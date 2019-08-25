@@ -27,16 +27,14 @@ public class Entity {
 	 * Initializes the entity with the specified transformations.
 	 * 
 	 * @param model
-	 * @param texture
 	 * @param posX
 	 * @param posY
 	 * @param posZ
-	 * @param rotX
-	 * @param rotY
-	 * @param rotZ
-	 * @param scaleX
-	 * @param scaleY
-	 * @param scaleZ
+	 * @param axis of rotation
+	 * @param angle about the axis of rotation
+	 * @param scale in the x direction
+	 * @param scale in the y direction
+	 * @param scale in the z direction
 	 */
 	public Entity(Model model, float posX, float posY, float posZ, Vector3f axis, float angle, float scaleX, float scaleY, float scaleZ) {
 		this.model = model;

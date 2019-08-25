@@ -52,8 +52,15 @@ public class TableTopState extends GameState {
 		Texture roomSpecularTexture = resourcePack.getTexture("roomSpecularMap");
 		VAO roomMesh = resourcePack.getMesh("roomMesh");
 		Model roomModel = ModelBuilder.newInstance().setMesh(roomMesh).setDiffuseTexture(roomTexture).setSpecularTexture(roomSpecularTexture).create();
-		roomEntity = new Entity(roomModel, -2, 0, -4, new Vector3f(0, 1, 0), 10, 1.2f, 1.2f, 1.4f);
+		roomEntity = new Entity(roomModel, -2, 0, -4, new Vector3f(0, 1, 0), -90, 1.2f, 1.2f, 1.4f);
 		addEntity(roomEntity);
+
+		Texture globeStandTexture = resourcePack.getTexture("globeStandTexture");
+		Texture globeStandSpecularTexture = resourcePack.getTexture("globeStandSpecularMap");
+		VAO globeStandMesh = resourcePack.getMesh("globeStandMesh");
+		Model globeStandModel = ModelBuilder.newInstance().setMesh(globeStandMesh).setDiffuseTexture(globeStandTexture).setSpecularTexture(globeStandSpecularTexture).create();
+		Entity globeStandEntity = new Entity(globeStandModel, 0, 4.9633f, -4, new Vector3f(0, 1, 0), 10, 0.2f, 0.2f, 0.2f);
+		addEntity(globeStandEntity);
 
 		Texture globeTexture = resourcePack.getTexture("greenTexture");
 		Texture globeSpecularTexture = resourcePack.getTexture("globeSpecularMap");
@@ -99,7 +106,7 @@ public class TableTopState extends GameState {
 	public GameState update() {
 		globe.update();
 		System.out.println(roomEntity.getWorldTransformation().getQuaternion());
-		roomEntity.getWorldTransformation().increaseRotation(new Vector3f(0, 0.5f, 0.5f), 0.1f);
+//		roomEntity.getWorldTransformation().increaseRotation(new Vector3f(0, 0.5f, 0.5f), 0.1f);
 		getCamera().update();
 		return this;
 	}

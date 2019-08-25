@@ -18,6 +18,7 @@ public interface RawData {
 		try {
 			fileSize = Files.size(path);
 		} catch (IOException e) {
+			System.out.println("Could not find file " + filePath);
 			e.printStackTrace();
 		}
 		return fileSize;
