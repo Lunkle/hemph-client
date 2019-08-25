@@ -248,11 +248,11 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	}
 
 	/**
-	 * Calculate the angle between two vectors, in radians
+	 * Calculate the angle between two vectors, in degrees.
 	 * 
 	 * @param a A vector
 	 * @param b The other vector
-	 * @return the angle between the two vectors, in radians
+	 * @return the angle between the two vectors, in degrees
 	 */
 	public static float angle(Vector3f a, Vector3f b) {
 		float dls = dot(a, b) / (a.length() * b.length());
@@ -260,7 +260,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 			dls = -1f;
 		else if (dls > 1.0f)
 			dls = 1.0f;
-		return (float) Math.acos(dls);
+		return (float) Math.toDegrees(Math.acos(dls));
 	}
 
 	/*

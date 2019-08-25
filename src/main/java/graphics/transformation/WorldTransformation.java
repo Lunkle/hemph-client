@@ -11,17 +11,18 @@ public class WorldTransformation extends Transformation {
 	private float scaleX = 1;
 	private float scaleY = 1;
 	private float scaleZ = 1;
-	private Quaternion quaternion;
+	private UnitQuaternion quaternion;
 
 	public WorldTransformation(float posX, float posY, float posZ, Vector3f axisOfRotation, float angle, float scaleX, float scaleY, float scaleZ) {
 		this.posX = posX;
 		this.posY = posY;
 		this.posZ = posZ;
-		quaternion = new Quaternion();
+		quaternion = new UnitQuaternion();
 		quaternion.applyRotation(axisOfRotation, angle);
 		this.scaleX = scaleX;
 		this.scaleY = scaleY;
 		this.scaleZ = scaleZ;
+		setFlag();
 	}
 
 	public Vector3f getPosition() {
@@ -37,6 +38,10 @@ public class WorldTransformation extends Transformation {
 
 	public void increasePosition(float dx, float dy, float dz) {
 		setPosition(posX + dx, posY + dy, posZ + dz);
+	}
+
+	public UnitQuaternion getQuaternion() {
+		return quaternion;
 	}
 
 	public void setRotation(Vector3f axisOfRotation, float angle) {

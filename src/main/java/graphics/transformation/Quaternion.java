@@ -5,24 +5,16 @@ import math.Vector3f;
 
 public class Quaternion {
 
-	private float w;
-	private float x;
-	private float y;
-	private float z;
+	protected float w;
+	protected float x;
+	protected float y;
+	protected float z;
 
 	/**
 	 * Creates an empty quaternion with w = 1 and x, y, z = 0.
 	 */
 	public Quaternion() {
 		reset();
-	}
-
-	/**
-	 * Creates an quaternion with axis and angle as specified.
-	 * 
-	 */
-	public Quaternion(Vector3f axis, float theta) {
-		setAngleAxis(axis, theta);
 	}
 
 	/**
@@ -51,42 +43,15 @@ public class Quaternion {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		normalize();
 		return this;
 	}
 
-	/**
-	 * Sets this quaternion by an angle of rotation about an axis.
-	 * 
-	 * @param theta
-	 * @param axisX
-	 * @param axisY
-	 * @param axisZ
-	 * @return this quaternion
-	 */
-	public Quaternion setAngleAxis(float axisX, float axisY, float axisZ, float theta) {
-		double angle = Math.toRadians(theta);
-		this.w = (float) Math.cos(angle);
-		Vector3f axis = new Vector3f(axisX, axisY, axisZ);
-		axis.normalise();
-		axis.scale((float) Math.sin(angle));
-		this.x = axis.x;
-		this.y = axis.y;
-		this.z = axis.z;
-		return this;
+	public Vector3f getV() {
+		return new Vector3f(x, y, z);
 	}
 
-	/**
-	 * Sets this quaternion by an angle of rotation about an axis.
-	 * 
-	 * @param theta
-	 * @param axisX
-	 * @param axisY
-	 * @param axisZ
-	 * @return this quaternion
-	 */
-	public Quaternion setAngleAxis(Vector3f axisOfRotation, float theta) {
-		return setAngleAxis(axisOfRotation.x, axisOfRotation.y, axisOfRotation.z, theta);
+	public float getS() {
+		return w;
 	}
 
 	/**
@@ -95,35 +60,80 @@ public class Quaternion {
 	 * @return this quaternion
 	 */
 	public Quaternion normalize() {
-		float mag = (float) Math.sqrt(w * w + x * x + y * y + z * z);
-		w /= mag;
-		x /= mag;
-		y /= mag;
-		z /= mag;
+		float magnitude = magnitude();
+		w /= magnitude;
+		x /= magnitude;
+		y /= magnitude;
+		z /= magnitude;
 		return this;
 	}
 
 	/**
-	 * Gets the invertse of this quaternion;
+	 * Gets the conjugate of this quaternion;
+	 * 
+	 * @return the conjugate quaternion
+	 */
+	public Quaternion getConjugate() {
+		Quaternion conjugate = new Quaternion(w, -x, -y, -z);
+		return conjugate;
+	}
+
+	/**
+	 * Gets the inverse of this quaternion;
 	 * 
 	 * @return the inverse quaternion
 	 */
-	public Quaternion inverse() {
-		return new Quaternion(w, -x, -y, -z);
+	public Quaternion getInverse() {
+		float magnitude = magnitude();
+		Quaternion inverse = getConjugate().scale(1 / (magnitude * magnitude));
+		return inverse;
+	}
+
+	public Quaternion scale(float scale) {
+		w *= scale;
+		x *= scale;
+		y *= scale;
+		z *= scale;
+		return this;
+	}
+
+	/**
+	 * 
+	 * Multiplies the corresponding scalar parts and sums the results.
+	 * 
+	 * @param quaternion
+	 * @return the dot product
+	 */
+	public float dot(Quaternion q) {
+		float sum = w * q.w + x * q.x + y * q.y + z * q.z;
+		return sum;
+	}
+
+	/**
+	 * Computes the angular difference between the quaternions.
+	 * 
+	 * @param quaternion
+	 * @return the angle difference
+	 */
+	public float angleBetween(Quaternion q) {
+		float cosTheta = this.dot(q) / (magnitude() * q.magnitude());
+		float theta = (float) Math.acos(cosTheta);
+		return theta;
 	}
 
 	/**
 	 * Multiplies this quaternion by the parameter quaternion.
 	 * 
-	 * @param quaternion
+	 * @param q
 	 * @return the resultant quaternion
 	 */
-	public Quaternion multiply(Quaternion quaternion) {
-		float newW = -x * quaternion.x - y * quaternion.y - z * quaternion.z + w * quaternion.w;
-		float newX = x * quaternion.w + y * quaternion.z - z * quaternion.y + w * quaternion.x;
-		float newY = -x * quaternion.z + y * quaternion.w + z * quaternion.x + w * quaternion.y;
-		float newZ = x * quaternion.y - y * quaternion.x + z * quaternion.w + w * quaternion.z;
-		return new Quaternion(newW, newX, newY, newZ);
+	public Quaternion multiply(Quaternion q) {
+		float s = w * q.w - Vector3f.dot(getV(), q.getV());
+		Vector3f saB = q.getV().scale(w);
+		Vector3f sbA = getV().scale(q.w);
+		Vector3f cross = Vector3f.cross(getV(), q.getV());
+		Vector3f v = Vector3f.add(Vector3f.add(saB, sbA), cross);
+		return new Quaternion(s, v.x, v.y, v.z);
 	}
 
 	/**
@@ -244,16 +254,17 @@ public class Quaternion {
 		return result;
 	}
 
-	public void applyRotation(Vector3f axisOfRotation, float angle) {
-		Quaternion q = new Quaternion(axisOfRotation, angle / 2);
-		Quaternion qi = q.inverse();
-		Quaternion r = q.multiply(this).multiply(qi);
-		r = this.multiply(new Quaternion(axisOfRotation, angle));
-		this.setComponents(r.w, r.x, r.y, r.z);
-	}
-
 	public void reset() {
 		this.setComponents(1, 0, 0, 0);
+	}
+
+	public float magnitude() {
+		return (float) Math.sqrt(w * w + x * x + y * y + z * z);
+	}
+
+	@Override
+	public String toString() {
+		return "Quaternion: [" + w + ", " + x + ", " + y + ", " + z + "]";
 	}
 
 }

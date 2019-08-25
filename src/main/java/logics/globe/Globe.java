@@ -2,7 +2,6 @@ package logics.globe;
 
 import graphics.entity.Entity;
 import graphics.rendering.Camera;
-import graphics.transformation.Quaternion;
 import input.command.Command;
 import input.information.Actions;
 import input.information.Keys;
@@ -15,14 +14,9 @@ import math.Vector3f;
 public class Globe {
 
 	private Entity globeEntity;
-	private Quaternion rotation;
 	private boolean selected;
 	private Vector3f currentIntersection = null;
 	private Vector3f previousIntersection = null;
-
-	public Globe() {
-		rotation = new Quaternion();
-	}
 
 	public void setGlobeEntity(Entity globeEntity) {
 		this.globeEntity = globeEntity;
@@ -44,6 +38,7 @@ public class Globe {
 		selected = false;
 	}
 
+	private Vector3f globePreviousPosition = null;
 	private Vector3f previousOrigin = null;
 	private Vector3f previousDirection = null;
 
@@ -53,9 +48,9 @@ public class Globe {
 		}
 		previousOrigin = origin;
 		previousDirection = new Vector3f(direction);
-		Vector3f globePosition = globeEntity.getWorldTransformation().getPosition();
+		globePreviousPosition = globeEntity.getWorldTransformation().getPosition();
 		float globeSize = globeEntity.getScaleX();
-		Vector3f globeToCamera = Vector3f.sub(origin, globePosition);
+		Vector3f globeToCamera = Vector3f.sub(origin, globePreviousPosition);
 		float a = Vector3f.dot(direction, direction);
 		float b = 2 * Vector3f.dot(direction, globeToCamera);
 		float c = Vector3f.dot(globeToCamera, globeToCamera) - globeSize * globeSize;
@@ -71,6 +66,7 @@ public class Globe {
 				return currentIntersection;
 			}
 		}
+		currentIntersection = null;
 		return null;
 	}
 
@@ -107,16 +103,17 @@ public class Globe {
 
 	private void rotateGlobe(Vector3f origin, Vector3f direction) {
 		getIntersection(origin, direction);
-		if (isSelected() && previousIntersection != null) {
-			Quaternion previousQuaternion = new Quaternion(0, previousIntersection.x, previousIntersection.y, previousIntersection.z);
-			Quaternion currentQuaternion = new Quaternion(0, currentIntersection.x, currentIntersection.y, currentIntersection.z);
-			Quaternion rotation = currentQuaternion.multiply(previousQuaternion.inverse());
-			globeEntity.increaseRotation(new Vector3f(0, 1, 0), 0.5f);
+		if (isSelected() && previousIntersection != null && currentIntersection != null) {
+			Vector3f prevInt = Vector3f.sub(previousIntersection, globePreviousPosition);
+			Vector3f currInt = Vector3f.sub(currentIntersection, globeEntity.getWorldTransformation().getPosition());
+			Vector3f rotationAxis = Vector3f.cross(prevInt, currInt).normalise(null);
+			float angleBetween = Vector3f.angle(prevInt, currInt);
+			globeEntity.increaseRotation(rotationAxis, angleBetween);
 		}
 	}
 
 	public void update() {
-
+//		System.out.println(globeEntity.getWorldTransformation().getQuaternion());
 //		System.out.println(previousIntersection);
 //		globeEntity.setRotation(rotX, rotY, rotZ);
 	}

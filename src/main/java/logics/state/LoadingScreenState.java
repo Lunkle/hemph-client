@@ -160,7 +160,7 @@ public class LoadingScreenState extends GameState {
 		if (!finishedLoading) {
 			double percentage = loadTask.getProgressPercentage();
 			if (percentage < 100) {
-				System.out.println(Math.round(percentage) + "%");
+//				System.out.println(Math.round(percentage) + "%");
 			} else {
 				finishedLoading = true;
 			}

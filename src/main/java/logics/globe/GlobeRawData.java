@@ -16,13 +16,13 @@ import math.Vector3f;
 public class GlobeRawData extends MeshRawData implements RawData {
 
 	private int subdivisions = 5;
-	private int numberOfPlates = 50;
-	private float amplitude = 0.6f;
+	private int numberOfPlates = 30;
+	private float amplitude = 0.3f;
 
-	private int smoothingIterations = 6; // How many times to smooth out the heights
+	private int smoothingIterations = 5; // How many times to smooth out the heights
 	private float smoothingFactor = 0.8f; // How much to smooth each time
 
-	private float perturbAmount = 0.0012f;
+	private float perturbAmount = 0.001f;
 
 	private List<TerrainTriangle> triangles;
 	private List<Vertex> vertices;

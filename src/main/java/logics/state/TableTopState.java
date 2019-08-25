@@ -21,6 +21,7 @@ import math.Vector3f;
 public class TableTopState extends GameState {
 
 	private Globe globe;
+	Entity roomEntity;
 
 	public TableTopState(ResourcePack resourcePack) {
 		setFlagToClearObservers();
@@ -35,11 +36,11 @@ public class TableTopState extends GameState {
 
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = GUIBuilder.newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
-//		addGUI(testGUI);
+		addGUI(testGUI);
 
 		Texture wood = resourcePack.getTexture("tableTexture");
 		GUI testGUI2 = GUIBuilder.newInstance().setDimensions(1170, 10, 100, 100).setTexture(wood).create();
-//		addGUI(testGUI2);
+		addGUI(testGUI2);
 
 		Texture tableSpecularTexture = resourcePack.getTexture("tableSpecularMap");
 		VAO tableMesh = resourcePack.getMesh("tableMesh");
@@ -51,7 +52,7 @@ public class TableTopState extends GameState {
 		Texture roomSpecularTexture = resourcePack.getTexture("roomSpecularMap");
 		VAO roomMesh = resourcePack.getMesh("roomMesh");
 		Model roomModel = ModelBuilder.newInstance().setMesh(roomMesh).setDiffuseTexture(roomTexture).setSpecularTexture(roomSpecularTexture).create();
-		Entity roomEntity = new Entity(roomModel, -2, 0, -4, new Vector3f(0, 1, 0), -45, 1.2f, 1.2f, 1.4f);
+		roomEntity = new Entity(roomModel, -2, 0, -4, new Vector3f(0, 1, 0), 10, 1.2f, 1.2f, 1.4f);
 		addEntity(roomEntity);
 
 		Texture globeTexture = resourcePack.getTexture("greenTexture");
@@ -97,6 +98,8 @@ public class TableTopState extends GameState {
 	@Override
 	public GameState update() {
 		globe.update();
+		System.out.println(roomEntity.getWorldTransformation().getQuaternion());
+		roomEntity.getWorldTransformation().increaseRotation(new Vector3f(0, 0.5f, 0.5f), 0.1f);
 		getCamera().update();
 		return this;
 	}
