@@ -44,8 +44,7 @@ public class WorldTransformation extends Transformation {
 	}
 
 	public void setRotation(Vector3f axisOfRotation, float angle) {
-		quaternion.reset();
-		quaternion.applyRotation(axisOfRotation, angle);
+		quaternion.setAngleAxis(axisOfRotation, angle / 2);
 		setFlag();
 	}
 
@@ -54,8 +53,8 @@ public class WorldTransformation extends Transformation {
 		setFlag();
 	}
 
-	public void increaseRotation(Quaternion rotation) {
-		quaternion.multiply(rotation);
+	public void increaseRotation(UnitQuaternion rotation) {
+		quaternion.applyRotation(rotation);
 		setFlag();
 	}
 

@@ -17,12 +17,13 @@ public class GlobeRawData extends MeshRawData implements RawData {
 
 	private int subdivisions = 5;
 	private int numberOfPlates = 30;
+	private int numberOfWaterPlates = 20;
 	private float amplitude = 0.3f;
 
 	private int smoothingIterations = 5; // How many times to smooth out the heights
 	private float smoothingFactor = 0.8f; // How much to smooth each time
 
-	private float perturbAmount = 0.001f;
+	private float perturbAmount = 0.002f;
 
 	private List<TerrainTriangle> triangles;
 	private List<Vertex> vertices;
@@ -158,10 +159,24 @@ public class GlobeRawData extends MeshRawData implements RawData {
 	private void generatePlates() {
 		int numberOfTriangles = triangles.size();
 		plates = new ArrayList<>();
+		List<Integer> waterBiomes = Biomes.getWaterBiomeIndices();
+		List<Integer> landBiomes = Biomes.getLandBiomeIndices();
+		List<Boolean> plateIsWater = new ArrayList<>();
+		for (int i = 0; i < numberOfWaterPlates; i++) {
+			plateIsWater.add(true);
+		}
+		for (int i = 0; i < numberOfPlates - numberOfWaterPlates; i++) {
+			plateIsWater.add(false);
+		}
 		for (int i = 0; i < numberOfPlates; i++) {
 			int triangleID = (int) getRandom(0, numberOfTriangles);
 			TerrainTriangle triangle = triangles.get(triangleID);
-			plates.add(new Plate(Biomes.getBiome((int) getRandom(0, Biomes.numberOfBiomes())), triangle));
+			int isWaterIndex = (int) getRandom(0, plateIsWater.size());
+			boolean isWater = plateIsWater.get(isWaterIndex);
+			plateIsWater.remove(isWaterIndex);
+			List<Integer> biomeMap = isWater ? waterBiomes : landBiomes;
+			int biomeIndex = biomeMap.get((int) getRandom(0, biomeMap.size()));
+			plates.add(new Plate(Biomes.getBiome(biomeIndex), triangle));
 		}
 		int numberOfSetTriangles = numberOfPlates;
 		while (numberOfSetTriangles < numberOfTriangles) {

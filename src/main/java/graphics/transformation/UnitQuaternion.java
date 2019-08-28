@@ -34,11 +34,16 @@ public class UnitQuaternion extends Quaternion {
 		this.x = axis.x;
 		this.y = axis.y;
 		this.z = axis.z;
+		normalize();
 		return this;
 	}
 
 	public UnitQuaternion(float w, float x, float y, float z) {
 		setComponents(w, x, y, z);
+	}
+
+	public UnitQuaternion(Quaternion rotQ) {
+		setComponents(rotQ.w, rotQ.x, rotQ.y, rotQ.z);
 	}
 
 	/**
@@ -62,6 +67,9 @@ public class UnitQuaternion extends Quaternion {
 
 	public Vector3f getAxis() {
 		Vector3f axis = new Vector3f(x, y, z);
+		if (axis.lengthSquared() == 0) {
+			axis.set(0, 1, 0);
+		}
 		axis.normalise();
 		return axis;
 	}
@@ -141,22 +149,17 @@ public class UnitQuaternion extends Quaternion {
 		return new UnitQuaternion(s, v.x, v.y, v.z);
 	}
 
-	public void applyRotation(Vector3f axisOfRotation, float angle) {
-		UnitQuaternion q = new UnitQuaternion(axisOfRotation, angle / 2);
-		UnitQuaternion qi = q.getInverse();
-		UnitQuaternion r = q.multiply(this).multiply(qi);
-
-		this.setComponents(r.w, r.x, r.y, r.z);
+	public void applyRotation(UnitQuaternion rotation) {
+		UnitQuaternion result = this.multiply(rotation);
+		this.setComponents(result.w, result.x, result.y, result.z);
 	}
 
-	@Override
-	public void reset() {
-		setComponents(0, 0, -1, 0);
+	public void applyRotation(Vector3f axisOfRotation, float angle) {
+		applyRotation(new UnitQuaternion(axisOfRotation, angle / 2));
 	}
 
 	@Override
 	public String toString() {
 		return "UnitQuaternion: [" + w + ", " + x + ", " + y + ", " + z + "]";
 	}
-
 }

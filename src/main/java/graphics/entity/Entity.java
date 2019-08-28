@@ -1,7 +1,7 @@
 package graphics.entity;
 
 import graphics.model.Model;
-import graphics.transformation.Quaternion;
+import graphics.transformation.UnitQuaternion;
 import graphics.transformation.WorldTransformation;
 import math.Matrix4f;
 import math.Vector3f;
@@ -30,7 +30,7 @@ public class Entity {
 	 * @param posX
 	 * @param posY
 	 * @param posZ
-	 * @param axis of rotation
+	 * @param axis  of rotation
 	 * @param angle about the axis of rotation
 	 * @param scale in the x direction
 	 * @param scale in the y direction
@@ -69,7 +69,7 @@ public class Entity {
 		worldTransformation.increaseRotation(axis, angle);
 	}
 
-	public void increaseRotation(Quaternion rotation) {
+	public void increaseRotation(UnitQuaternion rotation) {
 		worldTransformation.increaseRotation(rotation);
 	}
 

@@ -104,10 +104,11 @@ public class Globe {
 	private void rotateGlobe(Vector3f origin, Vector3f direction) {
 		getIntersection(origin, direction);
 		if (isSelected() && previousIntersection != null && currentIntersection != null) {
-			Vector3f prevInt = Vector3f.sub(previousIntersection, globePreviousPosition);
-			Vector3f currInt = Vector3f.sub(currentIntersection, globeEntity.getWorldTransformation().getPosition());
+			Vector3f prevInt = Vector3f.sub(previousIntersection, globePreviousPosition).normalise(null);
+			Vector3f currInt = Vector3f.sub(currentIntersection, globeEntity.getWorldTransformation().getPosition()).normalise(null);
+
 			Vector3f rotationAxis = Vector3f.cross(prevInt, currInt).normalise(null);
-			float angleBetween = Vector3f.angle(prevInt, currInt);
+			float angleBetween = -Vector3f.angle(prevInt, currInt);
 			globeEntity.increaseRotation(rotationAxis, angleBetween);
 		}
 	}
@@ -117,5 +118,4 @@ public class Globe {
 //		System.out.println(previousIntersection);
 //		globeEntity.setRotation(rotX, rotY, rotZ);
 	}
-
 }

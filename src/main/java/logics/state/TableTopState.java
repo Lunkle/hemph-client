@@ -27,12 +27,7 @@ public class TableTopState extends GameState {
 		setFlagToClearObservers();
 		setCameraMovementKeyCommands();
 		positionCamera();
-
-		Light directionalLight1 = new DirectionalLight(0, -1, 1f);
-		directionalLight1.setAmbient(0.5f, 0.3f, 0.3f);
-		directionalLight1.setDiffuse(1f, 1f, 1f);
-		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
-		addLight(directionalLight1);
+		setLights();
 
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = GUIBuilder.newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
@@ -59,19 +54,33 @@ public class TableTopState extends GameState {
 		Texture globeStandSpecularTexture = resourcePack.getTexture("globeStandSpecularMap");
 		VAO globeStandMesh = resourcePack.getMesh("globeStandMesh");
 		Model globeStandModel = ModelBuilder.newInstance().setMesh(globeStandMesh).setDiffuseTexture(globeStandTexture).setSpecularTexture(globeStandSpecularTexture).create();
-		Entity globeStandEntity = new Entity(globeStandModel, 0, 4.9633f, -4, new Vector3f(0, 1, 0), 10, 0.2f, 0.2f, 0.2f);
+		Entity globeStandEntity = new Entity(globeStandModel, -1.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0), -45, 0.3f, 0.3f, 0.3f);
 		addEntity(globeStandEntity);
 
-		Texture globeTexture = resourcePack.getTexture("greenTexture");
+		Texture globeTexture = resourcePack.getTexture("worldTexture");
 		Texture globeSpecularTexture = resourcePack.getTexture("globeSpecularMap");
 		VAO globeMesh = resourcePack.getMesh("globeMesh");
 		Model globeModel = ModelBuilder.newInstance().setMesh(globeMesh).setDiffuseTexture(globeTexture).setSpecularTexture(globeSpecularTexture).create();
 		globe = new Globe();
-		globe.setGlobeEntity(new Entity(globeModel, 0, 6, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1));
+		globe.setGlobeEntity(new Entity(globeModel, 0, 7.9f, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1));
 		addEntity(globe.getGlobeEntity());
 
 		setMouseGlobeSelectionCommands();
 
+	}
+
+	private void setLights() {
+		Light directionalLight1 = new DirectionalLight(0, -1, 1f);
+		directionalLight1.setAmbient(0.5f, 0.3f, 0.3f);
+		directionalLight1.setDiffuse(1f, 1f, 1f);
+		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
+		addLight(directionalLight1);
+
+		Light directionalLight2 = new DirectionalLight(0, -1, 1f);
+		directionalLight2.setAmbient(1f, 1f, 1f);
+		directionalLight2.setDiffuse(1f, 1f, 1f);
+		directionalLight2.setSpecular(1f, 1f, 1f);
+		addLight(directionalLight2);
 	}
 
 	private void positionCamera() {
@@ -105,8 +114,6 @@ public class TableTopState extends GameState {
 	@Override
 	public GameState update() {
 		globe.update();
-		System.out.println(roomEntity.getWorldTransformation().getQuaternion());
-//		roomEntity.getWorldTransformation().increaseRotation(new Vector3f(0, 0.5f, 0.5f), 0.1f);
 		getCamera().update();
 		return this;
 	}

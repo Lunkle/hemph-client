@@ -22,6 +22,15 @@ public class HemphApplication {
 
 	public void run() {
 		System.out.println("LWJGL Version: " + Version.getVersion());
+
+//		UnitQuaternion yAxis = new UnitQuaternion(0, 0, 1, 0);
+//		UnitQuaternion test = new UnitQuaternion(new Vector3f(0, 1, 0), 90);
+//		UnitQuaternion reult = yAxis.multiply(test);
+//
+//		System.out.println(yAxis);
+//		System.out.println(test);
+//		System.out.println(reult);
+
 		init();
 		loop();
 		cleanUp();

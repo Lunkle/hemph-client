@@ -46,12 +46,22 @@ public class LoadingScreenState extends GameState {
 	private Texture globeStandSpecularTexture;
 	private OBJMeshRawData globeStandRawMeshData;
 	private VAO globeStandMesh;
-	private ByteBufferImageRawData greenRawTextureData;
-	private Texture greenTexture;
+	private ByteBufferImageRawData worldRawTextureData;
+	private Texture worldTexture;
 	private ByteBufferImageRawData globeSpecularRawTextureData;
 	private Texture globeSpecularTexture;
 	private GlobeRawData globeRawMeshData;
 	private VAO globeMesh;
+	private ByteBufferImageRawData greenRawTextureData;
+	private Texture greenTexture;
+	private ByteBufferImageRawData redRawTextureData;
+	private Texture redTexture;
+	private ByteBufferImageRawData blueRawTextureData;
+	private Texture blueTexture;
+	private ByteBufferImageRawData arrowSpecularRawTextureData;
+	private Texture arrowSpecularTexture;
+	private OBJMeshRawData arrowRawMeshData;
+	private VAO arrowMesh;
 
 	public LoadingScreenState(Mouse mouse, ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter) {
 		super();
@@ -65,8 +75,7 @@ public class LoadingScreenState extends GameState {
 		setFlagToClearObservers();
 
 		KeyObserver printHi = new KeyObserver();
-		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {
-		}), new Command(() -> System.out.println("lmao"))));
+		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {}), new Command(() -> System.out.println("lmao"))));
 		addKeyObserver(printHi);
 
 		loadTask = loaderThread.generateNewTask();
@@ -81,9 +90,14 @@ public class LoadingScreenState extends GameState {
 		globeStandRawTextureData = new ByteBufferImageRawData();
 		globeStandSpecularRawTextureData = new ByteBufferImageRawData();
 		globeStandRawMeshData = new OBJMeshRawData();
-		greenRawTextureData = new ByteBufferImageRawData();
+		worldRawTextureData = new ByteBufferImageRawData();
 		globeSpecularRawTextureData = new ByteBufferImageRawData();
 		globeRawMeshData = new GlobeRawData();
+		greenRawTextureData = new ByteBufferImageRawData();
+		redRawTextureData = new ByteBufferImageRawData();
+		blueRawTextureData = new ByteBufferImageRawData();
+		arrowSpecularRawTextureData = new ByteBufferImageRawData();
+		arrowRawMeshData = new OBJMeshRawData();
 
 		loadTask.addItem(dukerawTextureData, "dukemascot.png");
 		loadTask.addItem(tableRawTextureData, "table.png");
@@ -95,9 +109,14 @@ public class LoadingScreenState extends GameState {
 		loadTask.addItem(globeStandRawTextureData, "globeStand.png");
 		loadTask.addItem(globeStandSpecularRawTextureData, "globeStandSpecularMap.png");
 		loadTask.addItem(globeStandRawMeshData, "globeStand.obj");
-		loadTask.addItem(greenRawTextureData, "green.png");
+		loadTask.addItem(worldRawTextureData, "worldTexture.png");
 		loadTask.addItem(globeSpecularRawTextureData, "globeSpecularMap.png");
 		loadTask.addItem(globeRawMeshData, "");
+		loadTask.addItem(greenRawTextureData, "green.png");
+		loadTask.addItem(redRawTextureData, "red.png");
+		loadTask.addItem(blueRawTextureData, "blue.png");
+		loadTask.addItem(arrowSpecularRawTextureData, "arrowSpecularMap.png");
+		loadTask.addItem(arrowRawMeshData, "arrow.obj");
 
 		loaderThread.queueTask(loadTask);
 	}
@@ -143,6 +162,17 @@ public class LoadingScreenState extends GameState {
 
 		greenTexture = new Texture();
 		unconnectedData.addData(greenTexture, greenRawTextureData);
+		redTexture = new Texture();
+		unconnectedData.addData(redTexture, redRawTextureData);
+		blueTexture = new Texture();
+		unconnectedData.addData(blueTexture, blueRawTextureData);
+		arrowSpecularTexture = new Texture();
+		unconnectedData.addData(arrowSpecularTexture, arrowSpecularRawTextureData);
+		arrowMesh = new VAO();
+		unconnectedData.addData(arrowMesh, arrowRawMeshData);
+
+		worldTexture = new Texture();
+		unconnectedData.addData(worldTexture, worldRawTextureData);
 		globeSpecularTexture = new Texture();
 		unconnectedData.addData(globeSpecularTexture, globeSpecularRawTextureData);
 		globeMesh = new VAO();
@@ -172,9 +202,14 @@ public class LoadingScreenState extends GameState {
 		resourcePack.addTexture(globeStandTexture, "globeStandTexture");
 		resourcePack.addTexture(globeStandSpecularTexture, "globeStandSpecularMap");
 		resourcePack.addMesh(globeStandMesh, "globeStandMesh");
-		resourcePack.addTexture(greenTexture, "greenTexture");
+		resourcePack.addTexture(worldTexture, "worldTexture");
 		resourcePack.addTexture(globeSpecularTexture, "globeSpecularMap");
 		resourcePack.addMesh(globeMesh, "globeMesh");
+		resourcePack.addTexture(greenTexture, "greenTexture");
+		resourcePack.addTexture(redTexture, "redTexture");
+		resourcePack.addTexture(blueTexture, "blueTexture");
+		resourcePack.addTexture(arrowSpecularTexture, "arrowSpecularMap");
+		resourcePack.addMesh(arrowMesh, "arrowMesh");
 	}
 
 	@Override
