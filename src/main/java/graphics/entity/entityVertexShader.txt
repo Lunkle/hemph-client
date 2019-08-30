@@ -12,13 +12,15 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
-void main(){
+void main() {
 
-	fragmentTextureCoordinates = vertexTextureCoordinates;
 	mat4 modelViewMatrix = viewMatrix * modelMatrix;
-	vec4 viewPosition = modelViewMatrix * vec4(vertexPosition, 1.0); 
+	vec4 viewPosition = modelViewMatrix * vec4(vertexPosition, 1.0);
+	 
 	fragmentPosition = viewPosition.xyz;
 	fragmentNormal = vec3(modelViewMatrix * vec4(vertexNormal, 0.0));
+	fragmentTextureCoordinates = vertexTextureCoordinates;
+	
 	gl_Position = projectionMatrix * viewPosition;
 	
 }

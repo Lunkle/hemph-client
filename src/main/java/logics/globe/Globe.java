@@ -2,9 +2,11 @@ package logics.globe;
 
 import graphics.entity.Entity;
 import graphics.rendering.Camera;
+import graphics.transformation.ProjectionTransformation;
 import input.command.Command;
 import input.information.Actions;
 import input.information.Keys;
+import input.mouse.Mouse;
 import input.mouse.MousePicker;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseCheck;
@@ -70,11 +72,12 @@ public class Globe {
 		return null;
 	}
 
-	public MouseButtonObserver getGlobeSelectionObserver(Camera camera, MousePicker mousePicker) {
+	public MouseButtonObserver getGlobeSelectionObserver(Mouse mouse, Camera camera, ProjectionTransformation projectionTransformation) {
 		MouseButtonObserver globeSelectionObserver = new MouseButtonObserver();
 		Command selectGlobe = new Command(() -> selectGlobe());
 		MouseCheck globeIntersectionCheck = () -> {
-			Vector3f intersection = getIntersection(camera.getPosition(), mousePicker.calculateMouseRay());
+			MousePicker.loadInformation(mouse, camera, projectionTransformation);
+			Vector3f intersection = getIntersection(camera.getPosition(), MousePicker.calculateMouseRay());
 			return intersection != null;
 		};
 		globeSelectionObserver.addCheck(Keys.MOUSE_LEFT, Actions.PRESS, globeIntersectionCheck, selectGlobe);
@@ -91,9 +94,12 @@ public class Globe {
 		return globeDeselectionObserver;
 	}
 
-	public MouseMovementObserver getGlobeRotationObserver(Camera camera, MousePicker mousePicker) {
+	public MouseMovementObserver getGlobeRotationObserver(Mouse mouse, Camera camera, ProjectionTransformation projectionTransformation) {
 		MouseMovementObserver globeRotationObserver = new MouseMovementObserver();
-		Command rotateGlobe = new Command(() -> rotateGlobe(camera.getPosition(), mousePicker.calculateMouseRay()));
+		Command rotateGlobe = new Command(() -> {
+			MousePicker.loadInformation(mouse, camera, projectionTransformation);
+			rotateGlobe(camera.getPosition(), MousePicker.calculateMouseRay());
+		});
 		MouseCheck selectedCheck = () -> {
 			return selected;
 		};
@@ -106,7 +112,6 @@ public class Globe {
 		if (isSelected() && previousIntersection != null && currentIntersection != null) {
 			Vector3f prevInt = Vector3f.sub(previousIntersection, globePreviousPosition).normalise(null);
 			Vector3f currInt = Vector3f.sub(currentIntersection, globeEntity.getWorldTransformation().getPosition()).normalise(null);
-
 			Vector3f rotationAxis = Vector3f.cross(prevInt, currInt).normalise(null);
 			float angleBetween = -Vector3f.angle(prevInt, currInt);
 			globeEntity.increaseRotation(rotationAxis, angleBetween);

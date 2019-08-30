@@ -40,9 +40,9 @@ public class HemphApplication {
 		loaderThread = new ResourceLoaderThread();
 		connecter = new GraphicsDataConnecter();
 		mouse = new Mouse();
-		GameState state = new LoadingScreenState(mouse, loaderThread, connecter);
 		visuals = new Visual();
-		inputs = new Input(mouse);
+		GameState state = new LoadingScreenState(mouse, loaderThread, connecter, visuals);
+		inputs = new Input(mouse, visuals);
 		logics = new Logic(state, inputs);
 	}
 

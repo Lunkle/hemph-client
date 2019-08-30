@@ -6,7 +6,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import graphics.texture.Texture;
 import graphics.vao.VAO;
+import logics.state.GameState;
 
 public class GUIRenderer {
 
@@ -14,6 +16,8 @@ public class GUIRenderer {
 
 	private GUIShader shader;
 	private int guiVaoID;
+
+	private static GUI finalGUI = GUIBuilder.newInstance().create();
 
 	public GUIRenderer() {
 		this.shader = new GUIShader();
@@ -23,7 +27,8 @@ public class GUIRenderer {
 		guiVaoID = guiVAO.getVaoId();
 	}
 
-	public void render(List<GUI> guis) {
+	public void render(GameState gameState) {
+		List<GUI> guis = gameState.getGuis();
 		shader.start();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL30.glBindVertexArray(guiVaoID);
@@ -41,8 +46,25 @@ public class GUIRenderer {
 		shader.stop();
 	}
 
+	public void loadScreenDimensions(float width, float height) {
+		finalGUI.setDimensions(0, 0, width, height);
+	}
+
+	public void renderFinalImage(Texture texture) {
+		finalGUI.setTexture(texture);
+		shader.start();
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL30.glBindVertexArray(guiVaoID);
+		GL20.glEnableVertexAttribArray(0);
+		finalGUI.activateTextures();
+		shader.loadModelMatrix(finalGUI.getTransformationMatrix());
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, QUAD_VERTEX_COUNT);
+		GL20.glDisableVertexAttribArray(0);
+		GL30.glBindVertexArray(0);
+		shader.stop();
+	}
+
 	public void cleanUp() {
 		shader.cleanUp();
 	}
-
 }

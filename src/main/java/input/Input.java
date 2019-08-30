@@ -9,7 +9,7 @@ import input.callback.KeyCallback;
 import input.callback.MouseButtonCallback;
 import input.callback.MouseMovementCallback;
 import input.callback.MouseScrollCallback;
-import input.misc.ResizeHandler;
+import input.misc.ResizeCallback;
 import input.mouse.Mouse;
 import input.observer.KeyEscapeExitObserver;
 import input.observer.KeyObserver;
@@ -24,12 +24,14 @@ public class Input {
 	private MouseButtonObserver mouseButtonObserver;
 	private MouseScrollObserver mouseScrollObserver;
 	private KeyObserver keyObserver;
+	private Visual visuals;
 
-	public Input(Mouse mouse) {
-		long windowID = Visual.getWindowID();
+	public Input(Mouse mouse, Visual visuals) {
+		this.visuals = visuals;
+		long windowID = visuals.getWindowID();
 
 		KeyCallback keyCallback = new KeyCallback();
-		keyObserver = new KeyEscapeExitObserver();
+		keyObserver = new KeyEscapeExitObserver(visuals);
 		keyCallback.addObserver(keyObserver);
 		GLFW.glfwSetKeyCallback(windowID, keyCallback);
 
@@ -46,7 +48,7 @@ public class Input {
 		GLFW.glfwSetMouseButtonCallback(windowID, mouseButtonCallback);
 		GLFW.glfwSetScrollCallback(windowID, mouseScrollCallback);
 
-		GLFW.glfwSetFramebufferSizeCallback(Visual.getWindowID(), new ResizeHandler());
+		GLFW.glfwSetFramebufferSizeCallback(windowID, new ResizeCallback(visuals));
 
 		hideCursor();
 		showCursor();
@@ -104,11 +106,11 @@ public class Input {
 	}
 
 	public void hideCursor() {
-		GLFW.glfwSetInputMode(Visual.getWindowID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+		GLFW.glfwSetInputMode(visuals.getWindowID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
 	}
 
 	public void showCursor() {
-		GLFW.glfwSetInputMode(Visual.getWindowID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+		GLFW.glfwSetInputMode(visuals.getWindowID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 	}
 
 }

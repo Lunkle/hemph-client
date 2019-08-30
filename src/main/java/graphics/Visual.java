@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
+import graphics.gui.GUI;
 import graphics.rendering.Renderer;
 import graphics.texture.Texture;
 import graphics.transformation.ProjectionTransformation;
@@ -18,18 +19,18 @@ import logics.state.GameState;
 
 public class Visual {
 
-	private static long windowID;
+	private long windowID;
 
-	private static int windowWidth = 1280;
-	private static int windowHeight = 720;
-
-	private static ProjectionTransformation projectionTransformation;
+	private int windowWidth = 1280;
+	private int windowHeight = 720;
+	private ProjectionTransformation projectionTransformation;
 
 	private Renderer renderer;
 
 	public Visual() {
 		createDisplay();
-		projectionTransformation = new ProjectionTransformation();
+		GUI.loadWindowDimensions(windowWidth, windowHeight);
+		projectionTransformation = new ProjectionTransformation(windowWidth, windowHeight);
 		renderer = new Renderer(projectionTransformation);
 	}
 
@@ -76,27 +77,27 @@ public class Visual {
 		return GLFW.glfwWindowShouldClose(windowID);
 	}
 
-	public static long getWindowID() {
+	public long getWindowID() {
 		return windowID;
 	}
 
-	public static int getWindowWidth() {
+	public int getWindowWidth() {
 		return windowWidth;
 	}
 
-	public static void setWindowWidth(int windowWidth) {
-		Visual.windowWidth = windowWidth;
+	public void setWindowWidth(int windowWidth) {
+		this.windowWidth = windowWidth;
 	}
 
-	public static int getWindowHeight() {
+	public int getWindowHeight() {
 		return windowHeight;
 	}
 
-	public static void setWindowHeight(int windowHeight) {
-		Visual.windowHeight = windowHeight;
+	public void setWindowHeight(int windowHeight) {
+		this.windowHeight = windowHeight;
 	}
 
-	public static ProjectionTransformation getProjectionTransformation() {
+	public ProjectionTransformation getProjectionTransformation() {
 		return projectionTransformation;
 	}
 

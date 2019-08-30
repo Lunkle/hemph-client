@@ -13,11 +13,13 @@ public abstract class Light {
 	private float specularRed;
 	private float specularGreen;
 	private float specularBlue;
+	private float strength;
 
 	public Light() {
 		setAmbient(0, 0, 0);
 		setDiffuse(0, 0, 0);
 		setSpecular(0, 0, 0);
+		setStrength(1);
 	}
 
 	public Vector3f getAmbient() {
@@ -48,6 +50,14 @@ public abstract class Light {
 		specularRed = red;
 		specularGreen = green;
 		specularBlue = blue;
+	}
+
+	public float getStrength() {
+		return strength;
+	}
+
+	public void setStrength(float strength) {
+		this.strength = strength;
 	}
 
 }

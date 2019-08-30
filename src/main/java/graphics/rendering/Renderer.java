@@ -3,6 +3,7 @@ package graphics.rendering;
 import org.lwjgl.opengl.GL11;
 
 import graphics.entity.EntityRenderer;
+import graphics.framebuffer.FBO;
 import graphics.gui.GUIRenderer;
 import graphics.transformation.ProjectionTransformation;
 import logics.state.GameState;
@@ -13,13 +14,15 @@ public class Renderer {
 	private static final float GREEN = 138 / 255.0f;
 	private static final float BLUE = 149 / 255.0f;
 
-	private EntityRenderer renderer;
+	private FBO fbo;
+	private EntityRenderer entityRenderer;
 	private GUIRenderer guiRenderer;
 
 	public Renderer(ProjectionTransformation projectionTransformation) {
-		renderer = new EntityRenderer();
-		renderer.loadProjectionMatrix(projectionTransformation);
+		entityRenderer = new EntityRenderer();
+		entityRenderer.loadProjectionMatrix(projectionTransformation);
 		guiRenderer = new GUIRenderer();
+		fbo = new FBO();
 	}
 
 	public void prepare() {
@@ -30,12 +33,15 @@ public class Renderer {
 
 	public void render(GameState gameState) {
 		prepare();
-		renderer.render(gameState);
-		guiRenderer.render(gameState.getGuis());
+//		fbo.bindFBO();
+		entityRenderer.render(gameState);
+		guiRenderer.render(gameState);
+//		FBO.bindDefaultFBO();
+//		guiRenderer.render(fbo.getTexture());
 	}
 
 	public void cleanUp() {
-		renderer.cleanUp();
+		entityRenderer.cleanUp();
 		guiRenderer.cleanUp();
 	}
 

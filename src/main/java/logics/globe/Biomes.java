@@ -13,8 +13,8 @@ public enum Biomes {
 	SWAMP(2, false),
 	JUNGLE(3, false),
 	OCEAN(4, true),
-	DESERT(5, false),
-	MOSSY(6, false),
+	MOSSY(5, false),
+	DESERT(6, false),
 	h(7, false),
 	i(8, false),
 	LAKE(9, true),
@@ -69,6 +69,10 @@ public enum Biomes {
 
 	public static List<Integer> getWaterBiomeIndices() {
 		return waterBiomeIndices;
+	}
+
+	public boolean isWater() {
+		return isWater;
 	}
 
 }

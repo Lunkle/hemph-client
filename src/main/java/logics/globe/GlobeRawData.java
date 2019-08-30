@@ -1,7 +1,9 @@
 package logics.globe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import graphics.loader.InterpretedData;
 import graphics.loader.RawData;
@@ -16,12 +18,15 @@ import math.Vector3f;
 public class GlobeRawData extends MeshRawData implements RawData {
 
 	private int subdivisions = 5;
-	private int numberOfPlates = 30;
-	private int numberOfWaterPlates = 20;
-	private float amplitude = 0.3f;
+	private int numberOfPlates = 50;
+	private int numberOfWaterPlates = 30;
 
-	private int smoothingIterations = 5; // How many times to smooth out the heights
-	private float smoothingFactor = 0.8f; // How much to smooth each time
+	private float plateCollisionAmplitude = 0.1f;
+	private int smoothingIterations = 2; // How many times to smooth out the heights
+	private float smoothingFactor = 0.6f; // How much to smooth each time
+
+	private double landArchExponent = 0.2;
+	private float landArchAmplitude = 0.4f;
 
 	private float perturbAmount = 0.002f;
 
@@ -41,6 +46,7 @@ public class GlobeRawData extends MeshRawData implements RawData {
 		subdivide(subdivisions);
 		perturbVertices(perturbAmount);
 		generatePlates();
+		generateBasicTopography();
 		generatePlateMovement();
 		separateTriangles();
 		translateToRawData();
@@ -169,6 +175,9 @@ public class GlobeRawData extends MeshRawData implements RawData {
 			plateIsWater.add(false);
 		}
 		for (int i = 0; i < numberOfPlates; i++) {
+			// This is a problem because the same ID might get chosen for more than one
+			// plate.
+			// TODO
 			int triangleID = (int) getRandom(0, numberOfTriangles);
 			TerrainTriangle triangle = triangles.get(triangleID);
 			int isWaterIndex = (int) getRandom(0, plateIsWater.size());
@@ -189,11 +198,55 @@ public class GlobeRawData extends MeshRawData implements RawData {
 		}
 	}
 
+	private void generateBasicTopography() {
+		for (Plate plate : plates) {
+			if (!plate.getBiome().isWater()) {
+				// Calculating nearest boundary for each triangle.
+				int numberOfTriangles = plate.getTriangles().size();
+				int numberOfSetTriangles = 0;
+				List<HalfEdge> currentBoundaries = plate.getBoundaries();
+				boolean firstRun = true;
+				while (numberOfSetTriangles < numberOfTriangles) {
+					List<HalfEdge> newBoundaries = new ArrayList<>();
+					for (HalfEdge boundary : currentBoundaries) {
+						TerrainTriangle terrainTriangle = (TerrainTriangle) boundary.getTriangle();
+						if (terrainTriangle.getClosestBoundary() == null) {
+							terrainTriangle.setClosestBoundary(firstRun ? boundary : ((TerrainTriangle) boundary.getPair().getTriangle()).getClosestBoundary());
+							for (HalfEdge triangleEdge : Primitive.getEdges(terrainTriangle)) {
+								if (!currentBoundaries.contains(triangleEdge)) {
+									newBoundaries.add(triangleEdge.getPair());
+								}
+							}
+							numberOfSetTriangles++;
+						}
+					}
+					currentBoundaries = newBoundaries;
+					firstRun = false;
+				}
+				// Increasing the heights.
+				Map<TerrainTriangle, Float> increaseAmounts = new HashMap<>();
+				for (TerrainTriangle triangle : plate.getTriangles()) {
+					Vector3f boundaryMidPoint = triangle.getClosestBoundary().getTriangle().getCentroid();
+					Vector3f triangleMidPoint = triangle.getCentroid();
+					float distanceSquared = Vector3f.sub(boundaryMidPoint, triangleMidPoint).lengthSquared();
+					float increaseFactor = (float) (Math.pow(distanceSquared, landArchExponent) * 0.001f * landArchAmplitude);
+					increaseAmounts.put(triangle, increaseFactor);
+				}
+				for (TerrainTriangle triangle : plate.getTriangles()) {
+					HalfEdge edge = triangle.getEdge();
+					for (int i = 0; i < 3; i++) {
+						edge.getVertex().setPosition(edge.getVertex().getPosition().scale(edge.getVertex().getPosition().length() + increaseAmounts.get(triangle)));
+					}
+				}
+			}
+		}
+	}
+
 	private void generatePlateMovement() {
 		// Generating movement vectors for each triangle for each plate
 		for (Plate plate : plates) {
 			Vector3f rotationAxis = getRandomVector();
-			float factor = (float) getRandom(0, amplitude);
+			float factor = (float) getRandom(0, plateCollisionAmplitude);
 			for (TerrainTriangle triangle : plate.getTriangles()) {
 				triangle.setMovementVector(Vector3f.cross(rotationAxis, triangle.getCentroid()).scale(factor));
 			}
@@ -201,17 +254,19 @@ public class GlobeRawData extends MeshRawData implements RawData {
 		// Raising or lowering the boundaries based on the plate movement
 		for (Plate plate : plates) {
 			for (HalfEdge boundary : plate.getBoundaries()) {
-				Vector3f movement1 = ((TerrainTriangle) boundary.getTriangle()).getMovementVector();
-				Vector3f movement2 = ((TerrainTriangle) boundary.getPair().getTriangle()).getMovementVector();
-				Vertex vertex1 = boundary.getVertex();
-				Vertex vertex2 = boundary.getPair().getVertex();
-				Vector3f triangle1ToTriangle2 = Vector3f.sub(vertex2.getPosition(), vertex1.getPosition());
-				Vector3f triangle2ToTriangle1 = Vector3f.sub(vertex1.getPosition(), vertex2.getPosition());
-				float dot1 = Vector3f.dot(triangle1ToTriangle2, movement1);
-				float dot2 = Vector3f.dot(triangle2ToTriangle1, movement2);
-				float sum = 10 * (dot1 + dot2);
-				vertex1.setPosition(vertex1.getPosition().scale(1 + sum));
-				vertex2.setPosition(vertex2.getPosition().scale(1 + sum));
+				if (!Plate.getPlateOfBoundary(boundary.getPair()).getBiome().isWater() && !plate.getBiome().isWater()) {
+					Vector3f movement1 = ((TerrainTriangle) boundary.getTriangle()).getMovementVector();
+					Vector3f movement2 = ((TerrainTriangle) boundary.getPair().getTriangle()).getMovementVector();
+					Vertex vertex1 = boundary.getVertex();
+					Vertex vertex2 = boundary.getPair().getVertex();
+					Vector3f triangle1ToTriangle2 = Vector3f.sub(vertex2.getPosition(), vertex1.getPosition());
+					Vector3f triangle2ToTriangle1 = Vector3f.sub(vertex1.getPosition(), vertex2.getPosition());
+					float dot1 = Vector3f.dot(triangle1ToTriangle2, movement1);
+					float dot2 = Vector3f.dot(triangle2ToTriangle1, movement2);
+					float sum = 10 * (dot1 + dot2);
+					vertex1.setPosition(vertex1.getPosition().scale(1 + sum));
+					vertex2.setPosition(vertex2.getPosition().scale(1 + sum));
+				}
 			}
 		}
 		// Smoothing out the heights

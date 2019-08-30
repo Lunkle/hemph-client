@@ -9,15 +9,15 @@ import math.Vector3f;
 public class Primitive {
 
 	/**
-	 * Calculates the normal of a triangle given one of the triangle's half edges.
-	 * The magnitude of the normal vector is porportional to the triangle's area.
+	 * Calculates the normal of the given triangle. The magnitude of the normal
+	 * vector is porportional to the triangle's area.
 	 * 
 	 * @param edge
 	 * @return the normal
 	 */
-	public static Vector3f getTriangleNormal(HalfEdge edge) {
-		HalfEdge nextEdge = edge.getNext();
-		Vector3f planeVector1 = Vector3f.sub(edge.getVertex().getPosition(), nextEdge.getVertex().getPosition());
+	public static Vector3f getTriangleNormal(Triangle triangle) {
+		HalfEdge nextEdge = triangle.getEdge().getNext();
+		Vector3f planeVector1 = Vector3f.sub(triangle.getEdge().getVertex().getPosition(), nextEdge.getVertex().getPosition());
 		Vector3f planeVector2 = Vector3f.sub(nextEdge.getNext().getVertex().getPosition(), nextEdge.getVertex().getPosition());
 		Vector3f cross = new Vector3f(Vector3f.cross(planeVector2, planeVector1));
 		return cross;
@@ -114,6 +114,14 @@ public class Primitive {
 			}
 		}
 		return null;
+	}
+
+	public static List<HalfEdge> getEdges(Triangle triangle) {
+		List<HalfEdge> list = new ArrayList<>();
+		list.add(triangle.getEdge());
+		list.add(list.get(0).getNext());
+		list.add(list.get(1).getNext());
+		return list;
 	}
 
 }
