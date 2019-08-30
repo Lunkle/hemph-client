@@ -60,7 +60,7 @@ public class Vertex {
 	public Vector3f calculateNormal() {
 		Vector3f totalNormal = new Vector3f(0, 0, 0);
 		for (HalfEdge edge : emanatingEdges) {
-			totalNormal = Vector3f.add(totalNormal, Primitive.getTriangleNormal(edge));
+			totalNormal = Vector3f.add(totalNormal, Primitive.getTriangleNormal(edge.getTriangle()));
 		}
 		totalNormal.normalise();
 		return totalNormal;

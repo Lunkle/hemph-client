@@ -15,10 +15,10 @@ import graphics.light.SpotLight;
 import graphics.loader.GraphicsDataConnecter;
 import graphics.loader.ResourceLoaderThread;
 import graphics.rendering.Camera;
+import graphics.transformation.ProjectionTransformation;
 import graphics.vao.VAO;
 import input.Input;
 import input.mouse.Mouse;
-import input.mouse.MousePicker;
 import input.observer.KeyObserver;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseMovementObserver;
@@ -28,15 +28,16 @@ public abstract class GameState {
 
 	protected static ResourceLoaderThread loaderThread;
 	protected static GraphicsDataConnecter connecter;
-
 	private static Mouse mouse;
+
+	private Visual visuals;
 	private Camera camera;
-	private MousePicker mousePicker;
 	private List<GUI> guis;
 	private List<DirectionalLight> directionalLights;
 	private List<PointLight> pointLights;
 	private List<SpotLight> spotLights;
-	private Map<VAO, List<Entity>> meshEntityMap;
+	private Map<VAO, List<Entity>> foregroundMeshEntityMap;
+	private Map<VAO, List<Entity>> backgroundMeshEntityMap;
 	private List<KeyObserver> keyObservers;
 	private List<MouseMovementObserver> mouseMovementObservers;
 	private List<MouseButtonObserver> mouseButtonObservers;
@@ -45,20 +46,24 @@ public abstract class GameState {
 
 	public GameState() {
 		camera = new Camera();
-		mousePicker = new MousePicker(mouse, camera, Visual.getProjectionTransformation());
 		guis = new ArrayList<>();
 		directionalLights = new ArrayList<>();
 		pointLights = new ArrayList<>();
 		spotLights = new ArrayList<>();
-		meshEntityMap = new HashMap<>();
+		foregroundMeshEntityMap = new HashMap<>();
+		backgroundMeshEntityMap = new HashMap<>();
 		keyObservers = new ArrayList<>();
 		mouseMovementObservers = new ArrayList<>();
 		mouseButtonObservers = new ArrayList<>();
 		mouseScrollObservers = new ArrayList<>();
 	}
 
-	protected void setMouse(Mouse mouse) {
+	protected static void setMouse(Mouse mouse) {
 		GameState.mouse = mouse;
+	}
+
+	protected void setVisuals(Visual visuals) {
+		this.visuals = visuals;
 	}
 
 	protected static void setLoadingThread(ResourceLoaderThread loaderThread) {
@@ -81,6 +86,14 @@ public abstract class GameState {
 		return guis;
 	}
 
+	public Visual getVisuals() {
+		return visuals;
+	}
+
+	public ProjectionTransformation getProjectionTransformation() {
+		return visuals.getProjectionTransformation();
+	}
+
 	protected void addGUI(GUI gui) {
 		guis.add(gui);
 	}
@@ -100,25 +113,40 @@ public abstract class GameState {
 	protected void addLight(Light light) {
 		if (light instanceof DirectionalLight) {
 			directionalLights.add((DirectionalLight) light);
-		} else if (light instanceof SpotLight) {
-			spotLights.add((SpotLight) light);
 		} else if (light instanceof PointLight) {
 			pointLights.add((PointLight) light);
+		} else if (light instanceof SpotLight) {
+			spotLights.add((SpotLight) light);
 		}
 	}
 
-	public Map<VAO, List<Entity>> getMeshes() {
-		return meshEntityMap;
+	public Map<VAO, List<Entity>> getForegroundMeshes() {
+		return foregroundMeshEntityMap;
 	}
 
-	protected void addEntity(Entity entity) {
+	public Map<VAO, List<Entity>> getBackgroundMeshes() {
+		return backgroundMeshEntityMap;
+	}
+
+	protected void addForegroundEntity(Entity entity) {
 		VAO mesh = entity.getModel().getMesh();
-		if (meshEntityMap.containsKey(mesh)) {
-			meshEntityMap.get(mesh).add(entity);
+		if (foregroundMeshEntityMap.containsKey(mesh)) {
+			foregroundMeshEntityMap.get(mesh).add(entity);
 		} else {
 			List<Entity> entityList = new ArrayList<>();
 			entityList.add(entity);
-			meshEntityMap.put(mesh, entityList);
+			foregroundMeshEntityMap.put(mesh, entityList);
+		}
+	}
+
+	protected void addBackgroundEntity(Entity entity) {
+		VAO mesh = entity.getModel().getMesh();
+		if (backgroundMeshEntityMap.containsKey(mesh)) {
+			backgroundMeshEntityMap.get(mesh).add(entity);
+		} else {
+			List<Entity> entityList = new ArrayList<>();
+			entityList.add(entity);
+			backgroundMeshEntityMap.put(mesh, entityList);
 		}
 	}
 
@@ -183,10 +211,6 @@ public abstract class GameState {
 			}
 			inputs.addMouseScrollCallbackObservers(copyMouseScrollObservers);
 		}
-	}
-
-	public MousePicker getMousePicker() {
-		return mousePicker;
 	}
 
 	/**

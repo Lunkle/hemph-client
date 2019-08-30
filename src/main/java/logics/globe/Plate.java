@@ -1,12 +1,16 @@
 package logics.globe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import graphics.primitive.HalfEdge;
 import graphics.primitive.Primitive;
 
 public class Plate {
+
+	private static Map<HalfEdge, Plate> edgePlateMap = new HashMap<>();
 
 	private List<TerrainTriangle> triangles;
 	private List<TerrainTriangle> adjacentEmptyTriangles;
@@ -24,11 +28,9 @@ public class Plate {
 				adjacentEmptyTriangles.add(adjacentTriangle);
 			}
 		}
-		HalfEdge edge = triangle.getEdge();
-		boundaries.add(edge);
-		HalfEdge next = edge.getNext();
-		boundaries.add(next);
-		boundaries.add(next.getNext());
+		for (HalfEdge edge : Primitive.getEdges(triangle)) {
+			addBoundary(edge);
+		}
 		triangle.setTerrainIndex(biome.getIndex());
 	}
 
@@ -43,13 +45,12 @@ public class Plate {
 			List<HalfEdge> newBoundaries = new ArrayList<>();
 			for (HalfEdge boundary : potentialBoundaries) {
 				if (boundaries.contains(boundary.getPair()))
-					boundaries.remove(boundary.getPair());
+					removeBoundary(boundary.getPair());
 				else
 					newBoundaries.add(boundary);
 			}
-			for (HalfEdge boundary : potentialBoundaries) {
-				boundaries.add(boundary);
-			}
+			for (HalfEdge boundary : newBoundaries)
+				addBoundary(boundary);
 			for (TerrainTriangle adjacentTriangle : Primitive.getAdjacentTerrainTriangles(triangle)) {
 				if (!adjacentEmptyTriangles.contains(adjacentTriangle) && adjacentTriangle.getTerrainIndex() == -1) {
 					adjacentEmptyTriangles.add(adjacentTriangle);
@@ -59,6 +60,10 @@ public class Plate {
 			return true;
 		}
 		return false;
+	}
+
+	public Biomes getBiome() {
+		return biome;
 	}
 
 	public List<TerrainTriangle> getAdjacentTriangles() {
@@ -71,6 +76,20 @@ public class Plate {
 
 	public List<HalfEdge> getBoundaries() {
 		return boundaries;
+	}
+
+	private void addBoundary(HalfEdge boundary) {
+		boundaries.add(boundary);
+		edgePlateMap.put(boundary, this);
+	}
+
+	private void removeBoundary(HalfEdge boundary) {
+		boundaries.remove(boundary);
+		edgePlateMap.remove(boundary);
+	}
+
+	public static Plate getPlateOfBoundary(HalfEdge boundary) {
+		return edgePlateMap.get(boundary);
 	}
 
 }

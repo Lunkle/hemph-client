@@ -21,18 +21,19 @@ public class EntityRenderer {
 
 	public void render(GameState gameState) {
 		enableCulling();
-		Map<VAO, List<Entity>> meshEntityMap = gameState.getMeshes();
+//		Map<VAO, List<Entity>> backgroundMeshEntityMap = gameState.getBackgroundMeshes();
+		Map<VAO, List<Entity>> foregroundMeshEntityMap = gameState.getForegroundMeshes();
 		shader.start();
 		shader.loadDirectionalLights(gameState.getDirectionalLights());
-//		shader.loadPointLights(gameState.getPointLights());
+		shader.loadPointLights(gameState.getPointLights());
 //		shader.loadSpotLights(gameState.getSpotLights());
 		shader.loadViewMatrix(gameState.getCamera().getViewTransformation().getMatrix());
-		for (VAO mesh : meshEntityMap.keySet()) {
+		for (VAO mesh : foregroundMeshEntityMap.keySet()) {
 			GL30.glBindVertexArray(mesh.getVaoId());
 			GL20.glEnableVertexAttribArray(0);
 			GL20.glEnableVertexAttribArray(1);
 			GL20.glEnableVertexAttribArray(2);
-			List<Entity> entityBatch = meshEntityMap.get(mesh);
+			List<Entity> entityBatch = foregroundMeshEntityMap.get(mesh);
 			for (Entity entity : entityBatch) {
 				entity.activateTextures();
 				shader.loadModelMatrix(entity.getModelMatrix());

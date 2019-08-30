@@ -11,8 +11,16 @@ public class TerrainTriangle extends Triangle {
 	private static final float PADDING = 0.05f;
 	private static int textureGridSize = 4;
 
+	// An index to keep track of what terrain type the triangle is.
 	private int terrainIndex = -1;
+
+	// The vector that defines the movement of the triangle. All triangles of a
+	// certain plate will rotate about the same axis.
 	private Vector3f movementVector;
+
+	// The closest boundary is not chosen by distance but by number of halfedges
+	// inbetween.
+	private HalfEdge closestBoundary;
 
 	public TerrainTriangle(Vertex p1, Vertex p2, Vertex p3) {
 		super(p1, p2, p3);
@@ -65,6 +73,14 @@ public class TerrainTriangle extends Triangle {
 
 	public void setMovementVector(Vector3f movementVector) {
 		this.movementVector = movementVector;
+	}
+
+	public HalfEdge getClosestBoundary() {
+		return closestBoundary;
+	}
+
+	public void setClosestBoundary(HalfEdge closestBoundary) {
+		this.closestBoundary = closestBoundary;
 	}
 
 }

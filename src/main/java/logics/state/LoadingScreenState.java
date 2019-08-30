@@ -2,6 +2,7 @@ package logics.state;
 
 import org.lwjgl.glfw.GLFW;
 
+import graphics.Visual;
 import graphics.loader.GraphicsDataConnecter;
 import graphics.loader.ResourceLoaderThread;
 import graphics.loader.ResourceLoadingTask;
@@ -63,10 +64,11 @@ public class LoadingScreenState extends GameState {
 	private OBJMeshRawData arrowRawMeshData;
 	private VAO arrowMesh;
 
-	public LoadingScreenState(Mouse mouse, ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter) {
+	public LoadingScreenState(Mouse mouse, ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter, Visual visuals) {
 		super();
 
 		setMouse(mouse);
+		setVisuals(visuals);
 		setLoadingThread(loaderThread);
 		setConnecter(connecter);
 
@@ -228,7 +230,7 @@ public class LoadingScreenState extends GameState {
 			double endTime = GLFW.glfwGetTime();
 			double timeTaken = endTime - startTime;
 			System.out.println("Finished loading in " + timeTaken + " seconds.");
-			return new TableTopState(resourcePack);
+			return new TableTopState(getVisuals(), resourcePack);
 		}
 		return this;
 	}
