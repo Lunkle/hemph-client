@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import graphics.gui.GUIMeshData;
+import graphics.gui.ScreenRawMeshData;
 import graphics.loader.InterpretedData;
 
 // An attribute object stores all the information for each vertex of a mesh
@@ -37,12 +37,12 @@ public class VAO implements InterpretedData {
 	}
 
 	// Binding the attribute object so opengl knows to write to it
-	protected void bindVAO() {
+	public void bindVAO() {
 		GL30.glBindVertexArray(vaoID);
 	}
 
 	// Remeber to unbind after finished attaching VBOS
-	protected void unbindVAO() {
+	public void unbindVAO() {
 		GL30.glBindVertexArray(0);
 	}
 
@@ -63,7 +63,7 @@ public class VAO implements InterpretedData {
 	}
 
 	@Override
-	public void interpret(MeshRawData data) {
+	public void interpret(RawMeshData data) {
 		vaoID = GL30.glGenVertexArrays();
 		vaos.add(vaoID);
 		bindVAO();
@@ -77,7 +77,7 @@ public class VAO implements InterpretedData {
 	}
 
 	@Override
-	public void interpret(GUIMeshData data) {
+	public void interpret(ScreenRawMeshData data) {
 		vaoID = GL30.glGenVertexArrays();
 		vaos.add(vaoID);
 		bindVAO();

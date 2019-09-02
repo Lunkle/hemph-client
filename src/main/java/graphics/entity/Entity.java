@@ -9,8 +9,6 @@ import math.Vector3f;
 public class Entity {
 
 	private Model model;
-	private float textureXOffset;
-	private float textureYOffset;
 	private WorldTransformation worldTransformation;
 
 	/**
@@ -95,14 +93,6 @@ public class Entity {
 
 	public void setScaleZ(float scaleZ) {
 		worldTransformation.setScaleZ(scaleZ);
-	}
-
-	public float getTextureXOffset() {
-		return textureXOffset;
-	}
-
-	public float getTextureYOffset() {
-		return textureYOffset;
 	}
 
 	public Model getModel() {

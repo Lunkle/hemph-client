@@ -93,4 +93,8 @@ public class WorldTransformation extends Transformation {
 		Matrix4f.scale(new Vector3f(scaleX, scaleY, scaleZ), matrix, matrix);
 	}
 
+	public void applyTransformation(WorldTransformation worldTransformation) {
+
+	}
+
 }

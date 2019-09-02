@@ -88,6 +88,17 @@ public class Plate {
 		edgePlateMap.remove(boundary);
 	}
 
+	public List<Plate> getAdjacentPlates() {
+		List<Plate> foundPlates = new ArrayList<>();
+		for (HalfEdge boundary : getBoundaries()) {
+			Plate adjacentPlate = getPlateOfBoundary(boundary.getPair());
+			if (!foundPlates.contains(adjacentPlate)) {
+				foundPlates.add(adjacentPlate);
+			}
+		}
+		return foundPlates;
+	}
+
 	public static Plate getPlateOfBoundary(HalfEdge boundary) {
 		return edgePlateMap.get(boundary);
 	}

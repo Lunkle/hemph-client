@@ -1,5 +1,6 @@
 package graphics.texture;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
 import graphics.loader.InterpretedData;
+import graphics.postProcessing.EmptyTextureRawData;
 
 public class Texture implements InterpretedData {
 
@@ -53,6 +55,16 @@ public class Texture implements InterpretedData {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		data.freeBuffer();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		textures.add(textureID); // Add to list to be deleted when the program is done
+	}
+
+	@Override
+	public void interpret(EmptyTextureRawData data) {
+		textureID = GL11.glGenTextures(); // Create a new OpenGL texture
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, data.getInternalFormat(), data.getTextureWidth(), data.getTextureHeight(), 0, data.getFormat(), data.getType(), (ByteBuffer) null);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		textures.add(textureID); // Add to list to be deleted when the program is done
 	}
 

@@ -11,9 +11,10 @@ import input.mouse.MousePicker;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseCheck;
 import input.observer.MouseMovementObserver;
+import logics.octree.GameObject;
 import math.Vector3f;
 
-public class Globe {
+public class Globe extends GameObject {
 
 	private Entity globeEntity;
 	private boolean selected;
@@ -118,9 +119,11 @@ public class Globe {
 		}
 	}
 
+	@Override
 	public void update() {
 //		System.out.println(globeEntity.getWorldTransformation().getQuaternion());
 //		System.out.println(previousIntersection);
 //		globeEntity.setRotation(rotX, rotY, rotZ);
 	}
+
 }

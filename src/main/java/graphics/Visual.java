@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import graphics.gui.GUI;
-import graphics.rendering.Renderer;
+import graphics.rendering.MasterRenderer;
 import graphics.texture.Texture;
 import graphics.transformation.ProjectionTransformation;
 import graphics.vao.EBO;
@@ -23,15 +23,21 @@ public class Visual {
 
 	private int windowWidth = 1280;
 	private int windowHeight = 720;
-	private ProjectionTransformation projectionTransformation;
 
-	private Renderer renderer;
+	private MasterRenderer renderer;
 
 	public Visual() {
 		createDisplay();
 		GUI.loadWindowDimensions(windowWidth, windowHeight);
-		projectionTransformation = new ProjectionTransformation(windowWidth, windowHeight);
-		renderer = new Renderer(projectionTransformation);
+		renderer = new MasterRenderer(windowWidth, windowHeight);
+	}
+
+	public Visual(int windowWidth, int windowHeight) {
+		this.windowWidth = windowWidth;
+		this.windowHeight = windowHeight;
+		createDisplay();
+		GUI.loadWindowDimensions(windowWidth, windowHeight);
+		renderer = new MasterRenderer(windowWidth, windowHeight);
 	}
 
 	private void createDisplay() {
@@ -98,7 +104,7 @@ public class Visual {
 	}
 
 	public ProjectionTransformation getProjectionTransformation() {
-		return projectionTransformation;
+		return renderer.getProjectionTransformation();
 	}
 
 }

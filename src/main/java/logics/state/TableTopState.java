@@ -76,8 +76,8 @@ public class TableTopState extends GameState {
 		directionalLight1.setAmbient(0.45f, 0.3f, 0.3f);
 		directionalLight1.setDiffuse(1f, 1f, 1f);
 		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
-		directionalLight1.setStrength(1f);
-//		addLight(directionalLight1);
+		directionalLight1.setStrength(0.2f);
+		addLight(directionalLight1);
 
 		DirectionalLight directionalLight2 = new DirectionalLight(0, 0, -1f);
 		directionalLight2.setAmbient(0.1f, 0.1f, 0.1f);
@@ -86,12 +86,12 @@ public class TableTopState extends GameState {
 		directionalLight2.setStrength(1f);
 		addLight(directionalLight2);
 
-		PointLight pointLight1 = new PointLight(0, 7.9f, 5);
-		pointLight1.setAmbient(0.45f, 0.3f, 0.3f);
-		pointLight1.setDiffuse(1f, 1f, 1f);
+		PointLight pointLight1 = new PointLight(-2, 7.9f, -5);
+		pointLight1.setAmbient(0.65f, 0.7f, 0.4f);
+		pointLight1.setDiffuse(0.8f, 0f, 0f);
 		pointLight1.setSpecular(0.6f, 0.33f, 0.16f);
-		pointLight1.setStrength(5);
-		pointLight1.setConstants(0.032f, 0.09f, 1);
+		pointLight1.setStrength(1);
+		pointLight1.setConstants(0.002f, 0.08f, 1);
 		addLight(pointLight1);
 	}
 

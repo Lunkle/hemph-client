@@ -12,7 +12,7 @@ import graphics.loader.RawData;
 import math.Vector2f;
 import math.Vector3f;
 
-public class OBJMeshRawData extends MeshRawData implements RawData {
+public class OBJMeshRawData extends RawMeshData implements RawData {
 
 	private float[] positionsArray;
 	private float[] normalsArray;

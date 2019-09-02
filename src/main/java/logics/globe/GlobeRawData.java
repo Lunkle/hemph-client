@@ -11,15 +11,17 @@ import graphics.primitive.HalfEdge;
 import graphics.primitive.Primitive;
 import graphics.primitive.Triangle;
 import graphics.primitive.Vertex;
-import graphics.vao.MeshRawData;
+import graphics.vao.RawMeshData;
 import math.Vector2f;
 import math.Vector3f;
 
-public class GlobeRawData extends MeshRawData implements RawData {
+public class GlobeRawData extends RawMeshData implements RawData {
 
 	private int subdivisions = 5;
 	private int numberOfPlates = 50;
 	private int numberOfWaterPlates = 30;
+
+	private float perturbAmount = 0.002f;
 
 	private float plateCollisionAmplitude = 0.1f;
 	private int smoothingIterations = 2; // How many times to smooth out the heights
@@ -27,8 +29,6 @@ public class GlobeRawData extends MeshRawData implements RawData {
 
 	private double landArchExponent = 0.2;
 	private float landArchAmplitude = 0.4f;
-
-	private float perturbAmount = 0.002f;
 
 	private List<TerrainTriangle> triangles;
 	private List<Vertex> vertices;
