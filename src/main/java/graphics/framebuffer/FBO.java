@@ -7,9 +7,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
-import graphics.postProcessing.EmptyColourAttachmentRawData;
-import graphics.postProcessing.EmptyDepthAttachmentRawData;
-import graphics.postProcessing.EmptyTextureRawData;
 import graphics.texture.Texture;
 
 public class FBO {
@@ -80,6 +77,15 @@ public class FBO {
 		for (int fbo : fbos) {
 			GL30.glDeleteFramebuffers(fbo);
 		}
+	}
+
+	/**
+	 * Wipes everything from the currently bound framebuffer object. This includes
+	 * colour and depth values.
+	 */
+	public static void clearCurrentFBOData() {
+		GL11.glClearColor(0, 0, 0, 1);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 
 }

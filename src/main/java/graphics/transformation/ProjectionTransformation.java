@@ -11,8 +11,13 @@ public class ProjectionTransformation extends Transformation {
 	private float farPlane = 1000;
 
 	public ProjectionTransformation(int windowWidth, int windowHeight) {
+		loadWindowDimensions(windowWidth, windowHeight);
+	}
+
+	public void loadWindowDimensions(int windowWidth, int windowHeight) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
+		raiseFlag();
 	}
 
 	@Override

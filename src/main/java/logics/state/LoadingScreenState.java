@@ -3,6 +3,7 @@ package logics.state;
 import org.lwjgl.glfw.GLFW;
 
 import graphics.Visual;
+import graphics.gui.GUIBuilder;
 import graphics.loader.GraphicsDataConnecter;
 import graphics.loader.ResourceLoaderThread;
 import graphics.loader.ResourceLoadingTask;
@@ -64,13 +65,14 @@ public class LoadingScreenState extends GameState {
 	private OBJMeshRawData arrowRawMeshData;
 	private VAO arrowMesh;
 
-	public LoadingScreenState(Mouse mouse, ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter, Visual visuals) {
+	public LoadingScreenState(Mouse mouse, ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter, Visual visuals, GUIBuilder guiBuilder) {
 		super();
 
 		setMouse(mouse);
 		setVisuals(visuals);
 		setLoadingThread(loaderThread);
 		setConnecter(connecter);
+		setGuiBuilder(guiBuilder);
 
 		startTime = GLFW.glfwGetTime();
 
@@ -125,7 +127,6 @@ public class LoadingScreenState extends GameState {
 
 	private synchronized void connectFirstDataBatch() {
 		UnconnectedData unconnectedData = connecter.generateNewTask();
-
 		dukeTexture = new Texture();
 		unconnectedData.addData(dukeTexture, dukerawTextureData);
 		tableTexture = new Texture();
@@ -149,7 +150,6 @@ public class LoadingScreenState extends GameState {
 
 		unconnectedData.addNotifier(this);
 		connecter.queueTask(unconnectedData);
-
 		while (!unconnectedData.isConnected()) {
 			try {
 				wait();
@@ -230,7 +230,7 @@ public class LoadingScreenState extends GameState {
 			double endTime = GLFW.glfwGetTime();
 			double timeTaken = endTime - startTime;
 			System.out.println("Finished loading in " + timeTaken + " seconds.");
-			return new TableTopState(getVisuals(), resourcePack);
+			return new PlayGameState(getVisuals(), resourcePack);
 		}
 		return this;
 	}

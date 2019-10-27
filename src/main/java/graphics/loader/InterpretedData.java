@@ -1,7 +1,7 @@
 package graphics.loader;
 
+import graphics.framebuffer.EmptyTextureRawData;
 import graphics.gui.ScreenRawMeshData;
-import graphics.postProcessing.EmptyTextureRawData;
 import graphics.texture.ByteBufferImageRawData;
 import graphics.vao.RawMeshData;
 

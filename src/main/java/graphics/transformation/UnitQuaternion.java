@@ -135,9 +135,11 @@ public class UnitQuaternion extends Quaternion {
 	}
 
 	/**
-	 * Multiplies this quaternion by the parameter quaternion.
+	 * Multiplies this quaternion by the parameter quaternion. What this effectively
+	 * does is transforms the current quaternion by the given quaternion. The given
+	 * quaternion is treated as a rotation.
 	 * 
-	 * @param q
+	 * @param the rotation quaternion
 	 * @return the resultant quaternion
 	 */
 	public UnitQuaternion multiply(UnitQuaternion q) {
@@ -156,6 +158,14 @@ public class UnitQuaternion extends Quaternion {
 
 	public void applyRotation(Vector3f axisOfRotation, float angle) {
 		applyRotation(new UnitQuaternion(axisOfRotation, angle / 2));
+	}
+
+	public Vector3f rotateVector3f(Vector3f vector) {
+		UnitQuaternion conjugate = this.getConjugate();
+		Quaternion pureQuaternion = new Quaternion(0, vector.x, vector.y, vector.z);
+		Quaternion resultantQuaternion = this.multiply(pureQuaternion).multiply(conjugate);
+		Vector3f result = resultantQuaternion.getV();
+		return result;
 	}
 
 	@Override

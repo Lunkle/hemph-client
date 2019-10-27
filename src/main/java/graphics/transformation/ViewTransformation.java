@@ -23,7 +23,7 @@ public class ViewTransformation extends Transformation {
 
 	public void setPosition(float x, float y, float z) {
 		position.set(x, y, z);
-		setFlag();
+		raiseFlag();
 	}
 
 	public void increasePosition(float dx, float dy, float dz) {

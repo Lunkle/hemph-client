@@ -6,6 +6,17 @@ import java.util.Map;
 import graphics.texture.Texture;
 import graphics.vao.VAO;
 
+/**
+ * Just a clean way to "transport" interpreted data across states. Without this
+ * class you would have massive constructors (which look uguh-lee!)
+ * 
+ * However, there is a downside: if the receiving side erroneously believes a
+ * certain piece of data is in this resource pack and tries to fetch it and use
+ * it, the error will only show up at run time.
+ * 
+ * @author Donny
+ *
+ */
 public class ResourcePack {
 
 	private Map<String, Texture> textureMap;
