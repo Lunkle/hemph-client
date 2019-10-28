@@ -17,22 +17,22 @@ public class Model {
 		this.mesh = mesh;
 	}
 
-	public Texture getDiffuseTexture() {
-		return diffuseTexture;
-	}
-
 	protected void setDiffuseTexture(Texture diffuseTexture) {
 		diffuseTexture.setAsDiffuseTexture();
 		this.diffuseTexture = diffuseTexture;
 	}
 
-	public Texture getSpecularTexture() {
-		return specularTexture;
-	}
-
 	protected void setSpecularTexture(Texture specularTexture) {
 		specularTexture.setAsSpecularTexture();
 		this.specularTexture = specularTexture;
+	}
+
+	/**
+	 * Activates all the textures.
+	 */
+	public void activateTextures() {
+		diffuseTexture.activateTexture();
+		specularTexture.activateTexture();
 	}
 
 }

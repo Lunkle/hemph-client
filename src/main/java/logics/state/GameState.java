@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import graphics.Visual;
-import graphics.entity.Entity;
 import graphics.gui.GUI;
+import graphics.gui.GUIBuilder;
 import graphics.light.DirectionalLight;
-import graphics.light.Light;
 import graphics.light.PointLight;
 import graphics.light.SpotLight;
 import graphics.loader.GraphicsDataConnecter;
@@ -23,21 +22,28 @@ import input.observer.KeyObserver;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseMovementObserver;
 import input.observer.MouseScrollObserver;
+import logics.octree.GameEntity;
+import logics.octree.Octree;
+import logics.octree.RoomEntity;
 
 public abstract class GameState {
 
 	protected static ResourceLoaderThread loaderThread;
 	protected static GraphicsDataConnecter connecter;
 	private static Mouse mouse;
+	private static GUIBuilder guiBuilder;
 
 	private Visual visuals;
 	private Camera camera;
 	private List<GUI> guis;
+
 	private List<DirectionalLight> directionalLights;
 	private List<PointLight> pointLights;
 	private List<SpotLight> spotLights;
-	private Map<VAO, List<Entity>> foregroundMeshEntityMap;
-	private Map<VAO, List<Entity>> backgroundMeshEntityMap;
+
+	private Octree octree;
+	private Map<VAO, List<GameEntity>> roomMeshEntityMap;
+
 	private List<KeyObserver> keyObservers;
 	private List<MouseMovementObserver> mouseMovementObservers;
 	private List<MouseButtonObserver> mouseButtonObservers;
@@ -50,12 +56,12 @@ public abstract class GameState {
 		directionalLights = new ArrayList<>();
 		pointLights = new ArrayList<>();
 		spotLights = new ArrayList<>();
-		foregroundMeshEntityMap = new HashMap<>();
-		backgroundMeshEntityMap = new HashMap<>();
 		keyObservers = new ArrayList<>();
 		mouseMovementObservers = new ArrayList<>();
 		mouseButtonObservers = new ArrayList<>();
 		mouseScrollObservers = new ArrayList<>();
+		octree = new Octree();
+		roomMeshEntityMap = new HashMap<>();
 	}
 
 	protected static void setMouse(Mouse mouse) {
@@ -74,6 +80,10 @@ public abstract class GameState {
 		GameState.connecter = connecter;
 	}
 
+	protected static void setGuiBuilder(GUIBuilder guiBuilder) {
+		GameState.guiBuilder = guiBuilder;
+	}
+
 	public Mouse getMouse() {
 		return mouse;
 	}
@@ -88,6 +98,10 @@ public abstract class GameState {
 
 	public Visual getVisuals() {
 		return visuals;
+	}
+
+	public static GUIBuilder getGuiBuilder() {
+		return guiBuilder;
 	}
 
 	public ProjectionTransformation getProjectionTransformation() {
@@ -110,44 +124,52 @@ public abstract class GameState {
 		return spotLights;
 	}
 
-	protected void addLight(Light light) {
-		if (light instanceof DirectionalLight) {
-			directionalLights.add((DirectionalLight) light);
-		} else if (light instanceof PointLight) {
-			pointLights.add((PointLight) light);
-		} else if (light instanceof SpotLight) {
-			spotLights.add((SpotLight) light);
-		}
+	protected void addLight(DirectionalLight light) {
+		directionalLights.add(light);
 	}
 
-	public Map<VAO, List<Entity>> getForegroundMeshes() {
-		return foregroundMeshEntityMap;
+	protected void addLight(PointLight light) {
+		pointLights.add(light);
 	}
 
-	public Map<VAO, List<Entity>> getBackgroundMeshes() {
-		return backgroundMeshEntityMap;
+	protected void addLight(SpotLight light) {
+		spotLights.add(light);
 	}
 
-	protected void addForegroundEntity(Entity entity) {
-		VAO mesh = entity.getModel().getMesh();
-		if (foregroundMeshEntityMap.containsKey(mesh)) {
-			foregroundMeshEntityMap.get(mesh).add(entity);
+	public void addGameEntity(GameEntity gameEntity) {
+//		octree.insert(gameEntity);
+		// TODO
+		VAO mesh = gameEntity.getModel().getMesh();
+		if (roomMeshEntityMap.containsKey(mesh)) {
+			roomMeshEntityMap.get(mesh).add(gameEntity);
 		} else {
-			List<Entity> entityList = new ArrayList<>();
-			entityList.add(entity);
-			foregroundMeshEntityMap.put(mesh, entityList);
+			List<GameEntity> entityList = new ArrayList<>();
+			entityList.add(gameEntity);
+			roomMeshEntityMap.put(mesh, entityList);
 		}
 	}
 
-	protected void addBackgroundEntity(Entity entity) {
-		VAO mesh = entity.getModel().getMesh();
-		if (backgroundMeshEntityMap.containsKey(mesh)) {
-			backgroundMeshEntityMap.get(mesh).add(entity);
+	public void addGameEntity(RoomEntity room) {
+		VAO mesh = room.getModel().getMesh();
+		if (roomMeshEntityMap.containsKey(mesh)) {
+			roomMeshEntityMap.get(mesh).add(room);
 		} else {
-			List<Entity> entityList = new ArrayList<>();
-			entityList.add(entity);
-			backgroundMeshEntityMap.put(mesh, entityList);
+			List<GameEntity> entityList = new ArrayList<>();
+			entityList.add(room);
+			roomMeshEntityMap.put(mesh, entityList);
 		}
+	}
+
+	public Map<VAO, List<GameEntity>> getMeshLists() {
+		Map<VAO, List<GameEntity>> meshesMap = new HashMap<>();
+		for (VAO mesh : roomMeshEntityMap.keySet()) {
+			meshesMap.put(mesh, roomMeshEntityMap.get(mesh));
+		}
+		return meshesMap;
+	}
+
+	public Map<VAO, List<GameEntity>> getRoomMeshes() {
+		return roomMeshEntityMap;
 	}
 
 	public void addKeyObserver(KeyObserver keyObserver) {

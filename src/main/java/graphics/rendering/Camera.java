@@ -69,4 +69,9 @@ public class Camera {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Camera:\n\t" + "x: " + transformation.getPosition().getX() + "\n\ty: " + transformation.getPosition().getY() + "\n\tz: " + transformation.getPosition().getZ();
+	}
+
 }

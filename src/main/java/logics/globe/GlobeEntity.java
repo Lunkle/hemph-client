@@ -1,8 +1,9 @@
 package logics.globe;
 
-import graphics.entity.Entity;
+import graphics.model.Model;
 import graphics.rendering.Camera;
 import graphics.transformation.ProjectionTransformation;
+import graphics.transformation.WorldTransformation;
 import input.command.Command;
 import input.information.Actions;
 import input.information.Keys;
@@ -11,22 +12,17 @@ import input.mouse.MousePicker;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseCheck;
 import input.observer.MouseMovementObserver;
-import logics.octree.GameObject;
+import logics.octree.HeaderEntity;
 import math.Vector3f;
 
-public class Globe extends GameObject {
+public class GlobeEntity extends HeaderEntity {
 
-	private Entity globeEntity;
 	private boolean selected;
 	private Vector3f currentIntersection = null;
 	private Vector3f previousIntersection = null;
 
-	public void setGlobeEntity(Entity globeEntity) {
-		this.globeEntity = globeEntity;
-	}
-
-	public Entity getGlobeEntity() {
-		return globeEntity;
+	public GlobeEntity(Model model, WorldTransformation worldTransformation) {
+		super(model, worldTransformation);
 	}
 
 	public boolean isSelected() {
@@ -45,14 +41,21 @@ public class Globe extends GameObject {
 	private Vector3f previousOrigin = null;
 	private Vector3f previousDirection = null;
 
+	/**
+	 * Gets intersection of a ray and a sphere.
+	 * 
+	 * @param origin
+	 * @param direction
+	 * @return the intersection point
+	 */
 	public Vector3f getIntersection(Vector3f origin, Vector3f direction) {
 		if (origin.equals(previousOrigin) && direction.equals(previousDirection)) {
 			return previousIntersection;
 		}
 		previousOrigin = origin;
 		previousDirection = new Vector3f(direction);
-		globePreviousPosition = globeEntity.getWorldTransformation().getPosition();
-		float globeSize = globeEntity.getScaleX();
+		globePreviousPosition = getAbsoluteWorldTransformation().getPosition();
+		float globeSize = getAbsoluteWorldTransformation().getScale().getLargestComponent();
 		Vector3f globeToCamera = Vector3f.sub(origin, globePreviousPosition);
 		float a = Vector3f.dot(direction, direction);
 		float b = 2 * Vector3f.dot(direction, globeToCamera);
@@ -112,18 +115,14 @@ public class Globe extends GameObject {
 		getIntersection(origin, direction);
 		if (isSelected() && previousIntersection != null && currentIntersection != null) {
 			Vector3f prevInt = Vector3f.sub(previousIntersection, globePreviousPosition).normalise(null);
-			Vector3f currInt = Vector3f.sub(currentIntersection, globeEntity.getWorldTransformation().getPosition()).normalise(null);
+			Vector3f currInt = Vector3f.sub(currentIntersection, getWorldTransformation().getPosition()).normalise(null);
 			Vector3f rotationAxis = Vector3f.cross(prevInt, currInt).normalise(null);
 			float angleBetween = -Vector3f.angle(prevInt, currInt);
-			globeEntity.increaseRotation(rotationAxis, angleBetween);
+			getWorldTransformation().increaseRotation(rotationAxis, angleBetween);
 		}
 	}
 
 	@Override
-	public void update() {
-//		System.out.println(globeEntity.getWorldTransformation().getQuaternion());
-//		System.out.println(previousIntersection);
-//		globeEntity.setRotation(rotX, rotY, rotZ);
-	}
+	public void update() {}
 
 }

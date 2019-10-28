@@ -397,4 +397,8 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 
 		return false;
 	}
+
+	public float getLargestComponent() {
+		return Math.max(Math.max(x, y), z);
+	}
 }

@@ -3,6 +3,7 @@ package game;
 import org.lwjgl.Version;
 
 import graphics.Visual;
+import graphics.gui.GUIBuilder;
 import graphics.loader.GraphicsDataConnecter;
 import graphics.loader.ResourceLoaderThread;
 import input.Input;
@@ -15,6 +16,7 @@ public class HemphApplication {
 
 	private ResourceLoaderThread loaderThread;
 	private GraphicsDataConnecter connecter;
+	private GUIBuilder guiBuilder;
 	private Mouse mouse;
 	private Input inputs;
 	private Logic logics;
@@ -22,15 +24,6 @@ public class HemphApplication {
 
 	public void run() {
 		System.out.println("LWJGL Version: " + Version.getVersion());
-
-//		UnitQuaternion yAxis = new UnitQuaternion(0, 0, 1, 0);
-//		UnitQuaternion test = new UnitQuaternion(new Vector3f(0, 1, 0), 90);
-//		UnitQuaternion reult = yAxis.multiply(test);
-//
-//		System.out.println(yAxis);
-//		System.out.println(test);
-//		System.out.println(reult);
-
 		init();
 		loop();
 		cleanUp();
@@ -39,9 +32,10 @@ public class HemphApplication {
 	private void init() {
 		loaderThread = new ResourceLoaderThread();
 		connecter = new GraphicsDataConnecter();
+		guiBuilder = new GUIBuilder();
 		mouse = new Mouse();
-		visuals = new Visual();
-		GameState state = new LoadingScreenState(mouse, loaderThread, connecter, visuals);
+		visuals = new Visual(guiBuilder);
+		GameState state = new LoadingScreenState(mouse, loaderThread, connecter, visuals, guiBuilder);
 		inputs = new Input(mouse, visuals);
 		logics = new Logic(state, inputs);
 	}
@@ -50,9 +44,9 @@ public class HemphApplication {
 		logics.start();
 		loaderThread.start();
 		while (!visuals.shouldCloseWindow()) {
+			connecter.connectResources();
 			inputs.handleEvents();
 			visuals.refresh(logics.getGameState());
-			connecter.connectResources();
 		}
 	}
 

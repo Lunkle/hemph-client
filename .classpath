@@ -7,7 +7,7 @@
 	<classpathentry kind="var" path="M2_REPO/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/xml/bind/jaxb-api/2.2.7/jaxb-api-2.2.7.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/xml/bind/jsr173_api/1.0/jsr173_api-1.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_221"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_231"/>
 	<classpathentry kind="var" path="M2_REPO/com/google/code/gson/gson/2.4/gson-2.4.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/jboss/resteasy/resteasy-client/3.0.13.Final/resteasy-client-3.0.13.Final.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/jboss/resteasy/resteasy-jaxrs/3.0.13.Final/resteasy-jaxrs-3.0.13.Final.jar"/>

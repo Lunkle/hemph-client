@@ -1,4 +1,4 @@
-package graphics.postProcessing;
+package graphics.framebuffer;
 
 import graphics.loader.InterpretedData;
 import graphics.loader.RawData;

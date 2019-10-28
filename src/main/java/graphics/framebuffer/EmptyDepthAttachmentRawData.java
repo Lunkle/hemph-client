@@ -1,4 +1,4 @@
-package graphics.postProcessing;
+package graphics.framebuffer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;

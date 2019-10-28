@@ -9,8 +9,8 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
+import graphics.framebuffer.EmptyTextureRawData;
 import graphics.loader.InterpretedData;
-import graphics.postProcessing.EmptyTextureRawData;
 
 public class Texture implements InterpretedData {
 

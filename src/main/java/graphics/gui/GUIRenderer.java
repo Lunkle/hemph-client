@@ -5,11 +5,9 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import graphics.rendering.Renderer;
 import graphics.vao.VAO;
-import logics.state.GameState;
 
-public class GUIRenderer extends Renderer {
+public class GUIRenderer {
 
 	private static final int QUAD_VERTEX_COUNT = 4;
 
@@ -23,9 +21,7 @@ public class GUIRenderer extends Renderer {
 		guiVAO.interpret(quadData); // Interpreting the raw quad data
 	}
 
-	@Override
-	public void render(GameState gameState) {
-		List<GUI> guis = gameState.getGuis();
+	public void render(List<GUI> guis) {
 		shader.start();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		guiVAO.bindVAO();

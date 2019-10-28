@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
-import graphics.gui.GUI;
+import graphics.gui.GUIBuilder;
 import graphics.rendering.MasterRenderer;
 import graphics.texture.Texture;
 import graphics.transformation.ProjectionTransformation;
@@ -21,23 +21,27 @@ public class Visual {
 
 	private long windowID;
 
-	private int windowWidth = 1280;
-	private int windowHeight = 720;
+	private final int DEFAULT_WINDOW_WIDTH = 1280;
+	private final int DEFAULT_WINDOW_HEIGHT = 720;
+
+	private int currentWindowWidth = DEFAULT_WINDOW_WIDTH;
+	private int currentWindowHeight = DEFAULT_WINDOW_HEIGHT;
 
 	private MasterRenderer renderer;
+	private GUIBuilder guiBuilder;
 
-	public Visual() {
+	public Visual(GUIBuilder guiBuilder) {
 		createDisplay();
-		GUI.loadWindowDimensions(windowWidth, windowHeight);
-		renderer = new MasterRenderer(windowWidth, windowHeight);
+		this.guiBuilder = guiBuilder;
+		guiBuilder.loadWindowDimensions(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+		renderer = new MasterRenderer(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
 	}
 
-	public Visual(int windowWidth, int windowHeight) {
-		this.windowWidth = windowWidth;
-		this.windowHeight = windowHeight;
-		createDisplay();
-		GUI.loadWindowDimensions(windowWidth, windowHeight);
-		renderer = new MasterRenderer(windowWidth, windowHeight);
+	public void updateWindowDimensions(int windowWidth, int windowHeight) {
+		currentWindowWidth = windowWidth;
+		currentWindowHeight = windowHeight;
+		guiBuilder.loadWindowDimensions(windowWidth, windowHeight);
+		renderer.loadWindowDimensions(windowWidth, windowHeight);
 	}
 
 	private void createDisplay() {
@@ -63,7 +67,7 @@ public class Visual {
 	}
 
 	public void refresh(GameState state) {
-		GL11.glViewport(0, 0, windowWidth, windowHeight);
+		GL11.glViewport(0, 0, currentWindowWidth, currentWindowHeight);
 		renderer.render(state);
 		GLFW.glfwSwapBuffers(windowID);
 	}
@@ -88,19 +92,11 @@ public class Visual {
 	}
 
 	public int getWindowWidth() {
-		return windowWidth;
-	}
-
-	public void setWindowWidth(int windowWidth) {
-		this.windowWidth = windowWidth;
+		return DEFAULT_WINDOW_WIDTH;
 	}
 
 	public int getWindowHeight() {
-		return windowHeight;
-	}
-
-	public void setWindowHeight(int windowHeight) {
-		this.windowHeight = windowHeight;
+		return DEFAULT_WINDOW_HEIGHT;
 	}
 
 	public ProjectionTransformation getProjectionTransformation() {

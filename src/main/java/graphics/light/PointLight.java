@@ -37,6 +37,14 @@ public class PointLight extends Light {
 		constants.setZ(constant);
 	}
 
+	/**
+	 * 
+	 * Setting the attenuation variables.
+	 * 
+	 * @param quadratic
+	 * @param linear
+	 * @param constant
+	 */
 	public void setConstants(float quadratic, float linear, float constant) {
 		constants.set(quadratic, linear, constant);
 	}

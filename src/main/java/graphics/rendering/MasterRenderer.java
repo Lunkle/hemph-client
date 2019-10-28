@@ -3,54 +3,49 @@ package graphics.rendering;
 import org.lwjgl.opengl.GL11;
 
 import graphics.entity.EntityRenderer;
+import graphics.framebuffer.DoubleBuffer;
 import graphics.framebuffer.FBO;
 import graphics.gui.GUIRenderer;
 import graphics.postProcessing.ScreenRenderer;
 import graphics.transformation.ProjectionTransformation;
 import logics.state.GameState;
 
-public class MasterRenderer extends Renderer {
+public class MasterRenderer {
 
-	private static final float RED = 123 / 255.0f;
-	private static final float GREEN = 138 / 255.0f;
-	private static final float BLUE = 149 / 255.0f;
-
-	private FBO fbo;
+	private DoubleBuffer doubleBuffer;
 	private EntityRenderer entityRenderer;
+//	private BlurRenderer blurRenderer;
 	private GUIRenderer guiRenderer;
 	private ScreenRenderer screenRenderer;
 	private ProjectionTransformation projectionTransformation;
 
 	public MasterRenderer(int windowWidth, int windowHeight) {
 		entityRenderer = new EntityRenderer();
-		projectionTransformation = new ProjectionTransformation(windowWidth, windowHeight);
-		entityRenderer.loadProjectionMatrix(projectionTransformation);
+		loadWindowDimensions(windowWidth, windowHeight);
 		guiRenderer = new GUIRenderer();
 		screenRenderer = new ScreenRenderer();
-		fbo = new FBO(windowWidth, windowHeight);
 	}
 
-	public void prepare() {
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glClearColor(RED, GREEN, BLUE, 1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+	public void loadWindowDimensions(int windowWidth, int windowHeight) {
+		doubleBuffer = new DoubleBuffer(windowWidth, windowHeight);
+		projectionTransformation = new ProjectionTransformation(windowWidth, windowHeight);
+		entityRenderer.loadProjectionMatrix(projectionTransformation);
 	}
 
-	@Override
 	public void render(GameState gameState) {
-		fbo.bindFBO();
-		prepare();
-		entityRenderer.render(gameState);
-		guiRenderer.render(gameState);
+		doubleBuffer.bindNextBuffer();
+		FBO.clearCurrentFBOData();
+		entityRenderer.loadUniforms(gameState);
+		entityRenderer.render(gameState.getMeshLists());
+		guiRenderer.render(gameState.getGuis());
 
 		FBO.bindDefaultFBO();
-		prepare();
-		screenRenderer.setTexture(fbo.getColourTexture());
-		screenRenderer.render(gameState);
+		FBO.clearCurrentFBOData();
+		screenRenderer.render(doubleBuffer.getColourTexture());
 	}
 
 	public void cleanUp() {
-		entityRenderer.cleanUp();
+		doubleBuffer.cleanUp();
 		guiRenderer.cleanUp();
 	}
 
