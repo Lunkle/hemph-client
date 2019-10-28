@@ -138,7 +138,7 @@ public abstract class GameState {
 
 	public void addGameEntity(GameEntity gameEntity) {
 //		octree.insert(gameEntity);
-		// Temporary, need to remove later
+		// TODO
 		VAO mesh = gameEntity.getModel().getMesh();
 		if (roomMeshEntityMap.containsKey(mesh)) {
 			roomMeshEntityMap.get(mesh).add(gameEntity);
@@ -160,13 +160,12 @@ public abstract class GameState {
 		}
 	}
 
-	public List<Map<VAO, List<GameEntity>>> getMeshLists() {
-		// TODO this is very complex owo use octree frustum intersection uwu
-		// The smaller the index of each map in the list, the more blurred it will be
-		// when rendered.
-		List<Map<VAO, List<GameEntity>>> meshesList = new ArrayList<>();
-		meshesList.add(roomMeshEntityMap);
-		return meshesList;
+	public Map<VAO, List<GameEntity>> getMeshLists() {
+		Map<VAO, List<GameEntity>> meshesMap = new HashMap<>();
+		for (VAO mesh : roomMeshEntityMap.keySet()) {
+			meshesMap.put(mesh, roomMeshEntityMap.get(mesh));
+		}
+		return meshesMap;
 	}
 
 	public Map<VAO, List<GameEntity>> getRoomMeshes() {

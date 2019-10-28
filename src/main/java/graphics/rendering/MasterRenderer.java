@@ -1,8 +1,5 @@
 package graphics.rendering;
 
-import java.util.List;
-import java.util.Map;
-
 import org.lwjgl.opengl.GL11;
 
 import graphics.entity.EntityRenderer;
@@ -11,8 +8,6 @@ import graphics.framebuffer.FBO;
 import graphics.gui.GUIRenderer;
 import graphics.postProcessing.ScreenRenderer;
 import graphics.transformation.ProjectionTransformation;
-import graphics.vao.VAO;
-import logics.octree.GameEntity;
 import logics.state.GameState;
 
 public class MasterRenderer {
@@ -41,14 +36,9 @@ public class MasterRenderer {
 		doubleBuffer.bindNextBuffer();
 		FBO.clearCurrentFBOData();
 		entityRenderer.loadUniforms(gameState);
-		for (Map<VAO, List<GameEntity>> meshes : gameState.getMeshLists()) {
-////			Texture toBlurTexture = doubleBuffer.getColourTexture();
-////			doubleBuffer.bindNextBuffer();
-////			FBO.clearCurrentFBOData();
-////			blurRenderer.render(toBlurTexture);
-			entityRenderer.render(meshes);
-		}
+		entityRenderer.render(gameState.getMeshLists());
 		guiRenderer.render(gameState.getGuis());
+
 		FBO.bindDefaultFBO();
 		FBO.clearCurrentFBOData();
 		screenRenderer.render(doubleBuffer.getColourTexture());

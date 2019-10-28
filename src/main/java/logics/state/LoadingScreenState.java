@@ -48,6 +48,12 @@ public class LoadingScreenState extends GameState {
 	private Texture globeStandSpecularTexture;
 	private OBJMeshRawData globeStandRawMeshData;
 	private VAO globeStandMesh;
+	private ByteBufferImageRawData candleRawTextureData;
+	private Texture candleTexture;
+	private ByteBufferImageRawData candleSpecularRawTextureData;
+	private Texture candleSpecularTexture;
+	private OBJMeshRawData candleRawMeshData;
+	private VAO candleMesh;
 	private ByteBufferImageRawData worldRawTextureData;
 	private Texture worldTexture;
 	private ByteBufferImageRawData globeSpecularRawTextureData;
@@ -94,6 +100,9 @@ public class LoadingScreenState extends GameState {
 		globeStandRawTextureData = new ByteBufferImageRawData();
 		globeStandSpecularRawTextureData = new ByteBufferImageRawData();
 		globeStandRawMeshData = new OBJMeshRawData();
+		candleRawTextureData = new ByteBufferImageRawData();
+		candleSpecularRawTextureData = new ByteBufferImageRawData();
+		candleRawMeshData = new OBJMeshRawData();
 		worldRawTextureData = new ByteBufferImageRawData();
 		globeSpecularRawTextureData = new ByteBufferImageRawData();
 		globeRawMeshData = new GlobeRawData();
@@ -113,6 +122,9 @@ public class LoadingScreenState extends GameState {
 		loadTask.addItem(globeStandRawTextureData, "globeStand.png");
 		loadTask.addItem(globeStandSpecularRawTextureData, "globeStandSpecularMap.png");
 		loadTask.addItem(globeStandRawMeshData, "globeStand.obj");
+		loadTask.addItem(candleRawTextureData, "candle.png");
+		loadTask.addItem(candleSpecularRawTextureData, "candleSpecularMap.png");
+		loadTask.addItem(candleRawMeshData, "candle.obj");
 		loadTask.addItem(worldRawTextureData, "worldTexture.png");
 		loadTask.addItem(globeSpecularRawTextureData, "globeSpecularMap.png");
 		loadTask.addItem(globeRawMeshData, "");
@@ -147,6 +159,12 @@ public class LoadingScreenState extends GameState {
 		unconnectedData.addData(globeStandSpecularTexture, globeStandSpecularRawTextureData);
 		globeStandMesh = new VAO();
 		unconnectedData.addData(globeStandMesh, globeStandRawMeshData);
+		candleTexture = new Texture();
+		unconnectedData.addData(candleTexture, candleRawTextureData);
+		candleSpecularTexture = new Texture();
+		unconnectedData.addData(candleSpecularTexture, candleSpecularRawTextureData);
+		candleMesh = new VAO();
+		unconnectedData.addData(candleMesh, candleRawMeshData);
 
 		unconnectedData.addNotifier(this);
 		connecter.queueTask(unconnectedData);
@@ -204,6 +222,9 @@ public class LoadingScreenState extends GameState {
 		resourcePack.addTexture(globeStandTexture, "globeStandTexture");
 		resourcePack.addTexture(globeStandSpecularTexture, "globeStandSpecularMap");
 		resourcePack.addMesh(globeStandMesh, "globeStandMesh");
+		resourcePack.addTexture(candleTexture, "candleTexture");
+		resourcePack.addTexture(candleSpecularTexture, "candleSpecularMap");
+		resourcePack.addMesh(candleMesh, "candleMesh");
 		resourcePack.addTexture(worldTexture, "worldTexture");
 		resourcePack.addTexture(globeSpecularTexture, "globeSpecularMap");
 		resourcePack.addMesh(globeMesh, "globeMesh");

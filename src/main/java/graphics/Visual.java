@@ -24,6 +24,9 @@ public class Visual {
 	private final int DEFAULT_WINDOW_WIDTH = 1280;
 	private final int DEFAULT_WINDOW_HEIGHT = 720;
 
+	private int currentWindowWidth = DEFAULT_WINDOW_WIDTH;
+	private int currentWindowHeight = DEFAULT_WINDOW_HEIGHT;
+
 	private MasterRenderer renderer;
 	private GUIBuilder guiBuilder;
 
@@ -35,6 +38,8 @@ public class Visual {
 	}
 
 	public void updateWindowDimensions(int windowWidth, int windowHeight) {
+		currentWindowWidth = windowWidth;
+		currentWindowHeight = windowHeight;
 		guiBuilder.loadWindowDimensions(windowWidth, windowHeight);
 		renderer.loadWindowDimensions(windowWidth, windowHeight);
 	}
@@ -62,7 +67,7 @@ public class Visual {
 	}
 
 	public void refresh(GameState state) {
-		GL11.glViewport(0, 0, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+		GL11.glViewport(0, 0, currentWindowWidth, currentWindowHeight);
 		renderer.render(state);
 		GLFW.glfwSwapBuffers(windowID);
 	}

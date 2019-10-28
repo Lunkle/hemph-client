@@ -15,8 +15,10 @@ public class ResizeCallback extends GLFWFramebufferSizeCallback {
 
 	@Override
 	public void invoke(long windowID, int width, int height) {
-		visuals.updateWindowDimensions(width, height);
-		GL11.glViewport(0, 0, visuals.getWindowWidth(), visuals.getWindowHeight());
+		if (width != 0 && height != 0) {
+			visuals.updateWindowDimensions(width, height);
+			GL11.glViewport(0, 0, width, height);
+		}
 	}
 
 }
