@@ -14,7 +14,7 @@ public class MouseScrollCallback extends GLFWScrollCallback implements InputObse
 	private InputObserverNode node;
 
 	public MouseScrollCallback() {
-		node = getEmptyObserverNode();
+		node = InputObserverNode.getEmptyObserverNode();
 	}
 
 	@Override
@@ -36,8 +36,22 @@ public class MouseScrollCallback extends GLFWScrollCallback implements InputObse
 	}
 
 	@Override
+	public void removeObserver(InputObserver removeObserver) {
+		if (node.getObserver().equals(removeObserver)) {
+			node = node.getNextNode();
+		}
+		InputObserverNode currentNode = node;
+		while (!currentNode.equals(InputObserverNode.getEmptyObserverNode())) {
+			if (currentNode.getObserver().equals(removeObserver)) {
+				currentNode.setNextNode(currentNode.getNextNode());
+				break;
+			}
+		}
+	}
+
+	@Override
 	public void clearObservers() {
-		node = getEmptyObserverNode();
+		node = InputObserverNode.getEmptyObserverNode();
 	}
 
 }

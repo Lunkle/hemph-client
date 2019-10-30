@@ -14,7 +14,7 @@ public class KeyCallback extends GLFWKeyCallback implements InputObservee {
 	private InputObserverNode node;
 
 	public KeyCallback() {
-		node = getEmptyObserverNode();
+		node = InputObserverNode.getEmptyObserverNode();
 	}
 
 	@Override
@@ -38,8 +38,23 @@ public class KeyCallback extends GLFWKeyCallback implements InputObservee {
 		node = newNode;
 	}
 
+	@Override
+	public void removeObserver(InputObserver removeObserver) {
+		if (node.getObserver().equals(removeObserver)) {
+			node = node.getNextNode();
+		}
+		InputObserverNode currentNode = node;
+		while (!currentNode.equals(InputObserverNode.getEmptyObserverNode())) {
+			if (currentNode.getObserver().equals(removeObserver)) {
+				currentNode.setNextNode(currentNode.getNextNode());
+				break;
+			}
+		}
+	}
+
+	@Override
 	public void clearObservers() {
-		node = getEmptyObserverNode();
+		node = InputObserverNode.getEmptyObserverNode();
 	}
 
 }

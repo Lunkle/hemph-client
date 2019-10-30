@@ -3,7 +3,7 @@ package logics;
 import org.lwjgl.glfw.GLFW;
 
 import input.Input;
-import logics.state.GameState;
+import logics.state.GameStateWrapper;
 
 public class Logic extends Thread {
 
@@ -14,13 +14,13 @@ public class Logic extends Thread {
 	private double accumulator = 0.0;
 	private int updateCounter = 1;
 
-	private GameState state;
+	private GameStateWrapper gameStateWrapper;
 	private Input inputs;
 
 	private boolean isDone = false;
 
-	public Logic(GameState state, Input inputs) {
-		this.state = state;
+	public Logic(GameStateWrapper stateWrapper, Input inputs) {
+		this.gameStateWrapper = stateWrapper;
 		this.inputs = inputs;
 	}
 
@@ -32,8 +32,8 @@ public class Logic extends Thread {
 			double averageUpdateDuration = previousUpdateEndTime / updateCounter;
 			int numUpdates = (int) ((accumulator + averageUpdateDuration) / targetUpdateTime);
 			for (int i = 0; i < numUpdates; i++) {
-				state.updateInputObservers(inputs);
-				state = state.update();
+				gameStateWrapper.getState().updateInputObservers(inputs);
+				gameStateWrapper.getState().update();
 				accumulator -= targetUpdateTime;
 			}
 			updateCounter += numUpdates;
@@ -43,10 +43,6 @@ public class Logic extends Thread {
 	}
 
 	public void cleanUp() {}
-
-	public GameState getGameState() {
-		return state;
-	}
 
 	public double getAlpha() {
 		return accumulator / targetUpdateTime;

@@ -32,4 +32,13 @@ public class InputObserverNode {
 		}
 	}
 
+	/**
+	 * Get the node containing the dumbest observer of all time.
+	 * 
+	 * @return Said node with dumb observer
+	 */
+	public static InputObserverNode getEmptyObserverNode() {
+		return new EmptyObserverNode();
+	}
+
 }

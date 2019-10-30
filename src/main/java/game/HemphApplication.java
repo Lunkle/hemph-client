@@ -3,21 +3,15 @@ package game;
 import org.lwjgl.Version;
 
 import graphics.Visual;
-import graphics.gui.GUIBuilder;
-import graphics.loader.GraphicsDataConnecter;
-import graphics.loader.ResourceLoaderThread;
 import input.Input;
-import input.mouse.Mouse;
 import logics.Logic;
 import logics.state.GameState;
+import logics.state.GameStateWrapper;
 import logics.state.LoadingScreenState;
 
 public class HemphApplication {
 
-	private ResourceLoaderThread loaderThread;
-	private GraphicsDataConnecter connecter;
-	private GUIBuilder guiBuilder;
-	private Mouse mouse;
+	private GameStateWrapper stateWrapper;
 	private Input inputs;
 	private Logic logics;
 	private Visual visuals;
@@ -30,28 +24,27 @@ public class HemphApplication {
 	}
 
 	private void init() {
-		loaderThread = new ResourceLoaderThread();
-		connecter = new GraphicsDataConnecter();
-		guiBuilder = new GUIBuilder();
-		mouse = new Mouse();
-		visuals = new Visual(guiBuilder);
-		GameState state = new LoadingScreenState(mouse, loaderThread, connecter, visuals, guiBuilder);
-		inputs = new Input(mouse, visuals);
-		logics = new Logic(state, inputs);
+		stateWrapper = new GameStateWrapper();
+		GameState state = new LoadingScreenState();
+		stateWrapper.setState(state);
+		visuals = new Visual(stateWrapper);
+		inputs = new Input(stateWrapper.getMouse(), visuals);
+		logics = new Logic(stateWrapper, inputs);
+		stateWrapper.setVisuals(visuals);
 	}
 
 	private void loop() {
 		logics.start();
-		loaderThread.start();
+		stateWrapper.getLoaderThread().start();
 		while (!visuals.shouldCloseWindow()) {
-			connecter.connectResources();
+			stateWrapper.getConnecter().connectResources();
 			inputs.handleEvents();
-			visuals.refresh(logics.getGameState());
+			visuals.refresh();
 		}
 	}
 
 	private void cleanUp() {
-		loaderThread.end();
+		stateWrapper.cleanUp();
 		logics.end();
 		visuals.cleanUp();
 	}

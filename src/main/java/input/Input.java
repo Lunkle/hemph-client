@@ -101,6 +101,30 @@ public class Input {
 		}
 	}
 
+	public void removeKeyCallbackObservers(List<KeyObserver> keyObservers) {
+		for (KeyObserver observer : keyObservers) {
+			keyObserver.removeObserver(observer);
+		}
+	}
+
+	public void removeMouseMovementCallbackObservers(List<MouseMovementObserver> mouseMovementObservers) {
+		for (MouseMovementObserver observer : mouseMovementObservers) {
+			mouseMovementObserver.removeObserver(observer);
+		}
+	}
+
+	public void removeMouseButtonCallbackObservers(List<MouseButtonObserver> mouseButtonObservers) {
+		for (MouseButtonObserver observer : mouseButtonObservers) {
+			mouseButtonObserver.removeObserver(observer);
+		}
+	}
+
+	public void removeMouseScrollCallbackObservers(List<MouseScrollObserver> mouseScrollObservers) {
+		for (MouseScrollObserver observer : mouseScrollObservers) {
+			mouseScrollObserver.removeObserver(observer);
+		}
+	}
+
 	public void handleEvents() {
 		GLFW.glfwPollEvents();
 	}

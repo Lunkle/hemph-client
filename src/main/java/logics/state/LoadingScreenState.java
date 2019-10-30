@@ -2,10 +2,6 @@ package logics.state;
 
 import org.lwjgl.glfw.GLFW;
 
-import graphics.Visual;
-import graphics.gui.GUIBuilder;
-import graphics.loader.GraphicsDataConnecter;
-import graphics.loader.ResourceLoaderThread;
 import graphics.loader.ResourceLoadingTask;
 import graphics.loader.ResourcePack;
 import graphics.loader.UnconnectedData;
@@ -16,13 +12,15 @@ import graphics.vao.VAO;
 import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
-import input.mouse.Mouse;
 import input.observer.KeyObserver;
 import logics.globe.GlobeRawData;
 
 public class LoadingScreenState extends GameState {
 
+	private boolean loadedItems = false;
 	private boolean finishedLoading = false;
+	private boolean finishedConnectingFirstBatch = false;
+	private boolean finishedConnectingSecondBatch = false;
 	private double startTime;
 
 	private ResourceLoadingTask loadTask;
@@ -71,14 +69,8 @@ public class LoadingScreenState extends GameState {
 	private OBJMeshRawData arrowRawMeshData;
 	private VAO arrowMesh;
 
-	public LoadingScreenState(Mouse mouse, ResourceLoaderThread loaderThread, GraphicsDataConnecter connecter, Visual visuals, GUIBuilder guiBuilder) {
+	public LoadingScreenState() {
 		super();
-
-		setMouse(mouse);
-		setVisuals(visuals);
-		setLoadingThread(loaderThread);
-		setConnecter(connecter);
-		setGuiBuilder(guiBuilder);
 
 		startTime = GLFW.glfwGetTime();
 
@@ -88,7 +80,10 @@ public class LoadingScreenState extends GameState {
 		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {}), new Command(() -> System.out.println("lmao"))));
 		addKeyObserver(printHi);
 
-		loadTask = loaderThread.generateNewTask();
+	}
+
+	private void addLoadRawDataTask() {
+		loadTask = getLoaderThread().generateNewTask();
 
 		dukerawTextureData = new ByteBufferImageRawData();
 		tableRawTextureData = new ByteBufferImageRawData();
@@ -134,11 +129,11 @@ public class LoadingScreenState extends GameState {
 		loadTask.addItem(arrowSpecularRawTextureData, "arrowSpecularMap.png");
 		loadTask.addItem(arrowRawMeshData, "arrow.obj");
 
-		loaderThread.queueTask(loadTask);
+		getLoaderThread().queueTask(loadTask);
 	}
 
 	private synchronized void connectFirstDataBatch() {
-		UnconnectedData unconnectedData = connecter.generateNewTask();
+		UnconnectedData unconnectedData = getConnecter().generateNewTask();
 		dukeTexture = new Texture();
 		unconnectedData.addData(dukeTexture, dukerawTextureData);
 		tableTexture = new Texture();
@@ -167,7 +162,7 @@ public class LoadingScreenState extends GameState {
 		unconnectedData.addData(candleMesh, candleRawMeshData);
 
 		unconnectedData.addNotifier(this);
-		connecter.queueTask(unconnectedData);
+		getConnecter().queueTask(unconnectedData);
 		while (!unconnectedData.isConnected()) {
 			try {
 				wait();
@@ -178,7 +173,7 @@ public class LoadingScreenState extends GameState {
 	}
 
 	private synchronized void connectSceondDataBatch() {
-		UnconnectedData unconnectedData = connecter.generateNewTask();
+		UnconnectedData unconnectedData = getConnecter().generateNewTask();
 
 		greenTexture = new Texture();
 		unconnectedData.addData(greenTexture, greenRawTextureData);
@@ -199,7 +194,7 @@ public class LoadingScreenState extends GameState {
 		unconnectedData.addData(globeMesh, globeRawMeshData);
 
 		unconnectedData.addNotifier(this);
-		connecter.queueTask(unconnectedData);
+		getConnecter().queueTask(unconnectedData);
 
 		while (!unconnectedData.isConnected()) {
 			try {
@@ -236,24 +231,35 @@ public class LoadingScreenState extends GameState {
 	}
 
 	@Override
-	public GameState update() {
-		if (!finishedLoading) {
+	public void updateWindowDimensions(int windowWidth, int windowHeight) {
+
+	}
+
+	@Override
+	public void update() {
+		if (!loadedItems) {
+			addLoadRawDataTask();
+			loadedItems = true;
+		} else if (!finishedLoading) {
 			double percentage = loadTask.getProgressPercentage();
 			if (percentage < 100) {
-//				System.out.println(Math.round(percentage) + "%");
+				System.out.println(Math.round(percentage) + "%");
 			} else {
 				finishedLoading = true;
 			}
-		} else {
+		} else if (!finishedConnectingFirstBatch) {
 			connectFirstDataBatch();
+			finishedConnectingFirstBatch = true;
+		} else if (!finishedConnectingSecondBatch) {
 			connectSceondDataBatch();
+			finishedConnectingSecondBatch = true;
+		} else {
 			generateResourcePack();
 			double endTime = GLFW.glfwGetTime();
 			double timeTaken = endTime - startTime;
 			System.out.println("Finished loading in " + timeTaken + " seconds.");
-			return new PlayGameState(getVisuals(), resourcePack);
+			transition(new PlayGameState(resourcePack));
 		}
-		return this;
 	}
 
 }

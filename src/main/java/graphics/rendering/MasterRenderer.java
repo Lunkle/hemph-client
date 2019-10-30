@@ -8,36 +8,38 @@ import graphics.framebuffer.FBO;
 import graphics.gui.GUIRenderer;
 import graphics.postProcessing.ScreenRenderer;
 import graphics.transformation.ProjectionTransformation;
-import logics.state.GameState;
+import graphics.transformation.ProjectionWrapper;
+import logics.state.GameStateWrapper;
 
 public class MasterRenderer {
+
+	private GameStateWrapper stateWrapper;
 
 	private DoubleBuffer doubleBuffer;
 	private EntityRenderer entityRenderer;
 //	private BlurRenderer blurRenderer;
 	private GUIRenderer guiRenderer;
 	private ScreenRenderer screenRenderer;
-	private ProjectionTransformation projectionTransformation;
+	private ProjectionWrapper projectionWrapper;
 
-	public MasterRenderer(int windowWidth, int windowHeight) {
-		entityRenderer = new EntityRenderer();
+	public MasterRenderer(GameStateWrapper stateWrapper, int windowWidth, int windowHeight) {
+		this.stateWrapper = stateWrapper;
+
+		this.projectionWrapper = new ProjectionWrapper();
 		loadWindowDimensions(windowWidth, windowHeight);
+
+		entityRenderer = new EntityRenderer();
+		entityRenderer.setProjectionWrapper(projectionWrapper);
 		guiRenderer = new GUIRenderer();
 		screenRenderer = new ScreenRenderer();
 	}
 
-	public void loadWindowDimensions(int windowWidth, int windowHeight) {
-		doubleBuffer = new DoubleBuffer(windowWidth, windowHeight);
-		projectionTransformation = new ProjectionTransformation(windowWidth, windowHeight);
-		entityRenderer.loadProjectionMatrix(projectionTransformation);
-	}
-
-	public void render(GameState gameState) {
+	public void render() {
 		doubleBuffer.bindNextBuffer();
 		FBO.clearCurrentFBOData();
-		entityRenderer.loadUniforms(gameState);
-		entityRenderer.render(gameState.getMeshLists());
-		guiRenderer.render(gameState.getGuis());
+		entityRenderer.loadUniforms(stateWrapper.getState());
+		entityRenderer.render(stateWrapper.getState().getMeshLists());
+		guiRenderer.render(stateWrapper.getState().getGuis());
 
 		FBO.bindDefaultFBO();
 		FBO.clearCurrentFBOData();
@@ -53,8 +55,14 @@ public class MasterRenderer {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 	}
 
-	public ProjectionTransformation getProjectionTransformation() {
-		return projectionTransformation;
+	public ProjectionWrapper getProjectionWrapper() {
+		return projectionWrapper;
+	}
+
+	public void loadWindowDimensions(int windowWidth, int windowHeight) {
+		doubleBuffer = new DoubleBuffer(windowWidth, windowHeight);
+		ProjectionTransformation projectionTransformation = new ProjectionTransformation(windowWidth, windowHeight);
+		projectionWrapper.setTransformation(projectionTransformation);
 	}
 
 }

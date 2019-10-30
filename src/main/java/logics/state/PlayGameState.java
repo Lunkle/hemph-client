@@ -1,6 +1,5 @@
 package logics.state;
 
-import graphics.Visual;
 import graphics.gui.GUI;
 import graphics.light.DirectionalLight;
 import graphics.light.PointLight;
@@ -15,6 +14,8 @@ import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
+import input.observer.MouseButtonObserver;
+import input.observer.MouseMovementObserver;
 import logics.globe.GlobeEntity;
 import logics.octree.RoomEntity;
 import math.Vector3f;
@@ -23,10 +24,74 @@ public class PlayGameState extends GameState {
 
 	private GlobeEntity globeEntity;
 
-	public PlayGameState(Visual visual, ResourcePack resourcePack) {
+	private ResourcePack resourcePack;
+	private boolean initialized = false;
+
+	private MouseButtonObserver globeSelectionObserver;
+	private MouseMovementObserver globeRotationObserver;
+
+	public PlayGameState(ResourcePack resourcePack) {
+		super();
 		setFlagToClearObservers();
+		this.resourcePack = resourcePack;
+	}
+
+	private void setLights() {
+		DirectionalLight directionalLight1 = new DirectionalLight(0, -1, 1f);
+		directionalLight1.setAmbient(0.45f, 0.3f, 0.3f);
+		directionalLight1.setDiffuse(1f, 1f, 1f);
+		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
+		directionalLight1.setStrength(0.2f);
+		addLight(directionalLight1);
+
+		DirectionalLight directionalLight2 = new DirectionalLight(0, 0, -1f);
+		directionalLight2.setAmbient(0.1f, 0.1f, 0.1f);
+		directionalLight2.setDiffuse(0.1f, 0.1f, 0.1f);
+		directionalLight2.setSpecular(0.1f, 0.1f, 0.1f);
+		directionalLight2.setStrength(3f);
+		addLight(directionalLight2);
+
+		PointLight pointLight1 = new PointLight(-2, 7.9f, -5);
+		pointLight1.setAmbient(0.65f, 0.7f, 0.4f);
+		pointLight1.setDiffuse(0.8f, 0f, 0f);
+		pointLight1.setSpecular(0.6f, 0.33f, 0.16f);
+		pointLight1.setStrength(10);
+		pointLight1.setConstants(1.8f, 0.7f, 1.0f);
+		addLight(pointLight1);
+	}
+
+	private void positionCamera() {
+		getCamera().setPosition(0, 9f, 1f);
+		getCamera().setRotation(30, 0, 0);
+	}
+
+	private void setMouseGlobeSelectionCommands() {
+		globeSelectionObserver = globeEntity.getGlobeSelectionObserver(getMouse(), getCamera(), getProjectionWrapper());
+		globeRotationObserver = globeEntity.getGlobeRotationObserver(getMouse(), getCamera(), getProjectionWrapper());
+		addMouseButtonObserver(globeSelectionObserver);
+		addMouseMovementObserver(globeRotationObserver);
+		addMouseButtonObserver(globeEntity.getGlobeDeselectionObserver());
+	}
+
+	private void setCameraMovementKeyCommands() {
+		KeyObserver cameraControlKeyObserver = new KeyObserver();
+		Command front = new Command(() -> getCamera().addDirection(Directions.FRONT));
+		Command back = new Command(() -> getCamera().addDirection(Directions.BACK));
+		Command left = new Command(() -> getCamera().addDirection(Directions.LEFT));
+		Command right = new Command(() -> getCamera().addDirection(Directions.RIGHT));
+		Command up = new Command(() -> getCamera().addDirection(Directions.UP));
+		Command down = new Command(() -> getCamera().addDirection(Directions.DOWN));
+		cameraControlKeyObserver.addCommand(Keys.KEY_W, new KeyCommand(front, back));
+		cameraControlKeyObserver.addCommand(Keys.KEY_A, new KeyCommand(left, right));
+		cameraControlKeyObserver.addCommand(Keys.KEY_S, new KeyCommand(back, front));
+		cameraControlKeyObserver.addCommand(Keys.KEY_D, new KeyCommand(right, left));
+		cameraControlKeyObserver.addCommand(Keys.KEY_Q, new KeyCommand(down, up));
+		cameraControlKeyObserver.addCommand(Keys.KEY_E, new KeyCommand(up, down));
+		addKeyObserver(cameraControlKeyObserver);
+	}
+
+	public void init() {
 		setCameraMovementKeyCommands();
-		setVisuals(visual);
 		positionCamera();
 		setLights();
 
@@ -78,66 +143,20 @@ public class PlayGameState extends GameState {
 		addGameEntity(globeEntity);
 
 		setMouseGlobeSelectionCommands();
-
-	}
-
-	private void setLights() {
-		DirectionalLight directionalLight1 = new DirectionalLight(0, -1, 1f);
-		directionalLight1.setAmbient(0.45f, 0.3f, 0.3f);
-		directionalLight1.setDiffuse(1f, 1f, 1f);
-		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
-		directionalLight1.setStrength(0.2f);
-		addLight(directionalLight1);
-
-		DirectionalLight directionalLight2 = new DirectionalLight(0, 0, -1f);
-		directionalLight2.setAmbient(0.1f, 0.1f, 0.1f);
-		directionalLight2.setDiffuse(0.1f, 0.1f, 0.1f);
-		directionalLight2.setSpecular(0.1f, 0.1f, 0.1f);
-		directionalLight2.setStrength(1f);
-		addLight(directionalLight2);
-
-		PointLight pointLight1 = new PointLight(-2, 7.9f, -5);
-		pointLight1.setAmbient(0.65f, 0.7f, 0.4f);
-		pointLight1.setDiffuse(0.8f, 0f, 0f);
-		pointLight1.setSpecular(0.6f, 0.33f, 0.16f);
-		pointLight1.setStrength(10);
-		pointLight1.setConstants(1.8f, 0.7f, 1.0f);
-		addLight(pointLight1);
-	}
-
-	private void positionCamera() {
-		getCamera().setPosition(0, 9f, 1f);
-		getCamera().setRotation(30, 0, 0);
-	}
-
-	private void setMouseGlobeSelectionCommands() {
-		addMouseButtonObserver(globeEntity.getGlobeSelectionObserver(getMouse(), getCamera(), getProjectionTransformation()));
-		addMouseButtonObserver(globeEntity.getGlobeDeselectionObserver());
-		addMouseMovementObserver(globeEntity.getGlobeRotationObserver(getMouse(), getCamera(), getProjectionTransformation()));
-	}
-
-	private void setCameraMovementKeyCommands() {
-		KeyObserver cameraControlKeyObserver = new KeyObserver();
-		Command front = new Command(() -> getCamera().addDirection(Directions.FRONT));
-		Command back = new Command(() -> getCamera().addDirection(Directions.BACK));
-		Command left = new Command(() -> getCamera().addDirection(Directions.LEFT));
-		Command right = new Command(() -> getCamera().addDirection(Directions.RIGHT));
-		Command up = new Command(() -> getCamera().addDirection(Directions.UP));
-		Command down = new Command(() -> getCamera().addDirection(Directions.DOWN));
-		cameraControlKeyObserver.addCommand(Keys.KEY_W, new KeyCommand(front, back));
-		cameraControlKeyObserver.addCommand(Keys.KEY_A, new KeyCommand(left, right));
-		cameraControlKeyObserver.addCommand(Keys.KEY_S, new KeyCommand(back, front));
-		cameraControlKeyObserver.addCommand(Keys.KEY_D, new KeyCommand(right, left));
-		cameraControlKeyObserver.addCommand(Keys.KEY_Q, new KeyCommand(down, up));
-		cameraControlKeyObserver.addCommand(Keys.KEY_E, new KeyCommand(up, down));
-		addKeyObserver(cameraControlKeyObserver);
 	}
 
 	@Override
-	public GameState update() {
-		globeEntity.update();
-		getCamera().update();
-		return this;
+	public void updateWindowDimensions(int windowWidth, int windowHeight) {}
+
+	@Override
+	public void update() {
+		if (initialized) {
+			globeEntity.update();
+			getCamera().update();
+		} else {
+			init();
+			initialized = true;
+		}
 	}
 
 }

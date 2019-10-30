@@ -14,7 +14,7 @@ public class MouseMovementCallback extends GLFWCursorPosCallback implements Inpu
 	private InputObserverNode node;
 
 	public MouseMovementCallback() {
-		node = getEmptyObserverNode();
+		node = InputObserverNode.getEmptyObserverNode();
 	}
 
 	@Override
@@ -36,7 +36,21 @@ public class MouseMovementCallback extends GLFWCursorPosCallback implements Inpu
 	}
 
 	@Override
+	public void removeObserver(InputObserver removeObserver) {
+		if (node.getObserver().equals(removeObserver)) {
+			node = node.getNextNode();
+		}
+		InputObserverNode currentNode = node;
+		while (!currentNode.equals(InputObserverNode.getEmptyObserverNode())) {
+			if (currentNode.getObserver().equals(removeObserver)) {
+				currentNode.setNextNode(currentNode.getNextNode());
+				break;
+			}
+		}
+	}
+
+	@Override
 	public void clearObservers() {
-		node = getEmptyObserverNode();
+		node = InputObserverNode.getEmptyObserverNode();
 	}
 }

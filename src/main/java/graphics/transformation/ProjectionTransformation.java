@@ -7,8 +7,8 @@ public class ProjectionTransformation extends Transformation {
 	private int windowWidth;
 	private int windowHeight;
 	private float fov = 90;
-	private float nearPlane = 0.01f;
-	private float farPlane = 1000;
+	private float nearPlane = 0.001f;
+	private float farPlane = 40;
 
 	public ProjectionTransformation(int windowWidth, int windowHeight) {
 		loadWindowDimensions(windowWidth, windowHeight);

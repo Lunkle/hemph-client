@@ -6,7 +6,7 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import graphics.transformation.ProjectionTransformation;
+import graphics.transformation.ProjectionWrapper;
 import graphics.vao.VAO;
 import logics.octree.GameEntity;
 import logics.state.GameState;
@@ -14,6 +14,7 @@ import logics.state.GameState;
 public class EntityRenderer {
 
 	private EntityShader shader;
+	private ProjectionWrapper projectionWrapper;
 
 	public EntityRenderer() {
 		shader = new EntityShader();
@@ -36,6 +37,7 @@ public class EntityRenderer {
 
 	public void render(Map<VAO, List<GameEntity>> meshEntityMap) {
 		shader.start();
+		shader.loadProjectionMatrix(projectionWrapper.getTransformation().getMatrix());
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		enableCulling();
 		for (VAO mesh : meshEntityMap.keySet()) {
@@ -61,16 +63,8 @@ public class EntityRenderer {
 		GL11.glCullFace(GL11.GL_BACK);
 	}
 
-	/**
-	 * Should only be called at the beginning of the game and whenever the window is
-	 * resized (in which case the projection transformation needs to be updated).
-	 * 
-	 * @param projectionTransformation
-	 */
-	public void loadProjectionMatrix(ProjectionTransformation projectionTransformation) {
-		shader.start();
-		shader.loadProjectionMatrix(projectionTransformation.getMatrix());
-		shader.stop();
+	public void setProjectionWrapper(ProjectionWrapper projectionWrapper) {
+		this.projectionWrapper = projectionWrapper;
 	}
 
 	public void cleanUp() {

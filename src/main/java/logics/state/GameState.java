@@ -14,7 +14,7 @@ import graphics.light.SpotLight;
 import graphics.loader.GraphicsDataConnecter;
 import graphics.loader.ResourceLoaderThread;
 import graphics.rendering.Camera;
-import graphics.transformation.ProjectionTransformation;
+import graphics.transformation.ProjectionWrapper;
 import graphics.vao.VAO;
 import input.Input;
 import input.mouse.Mouse;
@@ -28,12 +28,8 @@ import logics.octree.RoomEntity;
 
 public abstract class GameState {
 
-	protected static ResourceLoaderThread loaderThread;
-	protected static GraphicsDataConnecter connecter;
-	private static Mouse mouse;
-	private static GUIBuilder guiBuilder;
+	private GameStateWrapper gameStateWrapper;
 
-	private Visual visuals;
 	private Camera camera;
 	private List<GUI> guis;
 
@@ -44,10 +40,16 @@ public abstract class GameState {
 	private Octree octree;
 	private Map<VAO, List<GameEntity>> roomMeshEntityMap;
 
-	private List<KeyObserver> keyObservers;
-	private List<MouseMovementObserver> mouseMovementObservers;
-	private List<MouseButtonObserver> mouseButtonObservers;
-	private List<MouseScrollObserver> mouseScrollObservers;
+	private List<KeyObserver> toAddKeyObservers;
+	private List<MouseMovementObserver> toAddMouseMovementObservers;
+	private List<MouseButtonObserver> toAddMouseButtonObservers;
+	private List<MouseScrollObserver> toAddMouseScrollObservers;
+
+	private List<KeyObserver> toRemoveKeyObservers;
+	private List<MouseMovementObserver> toRemoveMouseMovementObservers;
+	private List<MouseButtonObserver> toRemoveMouseButtonObservers;
+	private List<MouseScrollObserver> toRemoveMouseScrollObservers;
+
 	private boolean clearObservers = false;
 
 	public GameState() {
@@ -56,36 +58,24 @@ public abstract class GameState {
 		directionalLights = new ArrayList<>();
 		pointLights = new ArrayList<>();
 		spotLights = new ArrayList<>();
-		keyObservers = new ArrayList<>();
-		mouseMovementObservers = new ArrayList<>();
-		mouseButtonObservers = new ArrayList<>();
-		mouseScrollObservers = new ArrayList<>();
+		toAddKeyObservers = new ArrayList<>();
+		toAddMouseMovementObservers = new ArrayList<>();
+		toAddMouseButtonObservers = new ArrayList<>();
+		toAddMouseScrollObservers = new ArrayList<>();
+		toRemoveKeyObservers = new ArrayList<>();
+		toRemoveMouseMovementObservers = new ArrayList<>();
+		toRemoveMouseButtonObservers = new ArrayList<>();
+		toRemoveMouseScrollObservers = new ArrayList<>();
 		octree = new Octree();
 		roomMeshEntityMap = new HashMap<>();
 	}
 
-	protected static void setMouse(Mouse mouse) {
-		GameState.mouse = mouse;
-	}
-
-	protected void setVisuals(Visual visuals) {
-		this.visuals = visuals;
-	}
-
-	protected static void setLoadingThread(ResourceLoaderThread loaderThread) {
-		GameState.loaderThread = loaderThread;
-	}
-
-	protected static void setConnecter(GraphicsDataConnecter connecter) {
-		GameState.connecter = connecter;
-	}
-
-	protected static void setGuiBuilder(GUIBuilder guiBuilder) {
-		GameState.guiBuilder = guiBuilder;
+	public void setGameStateWrapper(GameStateWrapper gameStateWrapper) {
+		this.gameStateWrapper = gameStateWrapper;
 	}
 
 	public Mouse getMouse() {
-		return mouse;
+		return gameStateWrapper.getMouse();
 	}
 
 	public Camera getCamera() {
@@ -97,15 +87,23 @@ public abstract class GameState {
 	}
 
 	public Visual getVisuals() {
-		return visuals;
+		return gameStateWrapper.getVisuals();
 	}
 
-	public static GUIBuilder getGuiBuilder() {
-		return guiBuilder;
+	public ResourceLoaderThread getLoaderThread() {
+		return gameStateWrapper.getLoaderThread();
 	}
 
-	public ProjectionTransformation getProjectionTransformation() {
-		return visuals.getProjectionTransformation();
+	public GUIBuilder getGuiBuilder() {
+		return gameStateWrapper.getGuiBuilder();
+	}
+
+	public GraphicsDataConnecter getConnecter() {
+		return gameStateWrapper.getConnecter();
+	}
+
+	public ProjectionWrapper getProjectionWrapper() {
+		return getVisuals().getProjectionWrapper();
 	}
 
 	protected void addGUI(GUI gui) {
@@ -173,26 +171,50 @@ public abstract class GameState {
 	}
 
 	public void addKeyObserver(KeyObserver keyObserver) {
-		synchronized (keyObservers) {
-			keyObservers.add(keyObserver);
+		synchronized (toAddKeyObservers) {
+			toAddKeyObservers.add(keyObserver);
 		}
 	}
 
 	public void addMouseMovementObserver(MouseMovementObserver mouseMovementObserver) {
-		synchronized (mouseMovementObservers) {
-			mouseMovementObservers.add(mouseMovementObserver);
+		synchronized (toAddMouseMovementObservers) {
+			toAddMouseMovementObservers.add(mouseMovementObserver);
 		}
 	}
 
 	public void addMouseButtonObserver(MouseButtonObserver mouseButtonObserver) {
-		synchronized (mouseButtonObservers) {
-			mouseButtonObservers.add(mouseButtonObserver);
+		synchronized (toAddMouseButtonObservers) {
+			toAddMouseButtonObservers.add(mouseButtonObserver);
 		}
 	}
 
 	public void addMouseScrollObserver(MouseScrollObserver mouseScrollObserver) {
-		synchronized (mouseScrollObservers) {
-			mouseScrollObservers.add(mouseScrollObserver);
+		synchronized (toAddMouseScrollObservers) {
+			toAddMouseScrollObservers.add(mouseScrollObserver);
+		}
+	}
+
+	public void removeKeyObserver(KeyObserver keyObserver) {
+		synchronized (toRemoveKeyObservers) {
+			toRemoveKeyObservers.add(keyObserver);
+		}
+	}
+
+	public void removeMouseMovementObserver(MouseMovementObserver mouseMovementObserver) {
+		synchronized (toRemoveMouseMovementObservers) {
+			toRemoveMouseMovementObservers.add(mouseMovementObserver);
+		}
+	}
+
+	public void removeMouseButtonObserver(MouseButtonObserver mouseButtonObserver) {
+		synchronized (toRemoveMouseButtonObservers) {
+			toRemoveMouseButtonObservers.add(mouseButtonObserver);
+		}
+	}
+
+	public void removeMouseScrollObserver(MouseScrollObserver mouseScrollObserver) {
+		synchronized (toRemoveMouseScrollObservers) {
+			toRemoveMouseScrollObservers.add(mouseScrollObserver);
 		}
 	}
 
@@ -205,41 +227,75 @@ public abstract class GameState {
 			inputs.clearAllCallbackObservers();
 			clearObservers = false;
 		}
-		if (keyObservers.size() > 0) {
-			List<KeyObserver> copyKeyObservers = keyObservers;
-			synchronized (keyObservers) {
-				keyObservers = new ArrayList<>();
+		if (toAddKeyObservers.size() > 0) {
+			List<KeyObserver> copyKeyObservers = toAddKeyObservers;
+			synchronized (toAddKeyObservers) {
+				toAddKeyObservers = new ArrayList<>();
 			}
 			inputs.addKeyCallbackObservers(copyKeyObservers);
 		}
-		if (mouseMovementObservers.size() > 0) {
-			List<MouseMovementObserver> copyMouseMovementObservers = mouseMovementObservers;
-			synchronized (mouseMovementObservers) {
-				mouseMovementObservers = new ArrayList<>();
+		if (toAddMouseMovementObservers.size() > 0) {
+			List<MouseMovementObserver> copyMouseMovementObservers = toAddMouseMovementObservers;
+			synchronized (toAddMouseMovementObservers) {
+				toAddMouseMovementObservers = new ArrayList<>();
 			}
 			inputs.addMouseMovementCallbackObservers(copyMouseMovementObservers);
 		}
-		if (mouseButtonObservers.size() > 0) {
-			List<MouseButtonObserver> copyMouseButtonObservers = mouseButtonObservers;
-			synchronized (mouseButtonObservers) {
-				mouseButtonObservers = new ArrayList<>();
+		if (toAddMouseButtonObservers.size() > 0) {
+			List<MouseButtonObserver> copyMouseButtonObservers = toAddMouseButtonObservers;
+			synchronized (toAddMouseButtonObservers) {
+				toAddMouseButtonObservers = new ArrayList<>();
 			}
 			inputs.addMouseButtonCallbackObservers(copyMouseButtonObservers);
 		}
-		if (mouseScrollObservers.size() > 0) {
-			List<MouseScrollObserver> copyMouseScrollObservers = mouseScrollObservers;
-			synchronized (mouseScrollObservers) {
-				mouseScrollObservers = new ArrayList<>();
+		if (toAddMouseScrollObservers.size() > 0) {
+			List<MouseScrollObserver> copyMouseScrollObservers = toAddMouseScrollObservers;
+			synchronized (toAddMouseScrollObservers) {
+				toAddMouseScrollObservers = new ArrayList<>();
 			}
 			inputs.addMouseScrollCallbackObservers(copyMouseScrollObservers);
 		}
+		if (toRemoveKeyObservers.size() > 0) {
+			List<KeyObserver> copyKeyObservers = toRemoveKeyObservers;
+			synchronized (toRemoveKeyObservers) {
+				toRemoveKeyObservers = new ArrayList<>();
+			}
+			inputs.removeKeyCallbackObservers(copyKeyObservers);
+		}
+		if (toAddMouseMovementObservers.size() > 0) {
+			List<MouseMovementObserver> copyMouseMovementObservers = toRemoveMouseMovementObservers;
+			synchronized (toRemoveMouseMovementObservers) {
+				toRemoveMouseMovementObservers = new ArrayList<>();
+			}
+			inputs.removeMouseMovementCallbackObservers(copyMouseMovementObservers);
+		}
+		if (toAddMouseButtonObservers.size() > 0) {
+			List<MouseButtonObserver> copyMouseButtonObservers = toRemoveMouseButtonObservers;
+			synchronized (toRemoveMouseButtonObservers) {
+				toRemoveMouseButtonObservers = new ArrayList<>();
+			}
+			inputs.removeMouseButtonCallbackObservers(copyMouseButtonObservers);
+		}
+		if (toRemoveMouseScrollObservers.size() > 0) {
+			List<MouseScrollObserver> copyMouseScrollObservers = toRemoveMouseScrollObservers;
+			synchronized (toRemoveMouseScrollObservers) {
+				toRemoveMouseScrollObservers = new ArrayList<>();
+			}
+			inputs.removeMouseScrollCallbackObservers(copyMouseScrollObservers);
+		}
 	}
+
+	public final void transition(GameState state) {
+		gameStateWrapper.setState(state);
+		state.setGameStateWrapper(gameStateWrapper);
+	}
+
+	public abstract void updateWindowDimensions(int windowWidth, int windowHeight);
 
 	/**
 	 * Will be called continually by the logics thread.
 	 * 
-	 * @return
 	 */
-	public abstract GameState update();
+	public abstract void update();
 
 }

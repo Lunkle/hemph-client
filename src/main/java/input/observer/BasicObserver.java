@@ -6,12 +6,13 @@ import input.information.Keys;
 
 public class BasicObserver implements InputObserver, InputObservee {
 
-	private InputObserverNode lastNode;
+	/**
+	 * The node containing this obsesrver.
+	 */
 	private InputObserverNode node;
 
 	protected BasicObserver() {
-		node = getEmptyObserverNode();
-		lastNode = node;
+		node = InputObserverNode.getEmptyObserverNode();
 	}
 
 	@Override
@@ -27,13 +28,26 @@ public class BasicObserver implements InputObserver, InputObservee {
 	@Override
 	public void addObserver(InputObserver newObserver) {
 		InputObserverNode newNode = new InputObserverNode(newObserver);
-		lastNode.setNextNode(newNode);
-		lastNode = newNode;
+		newNode.setNextNode(node);
+		node = newNode;
+	}
+
+	@Override
+	public void removeObserver(InputObserver removeObserver) {
+		if (node.getObserver().equals(removeObserver)) {
+			node = node.getNextNode();
+		}
+		InputObserverNode currentNode = node;
+		while (!currentNode.equals(InputObserverNode.getEmptyObserverNode())) {
+			if (currentNode.getObserver().equals(removeObserver)) {
+				currentNode.setNextNode(currentNode.getNextNode());
+				break;
+			}
+		}
 	}
 
 	@Override
 	public void clearObservers() {
-		node = getEmptyObserverNode();
-		lastNode = node;
+		node = InputObserverNode.getEmptyObserverNode();
 	}
 }

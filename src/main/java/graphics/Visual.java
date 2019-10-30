@@ -11,11 +11,11 @@ import org.lwjgl.system.MemoryUtil;
 import graphics.gui.GUIBuilder;
 import graphics.rendering.MasterRenderer;
 import graphics.texture.Texture;
-import graphics.transformation.ProjectionTransformation;
+import graphics.transformation.ProjectionWrapper;
 import graphics.vao.EBO;
 import graphics.vao.VAO;
 import graphics.vao.VBO;
-import logics.state.GameState;
+import logics.state.GameStateWrapper;
 
 public class Visual {
 
@@ -30,11 +30,11 @@ public class Visual {
 	private MasterRenderer renderer;
 	private GUIBuilder guiBuilder;
 
-	public Visual(GUIBuilder guiBuilder) {
+	public Visual(GameStateWrapper stateWrapper) {
 		createDisplay();
-		this.guiBuilder = guiBuilder;
+		this.guiBuilder = stateWrapper.getGuiBuilder();
 		guiBuilder.loadWindowDimensions(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
-		renderer = new MasterRenderer(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+		renderer = new MasterRenderer(stateWrapper, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
 	}
 
 	public void updateWindowDimensions(int windowWidth, int windowHeight) {
@@ -66,9 +66,9 @@ public class Visual {
 		GLFW.glfwShowWindow(windowID); // Make the window visible
 	}
 
-	public void refresh(GameState state) {
+	public void refresh() {
 		GL11.glViewport(0, 0, currentWindowWidth, currentWindowHeight);
-		renderer.render(state);
+		renderer.render();
 		GLFW.glfwSwapBuffers(windowID);
 	}
 
@@ -99,8 +99,8 @@ public class Visual {
 		return DEFAULT_WINDOW_HEIGHT;
 	}
 
-	public ProjectionTransformation getProjectionTransformation() {
-		return renderer.getProjectionTransformation();
+	public ProjectionWrapper getProjectionWrapper() {
+		return renderer.getProjectionWrapper();
 	}
 
 }

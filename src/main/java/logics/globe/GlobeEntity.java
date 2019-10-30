@@ -2,7 +2,7 @@ package logics.globe;
 
 import graphics.model.Model;
 import graphics.rendering.Camera;
-import graphics.transformation.ProjectionTransformation;
+import graphics.transformation.ProjectionWrapper;
 import graphics.transformation.WorldTransformation;
 import input.command.Command;
 import input.information.Actions;
@@ -76,11 +76,11 @@ public class GlobeEntity extends HeaderEntity {
 		return null;
 	}
 
-	public MouseButtonObserver getGlobeSelectionObserver(Mouse mouse, Camera camera, ProjectionTransformation projectionTransformation) {
+	public MouseButtonObserver getGlobeSelectionObserver(Mouse mouse, Camera camera, ProjectionWrapper projectionWrapper) {
 		MouseButtonObserver globeSelectionObserver = new MouseButtonObserver();
 		Command selectGlobe = new Command(() -> selectGlobe());
 		MouseCheck globeIntersectionCheck = () -> {
-			MousePicker.loadInformation(mouse, camera, projectionTransformation);
+			MousePicker.loadInformation(mouse, camera, projectionWrapper.getTransformation());
 			Vector3f intersection = getIntersection(camera.getPosition(), MousePicker.calculateMouseRay());
 			return intersection != null;
 		};
@@ -98,10 +98,10 @@ public class GlobeEntity extends HeaderEntity {
 		return globeDeselectionObserver;
 	}
 
-	public MouseMovementObserver getGlobeRotationObserver(Mouse mouse, Camera camera, ProjectionTransformation projectionTransformation) {
+	public MouseMovementObserver getGlobeRotationObserver(Mouse mouse, Camera camera, ProjectionWrapper projectionWrapper) {
 		MouseMovementObserver globeRotationObserver = new MouseMovementObserver();
 		Command rotateGlobe = new Command(() -> {
-			MousePicker.loadInformation(mouse, camera, projectionTransformation);
+			MousePicker.loadInformation(mouse, camera, projectionWrapper.getTransformation());
 			rotateGlobe(camera.getPosition(), MousePicker.calculateMouseRay());
 		});
 		MouseCheck selectedCheck = () -> {
