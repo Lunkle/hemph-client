@@ -1,4 +1,4 @@
-package graphics.loader;
+package loading.loader;
 
 import java.io.IOException;
 import java.nio.file.Files;

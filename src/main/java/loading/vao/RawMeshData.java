@@ -1,10 +1,10 @@
-package graphics.vao;
+package loading.vao;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import graphics.loader.InterpretedData;
-import graphics.loader.RawData;
+import loading.loader.InterpretedData;
+import loading.loader.RawData;
 
 public abstract class RawMeshData implements RawData {
 

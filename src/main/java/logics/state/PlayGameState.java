@@ -1,9 +1,10 @@
 package logics.state;
 
+import org.lwjgl.glfw.GLFW;
+
 import graphics.gui.GUI;
 import graphics.light.DirectionalLight;
 import graphics.light.PointLight;
-import graphics.loader.ResourcePack;
 import graphics.model.Model;
 import graphics.model.ModelBuilder;
 import graphics.rendering.Camera.Directions;
@@ -16,6 +17,7 @@ import input.information.Keys;
 import input.observer.KeyObserver;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseMovementObserver;
+import loading.loader.ResourcePack;
 import logics.globe.GlobeEntity;
 import logics.octree.RoomEntity;
 import math.Vector3f;
@@ -25,10 +27,13 @@ public class PlayGameState extends GameState {
 	private GlobeEntity globeEntity;
 
 	private ResourcePack resourcePack;
-	private boolean initialized = false;
 
 	private MouseButtonObserver globeSelectionObserver;
+	private MouseButtonObserver globeReleaseObserver;
 	private MouseMovementObserver globeRotationObserver;
+
+	// Testing varying light cycles, should probably delete later
+	private DirectionalLight directionalLight1;
 
 	public PlayGameState(ResourcePack resourcePack) {
 		super();
@@ -37,13 +42,15 @@ public class PlayGameState extends GameState {
 	}
 
 	private void setLights() {
-		DirectionalLight directionalLight1 = new DirectionalLight(0, -1, 1f);
+		// DirectionalLight directionalLight1 = new DirectionalLight(0, -1, 1f);
+		directionalLight1 = new DirectionalLight(0, -1, 1f);
 		directionalLight1.setAmbient(0.45f, 0.3f, 0.3f);
 		directionalLight1.setDiffuse(1f, 1f, 1f);
 		directionalLight1.setSpecular(0.6f, 0.33f, 0.16f);
-		directionalLight1.setStrength(0.2f);
+		directionalLight1.setStrength(0.3f);
 		addLight(directionalLight1);
 
+		// Main light source
 		DirectionalLight directionalLight2 = new DirectionalLight(0, 0, -1f);
 		directionalLight2.setAmbient(0.1f, 0.1f, 0.1f);
 		directionalLight2.setDiffuse(0.1f, 0.1f, 0.1f);
@@ -51,7 +58,8 @@ public class PlayGameState extends GameState {
 		directionalLight2.setStrength(3f);
 		addLight(directionalLight2);
 
-		PointLight pointLight1 = new PointLight(-2, 7.9f, -5);
+		// The candle
+		PointLight pointLight1 = new PointLight(-3, 7.5f, -5);
 		pointLight1.setAmbient(0.65f, 0.7f, 0.4f);
 		pointLight1.setDiffuse(0.8f, 0f, 0f);
 		pointLight1.setSpecular(0.6f, 0.33f, 0.16f);
@@ -67,10 +75,11 @@ public class PlayGameState extends GameState {
 
 	private void setMouseGlobeSelectionCommands() {
 		globeSelectionObserver = globeEntity.getGlobeSelectionObserver(getMouse(), getCamera(), getProjectionWrapper());
+		globeReleaseObserver = globeEntity.getGlobeReleaseObserver(getMouse(), getCamera(), getProjectionWrapper());
 		globeRotationObserver = globeEntity.getGlobeRotationObserver(getMouse(), getCamera(), getProjectionWrapper());
 		addMouseButtonObserver(globeSelectionObserver);
+		addMouseButtonObserver(globeReleaseObserver);
 		addMouseMovementObserver(globeRotationObserver);
-		addMouseButtonObserver(globeEntity.getGlobeDeselectionObserver());
 	}
 
 	private void setCameraMovementKeyCommands() {
@@ -90,10 +99,21 @@ public class PlayGameState extends GameState {
 		addKeyObserver(cameraControlKeyObserver);
 	}
 
-	public void init() {
+	@Override
+	protected void initialize() {
 		setCameraMovementKeyCommands();
 		positionCamera();
 		setLights();
+
+		Texture globeTexture = resourcePack.getTexture("worldTexture");
+		Texture globeSpecularTexture = resourcePack.getTexture("globeSpecularMap");
+		VAO globeMesh = resourcePack.getMesh("globeMesh");
+		Model globeModel = ModelBuilder.newInstance().setMesh(globeMesh).setDiffuseTexture(globeTexture).setSpecularTexture(globeSpecularTexture).create();
+		WorldTransformation globeTransformation = new WorldTransformation(0, 7.9f, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1);
+		globeEntity = new GlobeEntity(globeModel, globeTransformation);
+		addGameEntity(globeEntity);
+
+		setMouseGlobeSelectionCommands();
 
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = getGuiBuilder().newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
@@ -101,6 +121,12 @@ public class PlayGameState extends GameState {
 
 		Texture wood = resourcePack.getTexture("tableTexture");
 		GUI testGUI2 = getGuiBuilder().newInstance().setDimensions(1170, 10, 100, 100).setTexture(wood).create();
+		Command returnToTableViewCommand = new Command(() -> {
+			globeEntity.defocusGlobe();
+			getCamera().setTargetPosition(0, 9f, 1f);
+//			getCamera().setRotation(30, 0, 0);
+		});
+		testGUI2.setOnReleaseCommand(getMouse(), returnToTableViewCommand, getProjectionWrapper());
 		addGUI(testGUI2);
 
 		Texture tableSpecularTexture = resourcePack.getTexture("tableSpecularMap");
@@ -133,16 +159,6 @@ public class PlayGameState extends GameState {
 		WorldTransformation candleTransformation = new WorldTransformation(-3.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0), -45, 1f, 1f, 1f);
 		RoomEntity candleEntity = new RoomEntity(candleModel, candleTransformation);
 		addGameEntity(candleEntity);
-
-		Texture globeTexture = resourcePack.getTexture("worldTexture");
-		Texture globeSpecularTexture = resourcePack.getTexture("globeSpecularMap");
-		VAO globeMesh = resourcePack.getMesh("globeMesh");
-		Model globeModel = ModelBuilder.newInstance().setMesh(globeMesh).setDiffuseTexture(globeTexture).setSpecularTexture(globeSpecularTexture).create();
-		WorldTransformation globeTransformation = new WorldTransformation(0, 7.9f, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1);
-		globeEntity = new GlobeEntity(globeModel, globeTransformation);
-		addGameEntity(globeEntity);
-
-		setMouseGlobeSelectionCommands();
 	}
 
 	@Override
@@ -150,13 +166,9 @@ public class PlayGameState extends GameState {
 
 	@Override
 	public void update() {
-		if (initialized) {
-			globeEntity.update();
-			getCamera().update();
-		} else {
-			init();
-			initialized = true;
-		}
+		directionalLight1.setStrength((float) (0.3f + Math.sin(GLFW.glfwGetTime())));
+		globeEntity.update();
+		getCamera().update();
 	}
 
 }

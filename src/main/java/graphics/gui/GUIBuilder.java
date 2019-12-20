@@ -29,6 +29,7 @@ public class GUIBuilder {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
 		for (GUI gui : builtGuis) {
+			// TODO
 			Vector2f size = gui.getSize();
 			float previousWidth = previousWindowWidth * size.x;
 			float previousHeight = previousWindowHeight * size.y;

@@ -45,7 +45,7 @@ public class HemphApplication {
 
 	private void cleanUp() {
 		stateWrapper.cleanUp();
-		logics.end();
+		logics.cleanUp();
 		visuals.cleanUp();
 	}
 

@@ -17,9 +17,11 @@ import math.Vector3f;
 
 public class GlobeEntity extends HeaderEntity {
 
-	private boolean selected;
+	private boolean selected = false;
+	private boolean focused = false;
 	private Vector3f currentIntersection = null;
 	private Vector3f previousIntersection = null;
+	private Vector3f globePreviousPosition = null;
 
 	public GlobeEntity(Model model, WorldTransformation worldTransformation) {
 		super(model, worldTransformation);
@@ -29,17 +31,14 @@ public class GlobeEntity extends HeaderEntity {
 		return selected;
 	}
 
-	public void selectGlobe() {
-		selected = true;
+	public void releaseGlobe(Camera camera) {
+		camera.setTargetPosition(-0.035147168f, 8.040001f, -3.9139676f);
+		focused = true;
 	}
 
-	public void deselectGlobe() {
-		selected = false;
+	public void defocusGlobe() {
+		focused = false;
 	}
-
-	private Vector3f globePreviousPosition = null;
-	private Vector3f previousOrigin = null;
-	private Vector3f previousDirection = null;
 
 	/**
 	 * Gets intersection of a ray and a sphere.
@@ -49,11 +48,6 @@ public class GlobeEntity extends HeaderEntity {
 	 * @return the intersection point
 	 */
 	public Vector3f getIntersection(Vector3f origin, Vector3f direction) {
-		if (origin.equals(previousOrigin) && direction.equals(previousDirection)) {
-			return previousIntersection;
-		}
-		previousOrigin = origin;
-		previousDirection = new Vector3f(direction);
 		globePreviousPosition = getAbsoluteWorldTransformation().getPosition();
 		float globeSize = getAbsoluteWorldTransformation().getScale().getLargestComponent();
 		Vector3f globeToCamera = Vector3f.sub(origin, globePreviousPosition);
@@ -78,7 +72,7 @@ public class GlobeEntity extends HeaderEntity {
 
 	public MouseButtonObserver getGlobeSelectionObserver(Mouse mouse, Camera camera, ProjectionWrapper projectionWrapper) {
 		MouseButtonObserver globeSelectionObserver = new MouseButtonObserver();
-		Command selectGlobe = new Command(() -> selectGlobe());
+		Command selectGlobe = new Command(() -> selected = true);
 		MouseCheck globeIntersectionCheck = () -> {
 			MousePicker.loadInformation(mouse, camera, projectionWrapper.getTransformation());
 			Vector3f intersection = getIntersection(camera.getPosition(), MousePicker.calculateMouseRay());
@@ -88,14 +82,18 @@ public class GlobeEntity extends HeaderEntity {
 		return globeSelectionObserver;
 	}
 
-	public MouseButtonObserver getGlobeDeselectionObserver() {
-		MouseButtonObserver globeDeselectionObserver = new MouseButtonObserver();
-		Command deselectGlobe = new Command(() -> deselectGlobe());
+	public MouseButtonObserver getGlobeReleaseObserver(Mouse mouse, Camera camera, ProjectionWrapper projectionWrapper) {
+		MouseButtonObserver globeReleaseObserver = new MouseButtonObserver();
+		Command deselectGlobe = new Command(() -> releaseGlobe(camera));
 		MouseCheck releaseCheck = () -> {
-			return true;
+			selected = false;
+			MousePicker.loadInformation(mouse, camera, projectionWrapper.getTransformation());
+			Vector3f intersection = getIntersection(camera.getPosition(), MousePicker.calculateMouseRay());
+			System.out.println(intersection);
+			return intersection != null;
 		};
-		globeDeselectionObserver.addCheck(Keys.MOUSE_LEFT, Actions.RELEASE, releaseCheck, deselectGlobe);
-		return globeDeselectionObserver;
+		globeReleaseObserver.addCheck(Keys.MOUSE_LEFT, Actions.RELEASE, releaseCheck, deselectGlobe);
+		return globeReleaseObserver;
 	}
 
 	public MouseMovementObserver getGlobeRotationObserver(Mouse mouse, Camera camera, ProjectionWrapper projectionWrapper) {
@@ -105,7 +103,7 @@ public class GlobeEntity extends HeaderEntity {
 			rotateGlobe(camera.getPosition(), MousePicker.calculateMouseRay());
 		});
 		MouseCheck selectedCheck = () -> {
-			return selected;
+			return (selected && focused);
 		};
 		globeRotationObserver.addCheck(selectedCheck, rotateGlobe);
 		return globeRotationObserver;

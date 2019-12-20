@@ -2,17 +2,17 @@ package logics.state;
 
 import org.lwjgl.glfw.GLFW;
 
-import graphics.loader.ResourceLoadingTask;
-import graphics.loader.ResourcePack;
-import graphics.loader.UnconnectedData;
-import graphics.texture.ByteBufferImageRawData;
 import graphics.texture.Texture;
-import graphics.vao.OBJMeshRawData;
 import graphics.vao.VAO;
 import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Keys;
 import input.observer.KeyObserver;
+import loading.loader.ResourceLoadingTask;
+import loading.loader.ResourcePack;
+import loading.loader.UnconnectedData;
+import loading.texture.ByteBufferImageRawData;
+import loading.vao.OBJMeshRawData;
 import logics.globe.GlobeRawData;
 
 public class LoadingScreenState extends GameState {
@@ -79,6 +79,10 @@ public class LoadingScreenState extends GameState {
 		KeyObserver printHi = new KeyObserver();
 		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {}), new Command(() -> System.out.println("lmao"))));
 		addKeyObserver(printHi);
+	}
+
+	@Override
+	protected void initialize() {
 
 	}
 

@@ -8,6 +8,9 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
 import graphics.texture.Texture;
+import loading.framebuffer.EmptyColourAttachmentRawData;
+import loading.framebuffer.EmptyDepthAttachmentRawData;
+import loading.framebuffer.EmptyTextureRawData;
 
 public class FBO {
 

@@ -7,8 +7,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import graphics.gui.ScreenRawMeshData;
-import graphics.loader.InterpretedData;
+import loading.loader.InterpretedData;
+import loading.screen.ScreenRawMeshData;
+import loading.vao.RawMeshData;
 
 // An attribute object stores all the information for each vertex of a mesh
 // It stores them in the form of buffer objects

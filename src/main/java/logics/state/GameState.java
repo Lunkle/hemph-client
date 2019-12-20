@@ -11,8 +11,6 @@ import graphics.gui.GUIBuilder;
 import graphics.light.DirectionalLight;
 import graphics.light.PointLight;
 import graphics.light.SpotLight;
-import graphics.loader.GraphicsDataConnecter;
-import graphics.loader.ResourceLoaderThread;
 import graphics.rendering.Camera;
 import graphics.transformation.ProjectionWrapper;
 import graphics.vao.VAO;
@@ -22,6 +20,8 @@ import input.observer.KeyObserver;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseMovementObserver;
 import input.observer.MouseScrollObserver;
+import loading.loader.GraphicsDataConnecter;
+import loading.loader.ResourceLoaderThread;
 import logics.octree.GameEntity;
 import logics.octree.Octree;
 import logics.octree.RoomEntity;
@@ -108,6 +108,15 @@ public abstract class GameState {
 
 	protected void addGUI(GUI gui) {
 		guis.add(gui);
+		if (gui.getOnPress() != null) {
+			addMouseButtonObserver(gui.getOnPress());
+		}
+		if (gui.getOnRelease() != null) {
+			addMouseButtonObserver(gui.getOnRelease());
+		}
+		if (gui.getOnHover() != null) {
+			addMouseMovementObserver(gui.getOnHover());
+		}
 	}
 
 	public List<DirectionalLight> getDirectionalLights() {
@@ -155,6 +164,13 @@ public abstract class GameState {
 			List<GameEntity> entityList = new ArrayList<>();
 			entityList.add(room);
 			roomMeshEntityMap.put(mesh, entityList);
+		}
+	}
+
+	public void removeGameEntity(RoomEntity room) {
+		VAO mesh = room.getModel().getMesh();
+		if (roomMeshEntityMap.containsKey(mesh)) {
+			roomMeshEntityMap.get(mesh).remove(room);
 		}
 	}
 
@@ -222,6 +238,13 @@ public abstract class GameState {
 		clearObservers = true;
 	}
 
+	/**
+	 * 
+	 * Takes in an input handler to be updated. Any new input observers will be
+	 * added to the input handler accordingly.
+	 * 
+	 * @param the input handler to be updated
+	 */
 	public void updateInputObservers(Input inputs) {
 		if (clearObservers) {
 			inputs.clearAllCallbackObservers();
@@ -288,13 +311,18 @@ public abstract class GameState {
 	public final void transition(GameState state) {
 		gameStateWrapper.setState(state);
 		state.setGameStateWrapper(gameStateWrapper);
+		state.initialize();
 	}
 
 	public abstract void updateWindowDimensions(int windowWidth, int windowHeight);
 
 	/**
+	 * Will be called once upon transitioning
+	 */
+	protected abstract void initialize();
+
+	/**
 	 * Will be called continually by the logics thread.
-	 * 
 	 */
 	public abstract void update();
 

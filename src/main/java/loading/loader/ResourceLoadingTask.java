@@ -1,4 +1,4 @@
-package graphics.loader;
+package loading.loader;
 
 import java.util.HashMap;
 import java.util.Map;

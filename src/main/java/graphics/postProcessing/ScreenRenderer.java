@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL20;
 
 import graphics.texture.Texture;
 import graphics.vao.VAO;
+import loading.screen.ScreenQuadRawMeshData;
 
 public class ScreenRenderer {
 

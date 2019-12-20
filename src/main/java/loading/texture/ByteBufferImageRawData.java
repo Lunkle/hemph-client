@@ -1,4 +1,4 @@
-package graphics.texture;
+package loading.texture;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -6,8 +6,8 @@ import java.nio.IntBuffer;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
-import graphics.loader.InterpretedData;
-import graphics.loader.RawData;
+import loading.loader.InterpretedData;
+import loading.loader.RawData;
 
 public class ByteBufferImageRawData implements RawData {
 

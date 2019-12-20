@@ -57,6 +57,16 @@ public class MouseButtonObserver extends BasicObserver {
 		notifyObservers(type, input, action, data);
 	}
 
+	/**
+	 * Adds an observer that listens for the specific mouseKey and action
+	 * combination. It performs the mouseCheck, and if it returns true, it executes
+	 * the command.
+	 * 
+	 * @param mouseKey
+	 * @param action
+	 * @param mouseCheck
+	 * @param command
+	 */
 	public void addCheck(Keys mouseKey, Actions action, MouseCheck mouseCheck, Command command) {
 		boolean mouseKeyCheck = commandMap.containsKey(mouseKey);
 		boolean actionCheck = action != Actions.UNKNOWN;

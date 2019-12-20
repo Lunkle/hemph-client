@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import graphics.loader.InterpretedData;
-import graphics.loader.RawData;
 import graphics.primitive.HalfEdge;
 import graphics.primitive.Primitive;
 import graphics.primitive.Triangle;
 import graphics.primitive.Vertex;
-import graphics.vao.RawMeshData;
+import loading.loader.InterpretedData;
+import loading.loader.RawData;
+import loading.vao.RawMeshData;
 import math.Vector2f;
 import math.Vector3f;
 

@@ -3,6 +3,13 @@ package graphics.model;
 import graphics.texture.Texture;
 import graphics.vao.VAO;
 
+/**
+ * 
+ * A model is a VAO with textures
+ * 
+ * @author Donny
+ *
+ */
 public class Model {
 
 	private VAO mesh;

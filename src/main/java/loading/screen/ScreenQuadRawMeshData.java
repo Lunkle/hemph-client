@@ -1,6 +1,4 @@
-package graphics.postProcessing;
-
-import graphics.gui.ScreenRawMeshData;
+package loading.screen;
 
 public class ScreenQuadRawMeshData extends ScreenRawMeshData {
 

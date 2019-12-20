@@ -1,4 +1,4 @@
-package graphics.framebuffer;
+package loading.framebuffer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;

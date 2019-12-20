@@ -2,9 +2,9 @@ package logics.state;
 
 import graphics.Visual;
 import graphics.gui.GUIBuilder;
-import graphics.loader.GraphicsDataConnecter;
-import graphics.loader.ResourceLoaderThread;
 import input.mouse.Mouse;
+import loading.loader.GraphicsDataConnecter;
+import loading.loader.ResourceLoaderThread;
 
 public class GameStateWrapper {
 

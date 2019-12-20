@@ -33,6 +33,13 @@ public class MousePicker {
 		return worldRay;
 	}
 
+	public static Vector2f getNormalizedDeviceCoordinates(Mouse mouse, ProjectionTransformation projectionTransformation) {
+		Vector2f mousePosition = mouse.getPosition();
+		float x = 2 * mousePosition.x / projectionTransformation.getWindowWidth() - 1;
+		float y = 1 - 2 * mousePosition.y / projectionTransformation.getWindowHeight();
+		return new Vector2f(x, y);
+	}
+
 	private static Vector2f getNormalizedDeviceCoordinates(Vector2f mousePosition) {
 		float x = 2 * mousePosition.x / projectionTransformation.getWindowWidth() - 1;
 		float y = 1 - 2 * mousePosition.y / projectionTransformation.getWindowHeight();

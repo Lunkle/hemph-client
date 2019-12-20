@@ -1,7 +1,7 @@
-package graphics.gui;
+package loading.screen;
 
-import graphics.loader.InterpretedData;
-import graphics.loader.RawData;
+import loading.loader.InterpretedData;
+import loading.loader.RawData;
 
 public class ScreenRawMeshData implements RawData {
 

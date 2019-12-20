@@ -1,7 +1,7 @@
-package graphics.framebuffer;
+package loading.framebuffer;
 
-import graphics.loader.InterpretedData;
-import graphics.loader.RawData;
+import loading.loader.InterpretedData;
+import loading.loader.RawData;
 
 public abstract class EmptyTextureRawData implements RawData {
 

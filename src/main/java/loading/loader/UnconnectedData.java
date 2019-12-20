@@ -1,4 +1,4 @@
-package graphics.loader;
+package loading.loader;
 
 import java.util.ArrayList;
 import java.util.List;

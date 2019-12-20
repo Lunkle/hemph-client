@@ -5,8 +5,10 @@ import math.Vector3f;
 
 public class Camera {
 
+	private boolean manualControl = true;
 	private ViewTransformation transformation;
 	private Vector3f cameraMoveDirection = new Vector3f(0, 0, 0);
+	private Vector3f cameraPositionTarget = new Vector3f(0, 0, 0);
 	private float cameraSpeed = 0.12f;
 
 	public enum Directions {
@@ -39,10 +41,18 @@ public class Camera {
 	}
 
 	public void update() {
-		if (cameraMoveDirection.lengthSquared() != 0) {
-			Vector3f movementVector = new Vector3f(cameraMoveDirection);
-			movementVector.normalise().scale(cameraSpeed);
-			transformation.increasePosition(movementVector.x, movementVector.y, movementVector.z);
+		if (manualControl) {
+			if (cameraMoveDirection.lengthSquared() > 0.000001) {
+				Vector3f movementVector = new Vector3f(cameraMoveDirection);
+				movementVector.normalise().scale(cameraSpeed);
+				transformation.increasePosition(movementVector.x, movementVector.y, movementVector.z);
+			}
+		} else {
+			Vector3f targetVector = Vector3f.sub(cameraPositionTarget, getPosition()).scale(0.5f);
+			transformation.increasePosition(targetVector.x, targetVector.y, targetVector.z);
+			if (targetVector.lengthSquared() < 0.000001) {
+				manualControl = true;
+			}
 		}
 	}
 
@@ -72,6 +82,11 @@ public class Camera {
 	@Override
 	public String toString() {
 		return "Camera:\n\t" + "x: " + transformation.getPosition().getX() + "\n\ty: " + transformation.getPosition().getY() + "\n\tz: " + transformation.getPosition().getZ();
+	}
+
+	public void setTargetPosition(float targetX, float targetY, float targetZ) {
+		manualControl = false;
+		cameraPositionTarget.set(targetX, targetY, targetZ);
 	}
 
 }

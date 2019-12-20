@@ -14,6 +14,11 @@ public class Mouse {
 		previousPosition = new Vector2f(0, 0);
 	}
 
+	/**
+	 * Returns the position of the mouse in pixels from the top left corner.
+	 * 
+	 * @return mouse position
+	 */
 	public Vector2f getPosition() {
 		return position;
 	}

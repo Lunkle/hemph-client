@@ -42,13 +42,16 @@ public class Logic extends Thread {
 		cleanUp();
 	}
 
-	public void cleanUp() {}
-
+	/**
+	 * ??? What does this do
+	 * 
+	 * @return some garbage
+	 */
 	public double getAlpha() {
 		return accumulator / targetUpdateTime;
 	}
 
-	public void end() {
+	public void cleanUp() {
 		isDone = true;
 		synchronized (this) {
 			notify();

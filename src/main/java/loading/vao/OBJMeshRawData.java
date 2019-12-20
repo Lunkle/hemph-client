@@ -1,4 +1,4 @@
-package graphics.vao;
+package loading.vao;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,8 +7,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import graphics.loader.InterpretedData;
-import graphics.loader.RawData;
+import loading.loader.InterpretedData;
+import loading.loader.RawData;
 import math.Vector2f;
 import math.Vector3f;
 
