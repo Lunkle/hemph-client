@@ -11,8 +11,13 @@ import loading.loader.InterpretedData;
 import loading.screen.ScreenRawMeshData;
 import loading.vao.RawMeshData;
 
-// An attribute object stores all the information for each vertex of a mesh
-// It stores them in the form of buffer objects
+/**
+ * An attribute object stores all the information for each vertex of a mesh. It
+ * stores them in the form of buffer objects
+ * 
+ * @author Jay
+ *
+ */
 public class VAO implements InterpretedData {
 
 	private static List<Integer> vaos = new ArrayList<>();
@@ -20,9 +25,13 @@ public class VAO implements InterpretedData {
 	protected int vaoID;
 	protected int vertexCount;
 
-	// Must bind and unbind VAO before attaching VBO/EBOs
-	// The VAO is already deafult bound upon creation so do not create any other
-	// VAOs until finished attaching VBO and EBOs for the most recently created vao
+	/**
+	 * Must bind and unbind VAO before attaching VBO/EBOs. The VAO is already
+	 * deafult bound upon creation so do not create any other. VAOs until
+	 * finished attaching VBO and EBOs for the most recently created vao.
+	 * 
+	 * @param data
+	 */
 	protected void attachEBO(int[] data) {
 		EBO ebo = new EBO();
 		ebo.bindEBO();
@@ -37,12 +46,16 @@ public class VAO implements InterpretedData {
 		vbo.unbindVBO();
 	}
 
-	// Binding the attribute object so opengl knows to write to it
+	/**
+	 * Binding the attribute object so opengl knows to write to it.
+	 */
 	public void bindVAO() {
 		GL30.glBindVertexArray(vaoID);
 	}
 
-	// Remeber to unbind after finished attaching VBOS
+	/**
+	 * Remeber to unbind after finished attaching VBOS.
+	 */
 	public void unbindVAO() {
 		GL30.glBindVertexArray(0);
 	}
@@ -55,8 +68,10 @@ public class VAO implements InterpretedData {
 		return vertexCount;
 	}
 
-	// Method for deleting all the attribute objects when program is closing
-	// Called in Visual class's cleanUp method
+	/**
+	 * Method for deleting all the attribute objects when program is closing
+	 * Called in Visual class's cleanUp method.
+	 */
 	public static void cleanUp() {
 		for (int vao : vaos) {
 			GL30.glDeleteVertexArrays(vao);

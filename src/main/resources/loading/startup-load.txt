@@ -1,0 +1,21 @@
+bbrd green.png green
+bbrd red.png red
+bbrd blue.png blue
+bbrd dukemascot.png dukeTexture
+bbrd table.png tableTexture
+bbrd tableSpecularMap.png tableSpecularMap
+bbrd room.png roomTexture
+bbrd roomSpecularMap.png roomSpecularMap
+bbrd globeStand.png globeStandTexture
+bbrd globeStandSpecularMap.png globeStandSpecularMap
+bbrd candle.png candleTexture
+bbrd candleSpecularMap.png candleSpecularMap
+bbrd globeSpecularMap.png globeSpecularMap
+bbrd arrowSpecularMap.png arrowSpecularMap
+bbrd worldTexture.png worldTexture
+
+objmrd table.obj tableMesh
+objmrd room.obj roomMesh
+objmrd globeStand.obj globeStandMesh
+objmrd candle.obj candleMesh
+objmrd arrow.obj arrowMesh

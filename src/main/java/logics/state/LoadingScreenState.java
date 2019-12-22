@@ -17,14 +17,18 @@ import logics.globe.GlobeRawData;
 
 public class LoadingScreenState extends GameState {
 
-	private boolean loadedItems = false;
+	private boolean loadingItems = false;
 	private boolean finishedLoading = false;
+	private boolean connectingData = false;
+	private boolean finishedConnectingData = false;
 	private boolean finishedConnectingFirstBatch = false;
 	private boolean finishedConnectingSecondBatch = false;
 	private double startTime;
 
 	private ResourceLoadingTask loadTask;
+	private UnconnectedData connectTask;
 	private ResourcePack resourcePack;
+	private String loadFilePath;
 
 	private ByteBufferImageRawData dukerawTextureData;
 	private Texture dukeTexture;
@@ -56,7 +60,6 @@ public class LoadingScreenState extends GameState {
 	private Texture worldTexture;
 	private ByteBufferImageRawData globeSpecularRawTextureData;
 	private Texture globeSpecularTexture;
-	private GlobeRawData globeRawMeshData;
 	private VAO globeMesh;
 	private ByteBufferImageRawData greenRawTextureData;
 	private Texture greenTexture;
@@ -69,15 +72,20 @@ public class LoadingScreenState extends GameState {
 	private OBJMeshRawData arrowRawMeshData;
 	private VAO arrowMesh;
 
-	public LoadingScreenState() {
+	private GlobeRawData globeRawMeshData;
+
+	public LoadingScreenState(String filePath) {
 		super();
 
 		startTime = GLFW.glfwGetTime();
 
 		setFlagToClearObservers();
 
+		this.loadFilePath = filePath;
+
 		KeyObserver printHi = new KeyObserver();
-		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {}), new Command(() -> System.out.println("lmao"))));
+		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {
+		}), new Command(() -> System.out.println("lmao"))));
 		addKeyObserver(printHi);
 	}
 
@@ -86,179 +94,141 @@ public class LoadingScreenState extends GameState {
 
 	}
 
-	private void addLoadRawDataTask() {
+	private void queueLoadRawDataTask() {
 		loadTask = getLoaderThread().generateNewTask();
 
-		dukerawTextureData = new ByteBufferImageRawData();
-		tableRawTextureData = new ByteBufferImageRawData();
-		tableSpecularRawTextureData = new ByteBufferImageRawData();
-		tableRawMeshData = new OBJMeshRawData();
-		roomRawTextureData = new ByteBufferImageRawData();
-		roomSpecularRawTextureData = new ByteBufferImageRawData();
-		roomRawMeshData = new OBJMeshRawData();
-		globeStandRawTextureData = new ByteBufferImageRawData();
-		globeStandSpecularRawTextureData = new ByteBufferImageRawData();
-		globeStandRawMeshData = new OBJMeshRawData();
-		candleRawTextureData = new ByteBufferImageRawData();
-		candleSpecularRawTextureData = new ByteBufferImageRawData();
-		candleRawMeshData = new OBJMeshRawData();
-		worldRawTextureData = new ByteBufferImageRawData();
-		globeSpecularRawTextureData = new ByteBufferImageRawData();
-		globeRawMeshData = new GlobeRawData();
-		greenRawTextureData = new ByteBufferImageRawData();
-		redRawTextureData = new ByteBufferImageRawData();
-		blueRawTextureData = new ByteBufferImageRawData();
-		arrowSpecularRawTextureData = new ByteBufferImageRawData();
-		arrowRawMeshData = new OBJMeshRawData();
+		resourcePack = new ResourcePack();
+		resourcePack.load(loadFilePath);
 
-		loadTask.addItem(dukerawTextureData, "dukemascot.png");
-		loadTask.addItem(tableRawTextureData, "table.png");
-		loadTask.addItem(tableSpecularRawTextureData, "tableSpecularMap.png");
-		loadTask.addItem(tableRawMeshData, "table.obj");
-		loadTask.addItem(roomRawTextureData, "room.png");
-		loadTask.addItem(roomSpecularRawTextureData, "roomSpecularMap.png");
-		loadTask.addItem(roomRawMeshData, "room.obj");
-		loadTask.addItem(globeStandRawTextureData, "globeStand.png");
-		loadTask.addItem(globeStandSpecularRawTextureData, "globeStandSpecularMap.png");
-		loadTask.addItem(globeStandRawMeshData, "globeStand.obj");
-		loadTask.addItem(candleRawTextureData, "candle.png");
-		loadTask.addItem(candleSpecularRawTextureData, "candleSpecularMap.png");
-		loadTask.addItem(candleRawMeshData, "candle.obj");
-		loadTask.addItem(worldRawTextureData, "worldTexture.png");
-		loadTask.addItem(globeSpecularRawTextureData, "globeSpecularMap.png");
+		for (String name : resourcePack.getNameList()) {
+			loadTask.addItem(resourcePack.getRawData(name), resourcePack.getFilepath(name));
+		}
+		globeRawMeshData = new GlobeRawData();
 		loadTask.addItem(globeRawMeshData, "");
-		loadTask.addItem(greenRawTextureData, "green.png");
-		loadTask.addItem(redRawTextureData, "red.png");
-		loadTask.addItem(blueRawTextureData, "blue.png");
-		loadTask.addItem(arrowSpecularRawTextureData, "arrowSpecularMap.png");
-		loadTask.addItem(arrowRawMeshData, "arrow.obj");
 
 		getLoaderThread().queueTask(loadTask);
 	}
 
-	private synchronized void connectFirstDataBatch() {
-		UnconnectedData unconnectedData = getConnecter().generateNewTask();
-		dukeTexture = new Texture();
-		unconnectedData.addData(dukeTexture, dukerawTextureData);
-		tableTexture = new Texture();
-		unconnectedData.addData(tableTexture, tableRawTextureData);
-		tableSpecularTexture = new Texture();
-		unconnectedData.addData(tableSpecularTexture, tableSpecularRawTextureData);
-		tableMesh = new VAO();
-		unconnectedData.addData(tableMesh, tableRawMeshData);
-		roomTexture = new Texture();
-		unconnectedData.addData(roomTexture, roomRawTextureData);
-		roomSpecularTexture = new Texture();
-		unconnectedData.addData(roomSpecularTexture, roomSpecularRawTextureData);
-		roomMesh = new VAO();
-		unconnectedData.addData(roomMesh, roomRawMeshData);
-		globeStandTexture = new Texture();
-		unconnectedData.addData(globeStandTexture, globeStandRawTextureData);
-		globeStandSpecularTexture = new Texture();
-		unconnectedData.addData(globeStandSpecularTexture, globeStandSpecularRawTextureData);
-		globeStandMesh = new VAO();
-		unconnectedData.addData(globeStandMesh, globeStandRawMeshData);
-		candleTexture = new Texture();
-		unconnectedData.addData(candleTexture, candleRawTextureData);
-		candleSpecularTexture = new Texture();
-		unconnectedData.addData(candleSpecularTexture, candleSpecularRawTextureData);
-		candleMesh = new VAO();
-		unconnectedData.addData(candleMesh, candleRawMeshData);
+	// private synchronized void connectFirstDataBatch() {
+	// UnconnectedData unconnectedData = getConnecter().generateNewTask();
+	// dukeTexture = new Texture();
+	// unconnectedData.addData(dukeTexture, dukerawTextureData);
+	// tableTexture = new Texture();
+	// unconnectedData.addData(tableTexture, tableRawTextureData);
+	// tableSpecularTexture = new Texture();
+	// unconnectedData.addData(tableSpecularTexture,
+	// tableSpecularRawTextureData);
+	// tableMesh = new VAO();
+	// unconnectedData.addData(tableMesh, tableRawMeshData);
+	// roomTexture = new Texture();
+	// unconnectedData.addData(roomTexture, roomRawTextureData);
+	// roomSpecularTexture = new Texture();
+	// unconnectedData.addData(roomSpecularTexture, roomSpecularRawTextureData);
+	// roomMesh = new VAO();
+	// unconnectedData.addData(roomMesh, roomRawMeshData);
+	// globeStandTexture = new Texture();
+	// unconnectedData.addData(globeStandTexture, globeStandRawTextureData);
+	// globeStandSpecularTexture = new Texture();
+	// unconnectedData.addData(globeStandSpecularTexture,
+	// globeStandSpecularRawTextureData);
+	// globeStandMesh = new VAO();
+	// unconnectedData.addData(globeStandMesh, globeStandRawMeshData);
+	// candleTexture = new Texture();
+	// unconnectedData.addData(candleTexture, candleRawTextureData);
+	// candleSpecularTexture = new Texture();
+	// unconnectedData.addData(candleSpecularTexture,
+	// candleSpecularRawTextureData);
+	// candleMesh = new VAO();
+	// unconnectedData.addData(candleMesh, candleRawMeshData);
+	//
+	// unconnectedData.addNotifier(this);
+	// getConnecter().queueTask(unconnectedData);
+	// while (!unconnectedData.isConnected()) {
+	// try {
+	// wait();
+	// } catch (InterruptedException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
+	//
+	// private synchronized void connectSceondDataBatch() {
+	// UnconnectedData unconnectedData = getConnecter().generateNewTask();
+	//
+	// greenTexture = new Texture();
+	// unconnectedData.addData(greenTexture, greenRawTextureData);
+	// redTexture = new Texture();
+	// unconnectedData.addData(redTexture, redRawTextureData);
+	// blueTexture = new Texture();
+	// unconnectedData.addData(blueTexture, blueRawTextureData);
+	// arrowSpecularTexture = new Texture();
+	// unconnectedData.addData(arrowSpecularTexture,
+	// arrowSpecularRawTextureData);
+	// arrowMesh = new VAO();
+	// unconnectedData.addData(arrowMesh, arrowRawMeshData);
+	//
+	// worldTexture = new Texture();
+	// unconnectedData.addData(worldTexture, worldRawTextureData);
+	// globeSpecularTexture = new Texture();
+	// unconnectedData.addData(globeSpecularTexture,
+	// globeSpecularRawTextureData);
+	//
+	// unconnectedData.addNotifier(this);
+	// getConnecter().queueTask(unconnectedData);
+	//
+	// while (!unconnectedData.isConnected()) {
+	// try {
+	// wait();
+	// } catch (InterruptedException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
 
-		unconnectedData.addNotifier(this);
-		getConnecter().queueTask(unconnectedData);
-		while (!unconnectedData.isConnected()) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+	private void queueConnectTask() {
+		resourcePack.generateUnconnectedData();
+		connectTask = getConnecter().generateNewTask();
+		for (String name : resourcePack.getNameList()) {
+			connectTask.addData(resourcePack.getData(name), resourcePack.getRawData(name));
 		}
-	}
-
-	private synchronized void connectSceondDataBatch() {
-		UnconnectedData unconnectedData = getConnecter().generateNewTask();
-
-		greenTexture = new Texture();
-		unconnectedData.addData(greenTexture, greenRawTextureData);
-		redTexture = new Texture();
-		unconnectedData.addData(redTexture, redRawTextureData);
-		blueTexture = new Texture();
-		unconnectedData.addData(blueTexture, blueRawTextureData);
-		arrowSpecularTexture = new Texture();
-		unconnectedData.addData(arrowSpecularTexture, arrowSpecularRawTextureData);
-		arrowMesh = new VAO();
-		unconnectedData.addData(arrowMesh, arrowRawMeshData);
-
-		worldTexture = new Texture();
-		unconnectedData.addData(worldTexture, worldRawTextureData);
-		globeSpecularTexture = new Texture();
-		unconnectedData.addData(globeSpecularTexture, globeSpecularRawTextureData);
 		globeMesh = new VAO();
-		unconnectedData.addData(globeMesh, globeRawMeshData);
-
-		unconnectedData.addNotifier(this);
-		getConnecter().queueTask(unconnectedData);
-
-		while (!unconnectedData.isConnected()) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		connectTask.addData(globeMesh, globeRawMeshData);
+		getConnecter().queueTask(connectTask);
 	}
 
-	private void generateResourcePack() {
-		resourcePack = new ResourcePack();
-		resourcePack.addTexture(dukeTexture, "dukeTexture");
-		resourcePack.addTexture(tableTexture, "tableTexture");
-		resourcePack.addTexture(tableSpecularTexture, "tableSpecularMap");
-		resourcePack.addMesh(tableMesh, "tableMesh");
-		resourcePack.addTexture(roomTexture, "roomTexture");
-		resourcePack.addTexture(roomSpecularTexture, "roomSpecularMap");
-		resourcePack.addMesh(roomMesh, "roomMesh");
-		resourcePack.addTexture(globeStandTexture, "globeStandTexture");
-		resourcePack.addTexture(globeStandSpecularTexture, "globeStandSpecularMap");
-		resourcePack.addMesh(globeStandMesh, "globeStandMesh");
-		resourcePack.addTexture(candleTexture, "candleTexture");
-		resourcePack.addTexture(candleSpecularTexture, "candleSpecularMap");
-		resourcePack.addMesh(candleMesh, "candleMesh");
-		resourcePack.addTexture(worldTexture, "worldTexture");
-		resourcePack.addTexture(globeSpecularTexture, "globeSpecularMap");
-		resourcePack.addMesh(globeMesh, "globeMesh");
-		resourcePack.addTexture(greenTexture, "greenTexture");
-		resourcePack.addTexture(redTexture, "redTexture");
-		resourcePack.addTexture(blueTexture, "blueTexture");
-		resourcePack.addTexture(arrowSpecularTexture, "arrowSpecularMap");
-		resourcePack.addMesh(arrowMesh, "arrowMesh");
+	private void finalizeResourcePack() {
+		resourcePack.addData(globeMesh, "globeMesh");
 	}
 
 	@Override
-	public void updateWindowDimensions(int windowWidth, int windowHeight) {
-
-	}
+	public void updateWindowDimensions(int windowWidth, int windowHeight) {}
 
 	@Override
 	public void update() {
-		if (!loadedItems) {
-			addLoadRawDataTask();
-			loadedItems = true;
+		if (!loadingItems) {
+			queueLoadRawDataTask();
+			loadingItems = true;
 		} else if (!finishedLoading) {
 			double percentage = loadTask.getProgressPercentage();
 			if (percentage < 100) {
-				System.out.println(Math.round(percentage) + "%");
+				System.out.println("Reading Files: " + Math.round(percentage) + "%");
 			} else {
+				System.out.println("Reading Files: 100%");
 				finishedLoading = true;
 			}
-		} else if (!finishedConnectingFirstBatch) {
-			connectFirstDataBatch();
-			finishedConnectingFirstBatch = true;
-		} else if (!finishedConnectingSecondBatch) {
-			connectSceondDataBatch();
-			finishedConnectingSecondBatch = true;
+		} else if (!connectingData) {
+			queueConnectTask();
+			connectingData = true;
+		} else if (!finishedConnectingData) {
+			double percentage = connectTask.getProgressPercentage();
+			if (percentage < 100) {
+				System.out.println("Loading: " + Math.round(percentage) + "%");
+			} else {
+				System.out.println("Loading: 100%");
+				finishedConnectingData = true;
+			}
 		} else {
-			generateResourcePack();
+			finalizeResourcePack();
 			double endTime = GLFW.glfwGetTime();
 			double timeTaken = endTime - startTime;
 			System.out.println("Finished loading in " + timeTaken + " seconds.");

@@ -20,6 +20,7 @@ public class GraphicsDataConnecter {
 			List<RawData> rawData = nextData.getRawDataList();
 			for (int i = 0; i < interpretedData.size(); i++) {
 				rawData.get(i).accept(interpretedData.get(i));
+				nextData.incrementNumberOfConnectedData();
 			}
 			nextData.setConnected();
 			nextData.notifyObject();

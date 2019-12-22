@@ -3,6 +3,9 @@ package loading.framebuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
+import graphics.texture.Texture;
+import loading.loader.InterpretedData;
+
 public class EmptyDepthAttachmentRawData extends EmptyTextureRawData {
 
 	public EmptyDepthAttachmentRawData(int textureWidth, int textureHeight) {
@@ -22,6 +25,11 @@ public class EmptyDepthAttachmentRawData extends EmptyTextureRawData {
 	@Override
 	public int getType() {
 		return GL11.GL_FLOAT;
+	}
+
+	@Override
+	public InterpretedData newInterpretedData() {
+		return new Texture();
 	}
 
 }

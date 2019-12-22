@@ -2,6 +2,9 @@ package loading.framebuffer;
 
 import org.lwjgl.opengl.GL11;
 
+import graphics.texture.Texture;
+import loading.loader.InterpretedData;
+
 public class EmptyColourAttachmentRawData extends EmptyTextureRawData {
 
 	public EmptyColourAttachmentRawData(int textureWidth, int textureHeight) {
@@ -21,6 +24,11 @@ public class EmptyColourAttachmentRawData extends EmptyTextureRawData {
 	@Override
 	public int getType() {
 		return GL11.GL_UNSIGNED_BYTE;
+	}
+
+	@Override
+	public InterpretedData newInterpretedData() {
+		return new Texture();
 	}
 
 }

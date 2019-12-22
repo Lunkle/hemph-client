@@ -11,6 +11,8 @@ public interface RawData {
 
 	public void accept(InterpretedData data);
 
+	public InterpretedData newInterpretedData();
+
 	public default long getSize(String filePath) {
 		String fileName = "src/main/resources/" + filePath;
 		Path path = Paths.get(fileName);

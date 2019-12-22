@@ -1,5 +1,6 @@
 package loading.screen;
 
+import graphics.vao.VAO;
 import loading.loader.InterpretedData;
 import loading.loader.RawData;
 
@@ -20,6 +21,11 @@ public class ScreenRawMeshData implements RawData {
 
 	public float[] getQuadVertices() {
 		return QUAD_VERTICES;
+	}
+
+	@Override
+	public InterpretedData newInterpretedData() {
+		return new VAO();
 	}
 
 }

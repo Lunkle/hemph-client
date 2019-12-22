@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import graphics.vao.VAO;
 import loading.loader.InterpretedData;
 import loading.loader.RawData;
 import math.Vector2f;
@@ -39,13 +40,15 @@ public class OBJMeshRawData extends RawMeshData implements RawData {
 				line = reader.readLine();
 				String[] currentLine = line.split(" ");
 				if (line.startsWith("v ")) {
-					Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]), Float.parseFloat(currentLine[3]));
+					Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
+							Float.parseFloat(currentLine[3]));
 					vertices.add(vertex);
 				} else if (line.startsWith("vt ")) {
 					Vector2f texture = new Vector2f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]));
 					textures.add(texture);
 				} else if (line.startsWith("vn ")) {
-					Vector3f normal = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]), Float.parseFloat(currentLine[3]));
+					Vector3f normal = new Vector3f(Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]),
+							Float.parseFloat(currentLine[3]));
 					normals.add(normal);
 				} else if (line.startsWith("f ")) {
 					textureArray = new float[vertices.size() * 2];
@@ -86,7 +89,13 @@ public class OBJMeshRawData extends RawMeshData implements RawData {
 		}
 	}
 
-	private void processVertex(String[] vertexData, List<Integer> indices, List<Vector2f> textures, List<Vector3f> normals) {
+	@Override
+	public InterpretedData newInterpretedData() {
+		return new VAO();
+	}
+
+	private void processVertex(String[] vertexData, List<Integer> indices, List<Vector2f> textures,
+			List<Vector3f> normals) {
 		int currentVertexPointer = Integer.parseInt(vertexData[0]) - 1;
 		indices.add(currentVertexPointer);
 		Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);

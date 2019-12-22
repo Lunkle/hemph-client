@@ -9,6 +9,7 @@ import graphics.primitive.HalfEdge;
 import graphics.primitive.Primitive;
 import graphics.primitive.Triangle;
 import graphics.primitive.Vertex;
+import graphics.vao.VAO;
 import loading.loader.InterpretedData;
 import loading.loader.RawData;
 import loading.vao.RawMeshData;
@@ -24,7 +25,8 @@ public class GlobeRawData extends RawMeshData implements RawData {
 	private float perturbAmount = 0.002f;
 
 	private float plateCollisionAmplitude = 0.1f;
-	private int smoothingIterations = 2; // How many times to smooth out the heights
+	private int smoothingIterations = 2; // How many times to smooth out the
+											// heights
 	private float smoothingFactor = 0.6f; // How much to smooth each time
 
 	private double landArchExponent = 0.2;
@@ -42,7 +44,7 @@ public class GlobeRawData extends RawMeshData implements RawData {
 
 	@Override
 	public void load(String filePath) {
-		generateIcosaherdron();
+		generateIcosahedron();
 		subdivide(subdivisions);
 		perturbVertices(perturbAmount);
 		generatePlates();
@@ -52,7 +54,7 @@ public class GlobeRawData extends RawMeshData implements RawData {
 		translateToRawData();
 	}
 
-	public void generateIcosaherdron() {
+	public void generateIcosahedron() {
 		Vector2f vector = new Vector2f(1, (float) (2 * Math.sin(Math.toRadians(54))));
 		vector.normalise();
 		float a = vector.x;
@@ -175,7 +177,8 @@ public class GlobeRawData extends RawMeshData implements RawData {
 			plateIsWater.add(false);
 		}
 		for (int i = 0; i < numberOfPlates; i++) {
-			// This is a problem because the same ID might get chosen for more than one
+			// This is a problem because the same ID might get chosen for more
+			// than one
 			// plate.
 			// TODO
 			int triangleID = (int) getRandom(0, numberOfTriangles);
@@ -355,6 +358,11 @@ public class GlobeRawData extends RawMeshData implements RawData {
 	@Override
 	public void accept(InterpretedData data) {
 		data.interpret(this);
+	}
+
+	@Override
+	public InterpretedData newInterpretedData() {
+		return new VAO();
 	}
 
 	@Override
