@@ -50,7 +50,7 @@ public class HemphApplication {
 	}
 
 	public static void main(String[] args) {
-		new HemphApplication().run();
+		// new HemphApplication().run();
 	}
 
 }
