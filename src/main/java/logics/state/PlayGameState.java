@@ -82,12 +82,14 @@ public class PlayGameState extends GameState {
 
 	private void setCameraMovementKeyCommands() {
 		KeyObserver cameraControlKeyObserver = new KeyObserver();
+
 		Command front = new Command(() -> getCamera().addDirection(Directions.FRONT));
 		Command back = new Command(() -> getCamera().addDirection(Directions.BACK));
 		Command left = new Command(() -> getCamera().addDirection(Directions.LEFT));
 		Command right = new Command(() -> getCamera().addDirection(Directions.RIGHT));
 		Command up = new Command(() -> getCamera().addDirection(Directions.UP));
 		Command down = new Command(() -> getCamera().addDirection(Directions.DOWN));
+
 		cameraControlKeyObserver.addCommand(Keys.KEY_W, new KeyCommand(front, back));
 		cameraControlKeyObserver.addCommand(Keys.KEY_A, new KeyCommand(left, right));
 		cameraControlKeyObserver.addCommand(Keys.KEY_S, new KeyCommand(back, front));
@@ -106,10 +108,8 @@ public class PlayGameState extends GameState {
 		Texture globeTexture = resourcePack.getTexture("worldTexture");
 		Texture globeSpecularTexture = resourcePack.getTexture("globeSpecularMap");
 		VAO globeMesh = resourcePack.getMesh("globeMesh");
-		Model globeModel = ModelBuilder.newInstance().setMesh(globeMesh).setDiffuseTexture(globeTexture)
-				.setSpecularTexture(globeSpecularTexture).create();
-		WorldTransformation globeTransformation = new WorldTransformation(0, 7.9f, -5, new Vector3f(0, 1, 0), 0, 1, 1,
-				1);
+		Model globeModel = ModelBuilder.newInstance().setMesh(globeMesh).setDiffuseTexture(globeTexture).setSpecularTexture(globeSpecularTexture).create();
+		WorldTransformation globeTransformation = new WorldTransformation(0, 7.9f, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1);
 		globeEntity = new GlobeEntity(globeModel, globeTransformation);
 		addGameEntity(globeEntity);
 
@@ -131,40 +131,40 @@ public class PlayGameState extends GameState {
 
 		Texture tableSpecularTexture = resourcePack.getTexture("tableSpecularMap");
 		VAO tableMesh = resourcePack.getMesh("tableMesh");
-		Model model = ModelBuilder.newInstance().setMesh(tableMesh).setDiffuseTexture(wood)
-				.setSpecularTexture(tableSpecularTexture).create();
-		WorldTransformation tableWorldTransformation = new WorldTransformation(0, 0, -5, new Vector3f(0, 1, 0), 0, 1, 1,
-				1);
+		Model model = ModelBuilder.newInstance().setMesh(tableMesh).setDiffuseTexture(wood).setSpecularTexture(tableSpecularTexture).create();
+		WorldTransformation tableWorldTransformation = new WorldTransformation(0, 0, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1);
 		RoomEntity tableEntity = new RoomEntity(model, tableWorldTransformation);
 		addGameEntity(tableEntity);
 
 		Texture roomTexture = resourcePack.getTexture("roomTexture");
 		Texture roomSpecularTexture = resourcePack.getTexture("roomSpecularMap");
 		VAO roomMesh = resourcePack.getMesh("roomMesh");
-		Model roomModel = ModelBuilder.newInstance().setMesh(roomMesh).setDiffuseTexture(roomTexture)
-				.setSpecularTexture(roomSpecularTexture).create();
-		WorldTransformation roomTransformation = new WorldTransformation(-2, 0, -4, new Vector3f(0, 1, 0), -90, 1.2f,
-				1.2f, 1.4f);
+		Model roomModel = ModelBuilder.newInstance().setMesh(roomMesh).setDiffuseTexture(roomTexture).setSpecularTexture(roomSpecularTexture).create();
+		WorldTransformation roomTransformation = new WorldTransformation(-2, 0, -4, new Vector3f(0, 1, 0), -90, 1.2f, 1.2f, 1.4f);
 		RoomEntity roomEntity = new RoomEntity(roomModel, roomTransformation);
 		addGameEntity(roomEntity);
 
 		Texture globeStandTexture = resourcePack.getTexture("globeStandTexture");
 		Texture globeStandSpecularTexture = resourcePack.getTexture("globeStandSpecularMap");
 		VAO globeStandMesh = resourcePack.getMesh("globeStandMesh");
-		Model globeStandModel = ModelBuilder.newInstance().setMesh(globeStandMesh).setDiffuseTexture(globeStandTexture)
-				.setSpecularTexture(globeStandSpecularTexture).create();
-		WorldTransformation globeStandTransformation = new WorldTransformation(-1.0f, 4.9633f, -5.2f,
-				new Vector3f(0, 1, 0), -45, 0.3f, 0.3f, 0.3f);
+		Model globeStandModel = ModelBuilder.newInstance().setMesh(globeStandMesh).setDiffuseTexture(globeStandTexture).setSpecularTexture(globeStandSpecularTexture).create();
+		WorldTransformation globeStandTransformation = new WorldTransformation(-1.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0), -45, 0.3f, 0.3f, 0.3f);
 		RoomEntity globeStandEntity = new RoomEntity(globeStandModel, globeStandTransformation);
 		addGameEntity(globeStandEntity);
+
+		Texture treeTexture = resourcePack.getTexture("treeTexture");
+		Texture treeSpecularTexture = resourcePack.getTexture("treeSpecularMap");
+		VAO treeMesh = resourcePack.getMesh("treeMesh");
+		Model treeModel = ModelBuilder.newInstance().setMesh(treeMesh).setDiffuseTexture(treeTexture).setSpecularTexture(treeSpecularTexture).create();
+		WorldTransformation treeTransformation = new WorldTransformation(-1.0f, 4.9633f, -1.8f, new Vector3f(0, 1, 0), -45, 0.1f, 0.1f, 0.1f);
+		RoomEntity treeEntity = new RoomEntity(treeModel, treeTransformation);
+		addGameEntity(treeEntity);
 
 		Texture candleTexture = resourcePack.getTexture("candleTexture");
 		Texture candleSpecularTexture = resourcePack.getTexture("candleSpecularMap");
 		VAO candleMesh = resourcePack.getMesh("candleMesh");
-		Model candleModel = ModelBuilder.newInstance().setMesh(candleMesh).setDiffuseTexture(candleTexture)
-				.setSpecularTexture(candleSpecularTexture).create();
-		WorldTransformation candleTransformation = new WorldTransformation(-3.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0),
-				-45, 1f, 1f, 1f);
+		Model candleModel = ModelBuilder.newInstance().setMesh(candleMesh).setDiffuseTexture(candleTexture).setSpecularTexture(candleSpecularTexture).create();
+		WorldTransformation candleTransformation = new WorldTransformation(-3.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0), -45, 1f, 1f, 1f);
 		RoomEntity candleEntity = new RoomEntity(candleModel, candleTransformation);
 		addGameEntity(candleEntity);
 	}
