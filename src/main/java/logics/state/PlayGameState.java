@@ -156,7 +156,7 @@ public class PlayGameState extends GameState {
 		Texture treeSpecularTexture = resourcePack.getTexture("treeSpecularMap");
 		VAO treeMesh = resourcePack.getMesh("treeMesh");
 		Model treeModel = ModelBuilder.newInstance().setMesh(treeMesh).setDiffuseTexture(treeTexture).setSpecularTexture(treeSpecularTexture).create();
-		WorldTransformation treeTransformation = new WorldTransformation(-1.0f, 4.9633f, -1.8f, new Vector3f(0, 1, 0), -45, 0.1f, 0.1f, 0.1f);
+		WorldTransformation treeTransformation = new WorldTransformation(0, 8.9f, -4.9f, new Vector3f(0, 1, 0), -45, 0.02f, 0.02f, 0.02f);
 		RoomEntity treeEntity = new RoomEntity(treeModel, treeTransformation);
 		addGameEntity(treeEntity);
 
