@@ -14,6 +14,10 @@ bbrd globeSpecularMap.png globeSpecularMap
 bbrd arrowSpecularMap.png arrowSpecularMap
 bbrd tree.png treeTexture
 bbrd treeSpecularMap.png treeSpecularMap
+bbrd treeFall.png treeFall
+bbrd treeFallSpecularMap.png treeFallSpecularMap
+bbrd treeWinter.png treeWinter
+bbrd treeWinterSpecularMap.png treeWinterSpecularMap
 bbrd worldTexture.png worldTexture
 
 objmrd table.obj tableMesh
@@ -22,3 +26,5 @@ objmrd globeStand.obj globeStandMesh
 objmrd candle.obj candleMesh
 objmrd arrow.obj arrowMesh
 objmrd tree.obj treeMesh
+objmrd treeFall.obj treeFallMesh
+objmrd treeWinter.obj treeWinterMesh
