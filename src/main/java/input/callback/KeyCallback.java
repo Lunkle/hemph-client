@@ -30,7 +30,11 @@ public class KeyCallback extends GLFWKeyCallback implements InputObservee {
 	@Override
 	public void notifyObservers(InputEvent event) {
 		if (nextObserver != null) {
-			nextObserver.handleEvent(event);
+			boolean passesCheck = nextObserver.handleEvent(event);
+			if (passesCheck && nextObserver.doesConsume()) {
+				return;
+			}
+			nextObserver.notifyObservers(event);
 		}
 	}
 

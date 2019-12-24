@@ -31,7 +31,6 @@ public class KeyObserver extends InputObserver {
 		if (event instanceof KeyEvent) {
 			KeyEvent keyEvent = (KeyEvent) event;
 			KeyCommand command = getCommand(keyEvent.getKey());
-//			System.out.println(command);
 			if (command != null) {
 				if (keyEvent.getAction() == Action.PRESS) {
 					command.onPress.execute();

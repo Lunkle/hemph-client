@@ -132,7 +132,7 @@ public class GUI {
 			}
 			return false;
 		};
-//		onPress.setConsumes(true);
+		onPress.setConsumes(true);
 		onPress.addCheck(Key.MOUSE_LEFT, Action.PRESS, selectionCheck, command);
 	}
 
@@ -142,7 +142,7 @@ public class GUI {
 			setOnPressCommand(mouse, new Command(() -> {}), projectionWrapper);
 		}
 		onRelease = new MouseButtonObserver();
-		onPress.setName(toString() + " Release Observer");
+		onRelease.setName(toString() + " Release Observer");
 		MouseCheck selectionCheck = () -> {
 			if (selected == false) {
 				return false;
@@ -150,7 +150,7 @@ public class GUI {
 			selected = false;
 			return isSelectedBy(mouse, projectionWrapper.getTransformation());
 		};
-//		onRelease.setConsumes(true);
+		onRelease.setConsumes(true);
 		onRelease.addCheck(Key.MOUSE_LEFT, Action.RELEASE, selectionCheck, command);
 	}
 

@@ -15,13 +15,11 @@ public class Logic extends Thread {
 	private int updateCounter = 1;
 
 	private GameStateWrapper gameStateWrapper;
-	private Input inputs;
 
 	private boolean isDone = false;
 
 	public Logic(GameStateWrapper stateWrapper, Input inputs) {
 		this.gameStateWrapper = stateWrapper;
-		this.inputs = inputs;
 	}
 
 	@Override
@@ -32,7 +30,6 @@ public class Logic extends Thread {
 			double averageUpdateDuration = previousUpdateEndTime / updateCounter;
 			int numUpdates = (int) ((accumulator + averageUpdateDuration) / targetUpdateTime);
 			for (int i = 0; i < numUpdates; i++) {
-				gameStateWrapper.getState().updateInputObservers(inputs);
 				gameStateWrapper.getState().update();
 				accumulator -= targetUpdateTime;
 			}

@@ -17,7 +17,6 @@ import input.information.Key;
 import input.observer.KeyObserver;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseMovementObserver;
-import input.observer.MouseScrollObserver;
 import loading.loader.ResourcePack;
 import logics.globe.GlobeEntity;
 import logics.octree.RoomEntity;
@@ -38,7 +37,6 @@ public class PlayGameState extends GameState {
 
 	public PlayGameState(ResourcePack resourcePack) {
 		super();
-		setFlagToClearObservers();
 		this.resourcePack = resourcePack;
 	}
 
@@ -99,13 +97,11 @@ public class PlayGameState extends GameState {
 		cameraControlKeyObserver.addCommand(Key.KEY_Q, new KeyCommand(down, up));
 		cameraControlKeyObserver.addCommand(Key.KEY_E, new KeyCommand(up, down));
 		addKeyObserver(cameraControlKeyObserver);
-//		removeKeyObserver(cameraControlKeyObserver);
 	}
 
-	int x = 10;
-
 	@Override
-	protected void initialize() {
+	public void initialize() {
+		clearObservers();
 		setCameraMovementKeyCommands();
 		positionCamera();
 		setLights();
@@ -118,8 +114,6 @@ public class PlayGameState extends GameState {
 		globeEntity = new GlobeEntity(globeModel, globeTransformation);
 		addGameEntity(globeEntity);
 
-		setMouseGlobeSelectionCommands();
-
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = getGuiBuilder().newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
 		testGUI.setName("Mascot Button");
@@ -130,15 +124,16 @@ public class PlayGameState extends GameState {
 		testGUI2.setName("Wood Button");
 		Command returnToTableViewCommand = new Command(() -> {
 			globeEntity.defocusGlobe();
-			getCamera().setTargetPosition(x, 9f, 1f);
-			x = 10 - x;
+			getCamera().setTargetPosition(0, 9f, 1f);
 //			getCamera().setRotation(30, 0, 0);
 		});
 		testGUI2.setOnReleaseCommand(getMouse(), returnToTableViewCommand, getProjectionWrapper());
 		addGUI(testGUI2);
 
-		MouseScrollObserver mouseScrollObserver = new MouseScrollObserver();
-		addMouseScrollObserver(mouseScrollObserver);
+		setMouseGlobeSelectionCommands();
+
+//		MouseScrollObserver mouseScrollObserver = new MouseScrollObserver();
+//		addMouseScrollObserver(mouseScrollObserver);
 
 		Texture tableSpecularTexture = resourcePack.getTexture("tableSpecularMap");
 		VAO tableMesh = resourcePack.getMesh("tableMesh");

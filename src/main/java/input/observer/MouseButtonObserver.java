@@ -43,7 +43,7 @@ public class MouseButtonObserver extends InputObserver {
 
 	@Override
 	public boolean handleEvent(InputEvent event) {
-		System.out.println(this);
+//		System.out.println(this);
 		if (event instanceof MouseButtonEvent) {
 			MouseButtonEvent mouseButtonEvent = (MouseButtonEvent) event;
 			Key input = mouseButtonEvent.getButton();

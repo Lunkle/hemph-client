@@ -16,4 +16,9 @@ public class KeyEscapeExitObserver extends KeyObserver {
 		addCommand(Key.KEY_ESC, new KeyCommand(new NullCommand(), closeWindow));
 	}
 
+	@Override
+	public String toString() {
+		return "Key Escape Exit Observer";
+	}
+
 }

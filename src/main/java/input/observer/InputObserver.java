@@ -20,8 +20,16 @@ public abstract class InputObserver {
 	public abstract boolean handleEvent(InputEvent event);
 
 	public void notifyObservers(InputEvent event) {
-		if (getNextObserver() != null && !doesConsume()) {
-			getNextObserver().handleEvent(event);
+//		System.out.println(getNextObserver());
+		if (event.isAlive() && getNextObserver() != null) {
+			boolean passesCheck = getNextObserver().handleEvent(event);
+//			System.out.println(this + " handling event: " + event);
+			if (passesCheck && nextObserver.doesConsume()) {
+//				System.out.println("Consumed input");
+				return;
+			}
+//			System.out.println("Passing to next observer");
+			nextObserver.notifyObservers(event);
 		}
 	}
 

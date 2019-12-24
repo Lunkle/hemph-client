@@ -2,7 +2,7 @@ package input.event;
 
 import input.information.EventTypes;
 
-public class MouseScrollEvent implements InputEvent {
+public class MouseScrollEvent extends InputEvent {
 
 	private float offset;
 

@@ -22,4 +22,9 @@ public class MouseMovementPositionUpdaterObserver extends MouseMovementObserver 
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Mouse Movement Position Updater Observer";
+	}
+
 }

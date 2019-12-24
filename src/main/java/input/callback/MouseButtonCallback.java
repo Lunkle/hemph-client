@@ -19,13 +19,18 @@ public class MouseButtonCallback extends GLFWMouseButtonCallback implements Inpu
 		Key buttonIdentification = Key.getKey(button);
 		Action actionIdentification = Action.getAction(action);
 		InputEvent event = new MouseButtonEvent(buttonIdentification, actionIdentification);
+//		System.out.println(event);
 		notifyObservers(event);
 	}
 
 	@Override
 	public void notifyObservers(InputEvent event) {
 		if (nextObserver != null) {
-			nextObserver.handleEvent(event);
+			boolean passesCheck = nextObserver.handleEvent(event);
+			if (passesCheck && nextObserver.doesConsume()) {
+				return;
+			}
+			nextObserver.notifyObservers(event);
 		}
 	}
 

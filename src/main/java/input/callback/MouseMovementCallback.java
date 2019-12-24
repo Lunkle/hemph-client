@@ -15,13 +15,18 @@ public class MouseMovementCallback extends GLFWCursorPosCallback implements Inpu
 	@Override
 	public void invoke(long window, double xPos, double yPos) {
 		InputEvent event = new MouseMovementEvent((float) xPos, (float) yPos);
+//		System.out.println(event);
 		notifyObservers(event);
 	}
 
 	@Override
 	public void notifyObservers(InputEvent event) {
 		if (nextObserver != null) {
-			nextObserver.handleEvent(event);
+			boolean passesCheck = nextObserver.handleEvent(event);
+			if (passesCheck && nextObserver.doesConsume()) {
+				return;
+			}
+			nextObserver.notifyObservers(event);
 		}
 	}
 

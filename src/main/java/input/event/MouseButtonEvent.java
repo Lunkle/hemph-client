@@ -4,7 +4,7 @@ import input.information.Action;
 import input.information.EventTypes;
 import input.information.Key;
 
-public class MouseButtonEvent implements InputEvent {
+public class MouseButtonEvent extends InputEvent {
 
 	private Key button;
 	private Action action;
@@ -25,6 +25,11 @@ public class MouseButtonEvent implements InputEvent {
 	@Override
 	public EventTypes getEventType() {
 		return EventTypes.MOUSE_BUTTON;
+	}
+
+	@Override
+	public String toString() {
+		return button + " " + action;
 	}
 
 }

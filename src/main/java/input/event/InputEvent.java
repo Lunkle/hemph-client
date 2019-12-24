@@ -2,8 +2,18 @@ package input.event;
 
 import input.information.EventTypes;
 
-public interface InputEvent {
+public abstract class InputEvent {
 
-	public EventTypes getEventType();
+	private boolean isAlive = true;
+
+	public abstract EventTypes getEventType();
+
+	public boolean isAlive() {
+		return isAlive;
+	}
+
+	public void setAlive(boolean isAlive) {
+		this.isAlive = isAlive;
+	}
 
 }

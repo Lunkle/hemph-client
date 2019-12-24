@@ -2,6 +2,7 @@ package logics.state;
 
 import graphics.Visual;
 import graphics.gui.GUIBuilder;
+import input.Input;
 import input.mouse.Mouse;
 import loading.loader.GraphicsDataConnecter;
 import loading.loader.ResourceLoaderThread;
@@ -11,6 +12,8 @@ public class GameStateWrapper {
 	private GameState state;
 
 	private Visual visuals;
+	private Input inputs;
+
 	private ResourceLoaderThread loaderThread;
 	private GraphicsDataConnecter connecter;
 	private GUIBuilder guiBuilder;
@@ -27,10 +30,6 @@ public class GameStateWrapper {
 		return state;
 	}
 
-	public void setVisuals(Visual visuals) {
-		this.visuals = visuals;
-	}
-
 	public void setState(GameState state) {
 		this.state = state;
 		state.setGameStateWrapper(this);
@@ -38,6 +37,18 @@ public class GameStateWrapper {
 
 	public Visual getVisuals() {
 		return visuals;
+	}
+
+	public void setVisuals(Visual visuals) {
+		this.visuals = visuals;
+	}
+
+	public Input getInput() {
+		return inputs;
+	}
+
+	public void setInputs(Input inputs) {
+		this.inputs = inputs;
 	}
 
 	public ResourceLoaderThread getLoaderThread() {
@@ -59,5 +70,4 @@ public class GameStateWrapper {
 	public void cleanUp() {
 		loaderThread.end();
 	}
-
 }

@@ -21,7 +21,11 @@ public class MouseScrollCallback extends GLFWScrollCallback implements InputObse
 	@Override
 	public void notifyObservers(InputEvent event) {
 		if (nextObserver != null) {
-			nextObserver.handleEvent(event);
+			boolean passesCheck = nextObserver.handleEvent(event);
+			if (passesCheck && nextObserver.doesConsume()) {
+				return;
+			}
+			nextObserver.notifyObservers(event);
 		}
 	}
 

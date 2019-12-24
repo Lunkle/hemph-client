@@ -55,13 +55,17 @@ public interface InputObservee {
 	 * @param newObserver the new observer
 	 */
 	public default void addObserver(InputObserver newObserver) {
+//		System.out.println("Adding " + newObserver.getClass() + ", " + newObserver);
 		if (getLastObserver() == null) {
 			setNextObserver(newObserver);
 			setLastObserver(newObserver);
 		} else {
 			getLastObserver().setNextObserver(newObserver);
+//			System.out.println("Observer after " + getLastObserver() + " is " + getLastObserver().getNextObserver());
 			setLastObserver(newObserver);
 		}
+//		System.out.println("Last Observer: " + getLastObserver());
+//		System.out.println("First Observer: " + getNextObserver());
 	}
 
 	/**

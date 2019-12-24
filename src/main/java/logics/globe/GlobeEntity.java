@@ -72,7 +72,7 @@ public class GlobeEntity extends HeaderEntity {
 
 	public MouseButtonObserver getGlobeSelectionObserver(Mouse mouse, Camera camera, ProjectionWrapper projectionWrapper) {
 		MouseButtonObserver globeSelectionObserver = new MouseButtonObserver();
-		globeSelectionObserver.setName("Globe Selection Observer");
+		globeSelectionObserver.setName("Globe Press Observer");
 		Command selectGlobe = new Command(() -> selected = true);
 		MouseCheck globeIntersectionCheck = () -> {
 			MousePicker.loadInformation(mouse, camera, projectionWrapper.getTransformation());

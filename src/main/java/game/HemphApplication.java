@@ -25,12 +25,14 @@ public class HemphApplication {
 
 	private void init() {
 		stateWrapper = new GameStateWrapper();
-		GameState state = new LoadingScreenState("startup-load.txt");
-		stateWrapper.setState(state);
 		visuals = new Visual(stateWrapper);
 		inputs = new Input(stateWrapper.getMouse(), visuals);
 		logics = new Logic(stateWrapper, inputs);
+		stateWrapper.setInputs(inputs);
 		stateWrapper.setVisuals(visuals);
+		GameState state = new LoadingScreenState("startup-load.txt");
+		stateWrapper.setState(state);
+		state.initialize();
 	}
 
 	private void loop() {

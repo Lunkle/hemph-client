@@ -2,7 +2,7 @@ package input.event;
 
 import input.information.EventTypes;
 
-public class MouseMovementEvent implements InputEvent {
+public class MouseMovementEvent extends InputEvent {
 
 	private float xPos;
 	private float yPos;
@@ -23,6 +23,11 @@ public class MouseMovementEvent implements InputEvent {
 	@Override
 	public EventTypes getEventType() {
 		return EventTypes.MOUSE_MOVEMENT;
+	}
+
+	@Override
+	public String toString() {
+		return "Mouse moved to " + xPos + ", " + yPos;
 	}
 
 }
