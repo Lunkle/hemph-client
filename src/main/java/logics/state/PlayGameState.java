@@ -152,13 +152,17 @@ public class PlayGameState extends GameState {
 		RoomEntity globeStandEntity = new RoomEntity(globeStandModel, globeStandTransformation);
 		addGameEntity(globeStandEntity);
 
-		Texture treeTexture = resourcePack.getTexture("treeTexture");
-		Texture treeSpecularTexture = resourcePack.getTexture("treeSpecularMap");
-		VAO treeMesh = resourcePack.getMesh("treeMesh");
-		Model treeModel = ModelBuilder.newInstance().setMesh(treeMesh).setDiffuseTexture(treeTexture).setSpecularTexture(treeSpecularTexture).create();
-		WorldTransformation treeTransformation = new WorldTransformation(0, 8.9f, -4.9f, new Vector3f(0, 1, 0), -45, 0.02f, 0.02f, 0.02f);
-		RoomEntity treeEntity = new RoomEntity(treeModel, treeTransformation);
-		addGameEntity(treeEntity);
+		Texture treeSpringTexture = resourcePack.getTexture("treeSpringTexture");
+		System.out.println("--------------------------treeSpringTexture=     " + treeSpringTexture);
+		Texture treeSpringSpecularTexture = resourcePack.getTexture("treeSpringSpecularMap");
+
+		VAO treeSpringMesh = resourcePack.getMesh("treeSpringMesh");
+		System.out.println(treeSpringMesh);
+		System.out.println(treeSpringSpecularTexture);
+		Model treeSpringModel = ModelBuilder.newInstance().setMesh(treeSpringMesh).setDiffuseTexture(treeSpringTexture).setSpecularTexture(treeSpringSpecularTexture).create();
+		WorldTransformation treeSpringTransformation = new WorldTransformation(0, 8.9f, -4.9f, new Vector3f(0, 1, 0), -45, 0.02f, 0.02f, 0.02f);
+		RoomEntity treeSpringEntity = new RoomEntity(treeSpringModel, treeSpringTransformation);
+		addGameEntity(treeSpringEntity);
 
 		Texture candleTexture = resourcePack.getTexture("candleTexture");
 		Texture candleSpecularTexture = resourcePack.getTexture("candleSpecularMap");
