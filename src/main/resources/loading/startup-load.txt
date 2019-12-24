@@ -14,7 +14,7 @@ bbrd globeSpecularMap.png globeSpecularMap
 bbrd arrowSpecularMap.png arrowSpecularMap
 bbrd treeSpring.png treeSpringTexture
 bbrd treeSpringSpecularMap.png treeSpringSpecularMap
-bbrd treeFall.png treeFallTexture
+bbrd treeFall.png treeFall
 bbrd treeFallSpecularMap.png treeFallSpecularMap
 bbrd treeWinter.png treeWinter
 bbrd treeWinterSpecularMap.png treeWinterSpecularMap

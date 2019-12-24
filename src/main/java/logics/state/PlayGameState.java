@@ -153,7 +153,9 @@ public class PlayGameState extends GameState {
 		addGameEntity(globeStandEntity);
 
 		Texture treeSpringTexture = resourcePack.getTexture("treeSpringTexture");
+		System.out.println("--------------------------treeSpringTexture=     " + treeSpringTexture);
 		Texture treeSpringSpecularTexture = resourcePack.getTexture("treeSpringSpecularMap");
+
 		VAO treeSpringMesh = resourcePack.getMesh("treeSpringMesh");
 		System.out.println(treeSpringMesh);
 		System.out.println(treeSpringSpecularTexture);
