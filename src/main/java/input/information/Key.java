@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.lwjgl.glfw.GLFW;
 
-public enum Keys {
+public enum Key {
 
 	MOUSE_LEFT(GLFW.GLFW_MOUSE_BUTTON_1),
 	MOUSE_RIGHT(GLFW.GLFW_MOUSE_BUTTON_2),
@@ -20,22 +20,22 @@ public enum Keys {
 	KEY_E(GLFW.GLFW_KEY_E),
 	UNKNOWN(-1);
 
-	private static Map<Integer, Keys> keysMap;
+	private static Map<Integer, Key> keysMap;
 
 	private int code;
 
 	static {
 		keysMap = new HashMap<>();
-		for (Keys key : EnumSet.allOf(Keys.class)) {
+		for (Key key : EnumSet.allOf(Key.class)) {
 			keysMap.put(key.code, key);
 		}
 	}
 
-	private Keys(int code) {
+	private Key(int code) {
 		this.code = code;
 	}
 
-	public static Keys getKey(int keyCode) {
+	public static Key getKey(int keyCode) {
 		return keysMap.get(keyCode);
 	}
 

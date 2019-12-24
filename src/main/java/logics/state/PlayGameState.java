@@ -1,5 +1,7 @@
 package logics.state;
 
+import org.lwjgl.glfw.GLFW;
+
 import graphics.gui.GUI;
 import graphics.light.DirectionalLight;
 import graphics.light.PointLight;
@@ -11,7 +13,7 @@ import graphics.transformation.WorldTransformation;
 import graphics.vao.VAO;
 import input.command.Command;
 import input.command.KeyCommand;
-import input.information.Keys;
+import input.information.Key;
 import input.observer.KeyObserver;
 import input.observer.MouseButtonObserver;
 import input.observer.MouseMovementObserver;
@@ -35,7 +37,6 @@ public class PlayGameState extends GameState {
 
 	public PlayGameState(ResourcePack resourcePack) {
 		super();
-		setFlagToClearObservers();
 		this.resourcePack = resourcePack;
 	}
 
@@ -82,25 +83,25 @@ public class PlayGameState extends GameState {
 
 	private void setCameraMovementKeyCommands() {
 		KeyObserver cameraControlKeyObserver = new KeyObserver();
-
+		cameraControlKeyObserver.setName("Camera Key Control Observer");
 		Command front = new Command(() -> getCamera().addDirection(Directions.FRONT));
 		Command back = new Command(() -> getCamera().addDirection(Directions.BACK));
 		Command left = new Command(() -> getCamera().addDirection(Directions.LEFT));
 		Command right = new Command(() -> getCamera().addDirection(Directions.RIGHT));
 		Command up = new Command(() -> getCamera().addDirection(Directions.UP));
 		Command down = new Command(() -> getCamera().addDirection(Directions.DOWN));
-
-		cameraControlKeyObserver.addCommand(Keys.KEY_W, new KeyCommand(front, back));
-		cameraControlKeyObserver.addCommand(Keys.KEY_A, new KeyCommand(left, right));
-		cameraControlKeyObserver.addCommand(Keys.KEY_S, new KeyCommand(back, front));
-		cameraControlKeyObserver.addCommand(Keys.KEY_D, new KeyCommand(right, left));
-		cameraControlKeyObserver.addCommand(Keys.KEY_Q, new KeyCommand(down, up));
-		cameraControlKeyObserver.addCommand(Keys.KEY_E, new KeyCommand(up, down));
+		cameraControlKeyObserver.addCommand(Key.KEY_W, new KeyCommand(front, back));
+		cameraControlKeyObserver.addCommand(Key.KEY_A, new KeyCommand(left, right));
+		cameraControlKeyObserver.addCommand(Key.KEY_S, new KeyCommand(back, front));
+		cameraControlKeyObserver.addCommand(Key.KEY_D, new KeyCommand(right, left));
+		cameraControlKeyObserver.addCommand(Key.KEY_Q, new KeyCommand(down, up));
+		cameraControlKeyObserver.addCommand(Key.KEY_E, new KeyCommand(up, down));
 		addKeyObserver(cameraControlKeyObserver);
 	}
 
 	@Override
-	protected void initialize() {
+	public void initialize() {
+		clearObservers();
 		setCameraMovementKeyCommands();
 		positionCamera();
 		setLights();
@@ -113,21 +114,26 @@ public class PlayGameState extends GameState {
 		globeEntity = new GlobeEntity(globeModel, globeTransformation);
 		addGameEntity(globeEntity);
 
-		setMouseGlobeSelectionCommands();
-
 		Texture duke = resourcePack.getTexture("dukeTexture");
 		GUI testGUI = getGuiBuilder().newInstance().setDimensions(10, 10, 100, 100).setTexture(duke).create();
+		testGUI.setName("Mascot Button");
 		addGUI(testGUI);
 
 		Texture wood = resourcePack.getTexture("tableTexture");
 		GUI testGUI2 = getGuiBuilder().newInstance().setDimensions(1170, 10, 100, 100).setTexture(wood).create();
+		testGUI2.setName("Wood Button");
 		Command returnToTableViewCommand = new Command(() -> {
 			globeEntity.defocusGlobe();
 			getCamera().setTargetPosition(0, 9f, 1f);
-			// getCamera().setRotation(30, 0, 0);
+//			getCamera().setRotation(30, 0, 0);
 		});
 		testGUI2.setOnReleaseCommand(getMouse(), returnToTableViewCommand, getProjectionWrapper());
 		addGUI(testGUI2);
+
+		setMouseGlobeSelectionCommands();
+
+//		MouseScrollObserver mouseScrollObserver = new MouseScrollObserver();
+//		addMouseScrollObserver(mouseScrollObserver);
 
 		Texture tableSpecularTexture = resourcePack.getTexture("tableSpecularMap");
 		VAO tableMesh = resourcePack.getMesh("tableMesh");
@@ -152,14 +158,6 @@ public class PlayGameState extends GameState {
 		RoomEntity globeStandEntity = new RoomEntity(globeStandModel, globeStandTransformation);
 		addGameEntity(globeStandEntity);
 
-		Texture treeTexture = resourcePack.getTexture("treeTexture");
-		Texture treeSpecularTexture = resourcePack.getTexture("treeSpecularMap");
-		VAO treeMesh = resourcePack.getMesh("treeMesh");
-		Model treeModel = ModelBuilder.newInstance().setMesh(treeMesh).setDiffuseTexture(treeTexture).setSpecularTexture(treeSpecularTexture).create();
-		WorldTransformation treeTransformation = new WorldTransformation(-1.0f, 4.9633f, -1.8f, new Vector3f(0, 1, 0), -45, 0.1f, 0.1f, 0.1f);
-		RoomEntity treeEntity = new RoomEntity(treeModel, treeTransformation);
-		addGameEntity(treeEntity);
-
 		Texture candleTexture = resourcePack.getTexture("candleTexture");
 		Texture candleSpecularTexture = resourcePack.getTexture("candleSpecularMap");
 		VAO candleMesh = resourcePack.getMesh("candleMesh");
@@ -174,8 +172,7 @@ public class PlayGameState extends GameState {
 
 	@Override
 	public void update() {
-		// directionalLight1.setStrength((float) (0.3f +
-		// Math.sin(GLFW.glfwGetTime())));
+		directionalLight1.setStrength((float) (0.3f + Math.sin(GLFW.glfwGetTime())));
 		globeEntity.update();
 		getCamera().update();
 	}

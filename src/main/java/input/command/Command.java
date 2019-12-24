@@ -12,4 +12,12 @@ public class Command {
 		command.run();
 	}
 
+	public static Command combine(Command c1, Command c2) {
+		Command c = new Command(() -> {
+			c1.execute();
+			c2.execute();
+		});
+		return c;
+	}
+
 }

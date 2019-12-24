@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import input.command.Command;
-import input.information.Actions;
-import input.information.InputTypes;
-import input.information.Keys;
+import input.event.InputEvent;
+import input.event.MouseMovementEvent;
 
-public class MouseMovementObserver extends BasicObserver {
+public class MouseMovementObserver extends InputObserver {
 
 	private Map<MouseCheck, Command> commandMap;
 	private List<MouseCheck> ordering;
@@ -22,16 +21,16 @@ public class MouseMovementObserver extends BasicObserver {
 	}
 
 	@Override
-	public void handleEvent(InputTypes type, Keys input, Actions action, float[] data) {
-		if (type == InputTypes.MOUSE_MOVEMENT) {
+	public boolean handleEvent(InputEvent event) {
+		if (event instanceof MouseMovementEvent) {
 			for (MouseCheck check : ordering) {
 				if (check.checkMouse()) {
 					commandMap.get(check).execute();
-					return;
+					return true;
 				}
 			}
 		}
-		notifyObservers(type, input, action, data);
+		return false;
 	}
 
 	public void addCheck(MouseCheck mouseCheck, Command command) {

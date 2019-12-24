@@ -6,7 +6,7 @@ import graphics.texture.Texture;
 import graphics.vao.VAO;
 import input.command.Command;
 import input.command.KeyCommand;
-import input.information.Keys;
+import input.information.Key;
 import input.observer.KeyObserver;
 import loading.loader.ResourceLoadingTask;
 import loading.loader.ResourcePack;
@@ -79,19 +79,16 @@ public class LoadingScreenState extends GameState {
 
 		startTime = GLFW.glfwGetTime();
 
-		setFlagToClearObservers();
-
 		this.loadFilePath = filePath;
-
-		KeyObserver printHi = new KeyObserver();
-		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {
-		}), new Command(() -> System.out.println("lmao"))));
-		addKeyObserver(printHi);
 	}
 
 	@Override
-	protected void initialize() {
+	public void initialize() {
+		clearObservers();
 
+		KeyObserver printHi = new KeyObserver();
+		printHi.addCommand(Key.KEY_E, new KeyCommand(new Command(() -> {}), new Command(() -> System.out.println("lmao"))));
+		addKeyObserver(printHi);
 	}
 
 	private void queueLoadRawDataTask() {

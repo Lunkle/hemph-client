@@ -2,56 +2,56 @@ package input.callback;
 
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
-import input.information.Actions;
-import input.information.InputTypes;
-import input.information.Keys;
+import input.event.InputEvent;
+import input.event.MouseButtonEvent;
+import input.information.Action;
+import input.information.Key;
 import input.observer.InputObservee;
 import input.observer.InputObserver;
-import input.observer.InputObserverNode;
 
 public class MouseButtonCallback extends GLFWMouseButtonCallback implements InputObservee {
 
-	private InputObserverNode node;
-
-	public MouseButtonCallback() {
-		node = InputObserverNode.getEmptyObserverNode();
-	}
+	private InputObserver nextObserver;
+	private InputObserver lastObserver;
 
 	@Override
 	public void invoke(long window, int button, int action, int mods) {
-		notifyObservers(InputTypes.MOUSE_BUTTON, Keys.getKey(button), Actions.getAction(action), new float[0]);
+		Key buttonIdentification = Key.getKey(button);
+		Action actionIdentification = Action.getAction(action);
+		InputEvent event = new MouseButtonEvent(buttonIdentification, actionIdentification);
+//		System.out.println(event);
+		notifyObservers(event);
 	}
 
 	@Override
-	public void notifyObservers(InputTypes type, Keys input, Actions action, float[] data) {
-		if (node != null)
-			node.handle(type, input, action, data);
-	}
-
-	@Override
-	public void addObserver(InputObserver newObserver) {
-		InputObserverNode newNode = new InputObserverNode(newObserver);
-		newNode.setNextNode(node);
-		node = newNode;
-	}
-
-	@Override
-	public void removeObserver(InputObserver removeObserver) {
-		if (node.getObserver().equals(removeObserver)) {
-			node = node.getNextNode();
-		}
-		InputObserverNode currentNode = node;
-		while (!currentNode.equals(InputObserverNode.getEmptyObserverNode())) {
-			if (currentNode.getObserver().equals(removeObserver)) {
-				currentNode.setNextNode(currentNode.getNextNode());
-				break;
+	public void notifyObservers(InputEvent event) {
+		if (nextObserver != null) {
+			boolean passesCheck = nextObserver.handleEvent(event);
+			if (passesCheck && nextObserver.doesConsume()) {
+				return;
 			}
+			nextObserver.notifyObservers(event);
 		}
 	}
 
 	@Override
-	public void clearObservers() {
-		node = InputObserverNode.getEmptyObserverNode();
+	public InputObserver getNextObserver() {
+		return nextObserver;
+	}
+
+	@Override
+	public InputObserver getLastObserver() {
+		return lastObserver;
+	}
+
+	@Override
+	public void setNextObserver(InputObserver observer) {
+		nextObserver = observer;
+	}
+
+	@Override
+	public void setLastObserver(InputObserver observer) {
+		lastObserver = observer;
 	}
 
 }

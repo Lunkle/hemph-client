@@ -1,8 +1,6 @@
 package input.observer;
 
-import input.information.Actions;
-import input.information.InputTypes;
-import input.information.Keys;
+import input.event.InputEvent;
 
 /**
  * An interface for what an observee should be able to do. An observee is
@@ -16,32 +14,99 @@ import input.information.Keys;
 public interface InputObservee {
 
 	/**
-	 * Notifying the observers of someting that has happened.
+	 * Notifying the observers of someting that has happened. Takes O(n) time, where
+	 * n is the number of observers of this observee.
 	 * 
-	 * @param type   The type of input (Example: Mouse)
-	 * @param input  The actual input (Example: Left Click)
-	 * @param action Specifications of the action on the input (Example: Release)
-	 * @param data   Additional data (Example: X-Position, Y-Position)
+	 * @param event input event
 	 */
-	public void notifyObservers(InputTypes type, Keys input, Actions action, float[] data);
+	public void notifyObservers(InputEvent event);
 
 	/**
-	 * Add an observer to this observee.
+	 * Gets the very next observer of this observee, or null if it has no observers.
 	 * 
-	 * @param newObserver The new observer
+	 * @return the next observer, or null
 	 */
-	public void addObserver(InputObserver newObserver);
+	public InputObserver getNextObserver();
 
 	/**
-	 * Remove an observer.
+	 * Gets the very last observer of this observee, or null if it has no observers.
 	 * 
-	 * @param removeObserver The observer to be removed
+	 * @return the next observer, or null
 	 */
-	public void removeObserver(InputObserver removeObserver);
+	public InputObserver getLastObserver();
 
 	/**
-	 * Remove all observers.
+	 * Sets the very next observer of this observee to the given observer.
+	 * 
+	 * @param observer the new observer
 	 */
-	public void clearObservers();
+	public void setNextObserver(InputObserver observer);
 
+	/**
+	 * Sets the very last observer of this observee to the given observer.
+	 * 
+	 * @param observer the new observer
+	 */
+	public void setLastObserver(InputObserver observer);
+
+	/**
+	 * Append an observer to this observee's chain of observers. Takes O(1) time.
+	 * 
+	 * @param newObserver the new observer
+	 */
+	public default void addObserver(InputObserver newObserver) {
+//		System.out.println("Adding " + newObserver.getClass() + ", " + newObserver);
+		if (getLastObserver() == null) {
+			setNextObserver(newObserver);
+			setLastObserver(newObserver);
+		} else {
+			getLastObserver().setNextObserver(newObserver);
+//			System.out.println("Observer after " + getLastObserver() + " is " + getLastObserver().getNextObserver());
+			setLastObserver(newObserver);
+		}
+//		System.out.println("Last Observer: " + getLastObserver());
+//		System.out.println("First Observer: " + getNextObserver());
+	}
+
+	/**
+	 * Add an observer to the observer at the index location down the chain of
+	 * observers. Takes O(n) time.
+	 * 
+	 * @param newObserver the new observer
+	 * @param index       the index at which to input it
+	 */
+	public default void addObserver(InputObserver newObserver, int index) {
+		if (index == 0 || getNextObserver() == null) {
+			addObserver(newObserver);
+		} else {
+			getNextObserver().addObserver(newObserver, index - 1);
+		}
+	}
+
+	/**
+	 * Remove a given observer from the chain of observers. Note that an observer
+	 * cannot remove itself. Takes O(n) time.
+	 * 
+	 * @param removeObserver the observer to be removed
+	 */
+	public default void removeObserver(InputObserver removeObserver) {
+		if (getNextObserver() != null) {
+			if (getNextObserver().equals(removeObserver)) {
+				if (getLastObserver().equals(removeObserver)) {
+					setLastObserver(null);
+				}
+				setNextObserver(getNextObserver().getNextObserver());
+			} else {
+				getNextObserver().removeObserver(removeObserver);
+			}
+		}
+	}
+
+	/**
+	 * Remove all observers. Takes O(1) time.
+	 */
+	public default void clearObservers() {
+		setNextObserver(null);
+		setLastObserver(null);
+	}
 }
