@@ -250,61 +250,85 @@ public abstract class GameState {
 			inputs.clearAllCallbackObservers();
 			clearObservers = false;
 		}
+		addObservers(inputs);
+		removeObservers(inputs);
+	}
+
+	private void addObservers(Input inputs) {
 		if (toAddKeyObservers.size() > 0) {
 			List<KeyObserver> copyKeyObservers = toAddKeyObservers;
 			synchronized (toAddKeyObservers) {
 				toAddKeyObservers = new ArrayList<>();
 			}
-			inputs.addKeyCallbackObservers(copyKeyObservers);
+			for (KeyObserver copyObserver : copyKeyObservers) {
+				inputs.appendKeyCallbackObserver(copyObserver);
+			}
 		}
 		if (toAddMouseMovementObservers.size() > 0) {
 			List<MouseMovementObserver> copyMouseMovementObservers = toAddMouseMovementObservers;
 			synchronized (toAddMouseMovementObservers) {
 				toAddMouseMovementObservers = new ArrayList<>();
 			}
-			inputs.addMouseMovementCallbackObservers(copyMouseMovementObservers);
+			for (MouseMovementObserver copyObserver : copyMouseMovementObservers) {
+				inputs.appendMouseMovementCallbackObserver(copyObserver);
+			}
 		}
 		if (toAddMouseButtonObservers.size() > 0) {
 			List<MouseButtonObserver> copyMouseButtonObservers = toAddMouseButtonObservers;
 			synchronized (toAddMouseButtonObservers) {
 				toAddMouseButtonObservers = new ArrayList<>();
 			}
-			inputs.addMouseButtonCallbackObservers(copyMouseButtonObservers);
+			for (MouseButtonObserver copyObserver : copyMouseButtonObservers) {
+				inputs.appendMouseButtonCallbackObserver(copyObserver);
+			}
 		}
 		if (toAddMouseScrollObservers.size() > 0) {
 			List<MouseScrollObserver> copyMouseScrollObservers = toAddMouseScrollObservers;
 			synchronized (toAddMouseScrollObservers) {
 				toAddMouseScrollObservers = new ArrayList<>();
 			}
-			inputs.addMouseScrollCallbackObservers(copyMouseScrollObservers);
+			for (MouseScrollObserver copyObserver : copyMouseScrollObservers) {
+				inputs.appendMouseScrollCallbackObserver(copyObserver);
+			}
 		}
+	}
+
+	private void removeObservers(Input inputs) {
 		if (toRemoveKeyObservers.size() > 0) {
 			List<KeyObserver> copyKeyObservers = toRemoveKeyObservers;
 			synchronized (toRemoveKeyObservers) {
 				toRemoveKeyObservers = new ArrayList<>();
 			}
-			inputs.removeKeyCallbackObservers(copyKeyObservers);
+			for (KeyObserver copyObserver : copyKeyObservers) {
+				inputs.removeKeyCallbackObserver(copyObserver);
+			}
 		}
-		if (toAddMouseMovementObservers.size() > 0) {
+		if (toRemoveMouseMovementObservers.size() > 0) {
 			List<MouseMovementObserver> copyMouseMovementObservers = toRemoveMouseMovementObservers;
 			synchronized (toRemoveMouseMovementObservers) {
 				toRemoveMouseMovementObservers = new ArrayList<>();
 			}
-			inputs.removeMouseMovementCallbackObservers(copyMouseMovementObservers);
+			for (MouseMovementObserver copyObserver : copyMouseMovementObservers) {
+				inputs.removeMouseMovementCallbackObserver(copyObserver);
+			}
 		}
-		if (toAddMouseButtonObservers.size() > 0) {
+		if (toRemoveMouseButtonObservers.size() > 0) {
 			List<MouseButtonObserver> copyMouseButtonObservers = toRemoveMouseButtonObservers;
 			synchronized (toRemoveMouseButtonObservers) {
 				toRemoveMouseButtonObservers = new ArrayList<>();
 			}
-			inputs.removeMouseButtonCallbackObservers(copyMouseButtonObservers);
+			for (MouseButtonObserver copyObserver : copyMouseButtonObservers) {
+				inputs.removeMouseButtonCallbackObserver(copyObserver);
+			}
 		}
 		if (toRemoveMouseScrollObservers.size() > 0) {
 			List<MouseScrollObserver> copyMouseScrollObservers = toRemoveMouseScrollObservers;
 			synchronized (toRemoveMouseScrollObservers) {
 				toRemoveMouseScrollObservers = new ArrayList<>();
 			}
-			inputs.removeMouseScrollCallbackObservers(copyMouseScrollObservers);
+			for (MouseScrollObserver copyObserver : copyMouseScrollObservers) {
+				inputs.removeMouseScrollCallbackObserver(copyObserver);
+			}
 		}
 	}
 

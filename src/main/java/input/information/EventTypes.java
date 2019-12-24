@@ -1,10 +1,10 @@
 package input.information;
 
-public enum InputTypes {
+public enum EventTypes {
 
 	KEY,
-	MOUSE_MOVEMENT,
 	MOUSE_BUTTON,
+	MOUSE_MOVEMENT,
 	MOUSE_SCROLL,
 	UNKNOWN;
 

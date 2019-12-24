@@ -10,4 +10,12 @@ public class KeyCommand {
 		this.onRelease = onRelease;
 	}
 
+	public Command getOnPress() {
+		return onPress;
+	}
+
+	public Command getOnRelease() {
+		return onRelease;
+	}
+
 }

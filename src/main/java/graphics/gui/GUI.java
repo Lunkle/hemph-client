@@ -5,8 +5,8 @@ import graphics.transformation.ProjectionTransformation;
 import graphics.transformation.ProjectionWrapper;
 import graphics.transformation.WorldTransformation;
 import input.command.Command;
-import input.information.Actions;
-import input.information.Keys;
+import input.information.Action;
+import input.information.Key;
 import input.mouse.Mouse;
 import input.mouse.MousePicker;
 import input.observer.MouseButtonObserver;
@@ -17,6 +17,8 @@ import math.Vector2f;
 import math.Vector3f;
 
 public class GUI {
+
+	private String name;
 
 	private boolean selected = true;
 	private boolean clickSet = false;
@@ -122,19 +124,16 @@ public class GUI {
 			setOnReleaseCommand(mouse, new Command(() -> {}), projectionWrapper);
 		}
 		onPress = new MouseButtonObserver();
+		onPress.setName(toString() + " Press Observer");
 		MouseCheck selectionCheck = () -> {
-//			System.out.println("mousePosition " + MousePicker.getNormalizedDeviceCoordinates(mouse, projectionWrapper.getTransformation()));
-//			System.out.println("guiPosition " + getPosition());
-//			System.out.println("guiSize " + getSize());
-//			System.out.println("position " + worldTransformation.getPosition());
-//			System.out.println(isSelectedBy(mouse, projectionWrapper.getTransformation()));
 			if (isSelectedBy(mouse, projectionWrapper.getTransformation())) {
 				selected = true;
 				return true;
 			}
 			return false;
 		};
-		onPress.addCheck(Keys.MOUSE_LEFT, Actions.PRESS, selectionCheck, command);
+//		onPress.setConsumes(true);
+		onPress.addCheck(Key.MOUSE_LEFT, Action.PRESS, selectionCheck, command);
 	}
 
 	public void setOnReleaseCommand(Mouse mouse, Command command, ProjectionWrapper projectionWrapper) {
@@ -143,14 +142,16 @@ public class GUI {
 			setOnPressCommand(mouse, new Command(() -> {}), projectionWrapper);
 		}
 		onRelease = new MouseButtonObserver();
+		onPress.setName(toString() + " Release Observer");
 		MouseCheck selectionCheck = () -> {
-			if (selected = false) {
+			if (selected == false) {
 				return false;
 			}
 			selected = false;
 			return isSelectedBy(mouse, projectionWrapper.getTransformation());
 		};
-		onRelease.addCheck(Keys.MOUSE_LEFT, Actions.RELEASE, selectionCheck, command);
+//		onRelease.setConsumes(true);
+		onRelease.addCheck(Key.MOUSE_LEFT, Action.RELEASE, selectionCheck, command);
 	}
 
 	public MouseButtonObserver getOnPress() {
@@ -163,6 +164,18 @@ public class GUI {
 
 	public MouseMovementObserver getOnHover() {
 		return onHover;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		if (name == null) {
+			return "Unnamed GUI";
+		}
+		return name;
 	}
 
 }

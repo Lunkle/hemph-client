@@ -3,14 +3,13 @@ package input.observer;
 import java.util.HashMap;
 import java.util.Map;
 
-import input.command.KeyCommand;
-import input.information.Actions;
-import input.information.InputTypes;
-import input.information.Keys;
+import input.command.ScrollCommand;
+import input.event.InputEvent;
+import input.event.MouseScrollEvent;
 
-public class MouseScrollObserver extends BasicObserver {
+public class MouseScrollObserver extends InputObserver {
 
-	private Map<MouseCheck, KeyCommand> commandMap;
+	private Map<MouseCheck, ScrollCommand> commandMap;
 
 	public MouseScrollObserver() {
 		super();
@@ -18,32 +17,17 @@ public class MouseScrollObserver extends BasicObserver {
 	}
 
 	@Override
-	public void handleEvent(InputTypes type, Keys input, Actions action, float[] data) {
-		if (!(type == InputTypes.MOUSE_SCROLL)) {
-			notifyObservers(type, input, action, data);
-			return;
-		}
-		KeyCommand command = null;
-		for (MouseCheck check : commandMap.keySet()) {
-			if (check.checkMouse()) {
-				command = commandMap.get(check);
-				break;
+	public boolean handleEvent(InputEvent event) {
+		if (event instanceof MouseScrollEvent) {
+			MouseScrollEvent mouseScrollEvent = (MouseScrollEvent) event;
+			for (MouseCheck check : commandMap.keySet()) {
+				if (check.checkMouse()) {
+					commandMap.get(check).execute(mouseScrollEvent.getOffset());
+					return true;
+				}
 			}
 		}
-		if (command == null) {
-			notifyObservers(type, input, action, data);
-			return;
-		}
-		switch (action) {
-			case PRESS:
-				command.onPress.execute();
-				break;
-			case RELEASE:
-				command.onRelease.execute();
-				break;
-			default:
-				return;
-		}
+		return false;
 	}
 
 }

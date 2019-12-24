@@ -5,8 +5,8 @@ import graphics.rendering.Camera;
 import graphics.transformation.ProjectionWrapper;
 import graphics.transformation.WorldTransformation;
 import input.command.Command;
-import input.information.Actions;
-import input.information.Keys;
+import input.information.Action;
+import input.information.Key;
 import input.mouse.Mouse;
 import input.mouse.MousePicker;
 import input.observer.MouseButtonObserver;
@@ -72,27 +72,28 @@ public class GlobeEntity extends HeaderEntity {
 
 	public MouseButtonObserver getGlobeSelectionObserver(Mouse mouse, Camera camera, ProjectionWrapper projectionWrapper) {
 		MouseButtonObserver globeSelectionObserver = new MouseButtonObserver();
+		globeSelectionObserver.setName("Globe Selection Observer");
 		Command selectGlobe = new Command(() -> selected = true);
 		MouseCheck globeIntersectionCheck = () -> {
 			MousePicker.loadInformation(mouse, camera, projectionWrapper.getTransformation());
 			Vector3f intersection = getIntersection(camera.getPosition(), MousePicker.calculateMouseRay());
 			return intersection != null;
 		};
-		globeSelectionObserver.addCheck(Keys.MOUSE_LEFT, Actions.PRESS, globeIntersectionCheck, selectGlobe);
+		globeSelectionObserver.addCheck(Key.MOUSE_LEFT, Action.PRESS, globeIntersectionCheck, selectGlobe);
 		return globeSelectionObserver;
 	}
 
 	public MouseButtonObserver getGlobeReleaseObserver(Mouse mouse, Camera camera, ProjectionWrapper projectionWrapper) {
 		MouseButtonObserver globeReleaseObserver = new MouseButtonObserver();
+		globeReleaseObserver.setName("Globe Release Observer");
 		Command deselectGlobe = new Command(() -> releaseGlobe(camera));
 		MouseCheck releaseCheck = () -> {
 			selected = false;
 			MousePicker.loadInformation(mouse, camera, projectionWrapper.getTransformation());
 			Vector3f intersection = getIntersection(camera.getPosition(), MousePicker.calculateMouseRay());
-			System.out.println(intersection);
 			return intersection != null;
 		};
-		globeReleaseObserver.addCheck(Keys.MOUSE_LEFT, Actions.RELEASE, releaseCheck, deselectGlobe);
+		globeReleaseObserver.addCheck(Key.MOUSE_LEFT, Action.RELEASE, releaseCheck, deselectGlobe);
 		return globeReleaseObserver;
 	}
 
