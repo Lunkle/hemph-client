@@ -14,8 +14,8 @@ import math.Vector3f;
 
 public class EntityShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "src/main/java/graphics/entity/entityVertexShader.txt";
-	private static final String FRAGMENT_FILE = "src/main/java/graphics/entity/entityFragmentShader.txt";
+	private static final String VERTEX_FILE = "shaders/entity/entityVertexShader.txt";
+	private static final String FRAGMENT_FILE = "shaders/entity/entityFragmentShader.txt";
 
 	private static final int MAX_LIGHTS = 3;
 
