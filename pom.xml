@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                           http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -26,11 +27,11 @@
 			<artifactId>hemph-common</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.lwjgl</groupId>
-			<artifactId>lwjgl-stb</artifactId>
-			<version>${lwjgl.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.lwjgl</groupId>
+            <artifactId>lwjgl-stb</artifactId>
+            <version>${lwjgl.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.l33tlabs.twl</groupId>
 			<artifactId>pngdecoder</artifactId>
@@ -51,6 +52,7 @@
 			<artifactId>lwjgl-assimp</artifactId>
 			<version>${lwjgl.version}</version>
 			<classifier>${native.target}</classifier>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
@@ -72,24 +74,28 @@
 			<artifactId>lwjgl</artifactId>
 			<version>${lwjgl.version}</version>
 			<classifier>${native.target}</classifier>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-stb</artifactId>
 			<version>${lwjgl.version}</version>
 			<classifier>${native.target}</classifier>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-glfw</artifactId>
 			<version>${lwjgl.version}</version>
 			<classifier>${native.target}</classifier>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-opengl</artifactId>
 			<version>${lwjgl.version}</version>
 			<classifier>${native.target}</classifier>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -138,29 +144,6 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.1.1</version>
-				<executions>
-					<execution>
-						<phase>test</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<configuration>
-							<mainClass>game.HemphApplication</mainClass>
-							<arguments>
-								<argument>arg0</argument>
-								<argument>arg1</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 	</build>
 

@@ -1,1 +1,0 @@
-mvn exec:java -Dexec.mainClass=game.HemphApplication

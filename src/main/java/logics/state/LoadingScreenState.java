@@ -84,7 +84,8 @@ public class LoadingScreenState extends GameState {
 		this.loadFilePath = filePath;
 
 		KeyObserver printHi = new KeyObserver();
-		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {}), new Command(() -> System.out.println("lmao"))));
+		printHi.addCommand(Keys.KEY_E, new KeyCommand(new Command(() -> {
+		}), new Command(() -> System.out.println("lmao"))));
 		addKeyObserver(printHi);
 	}
 
@@ -210,10 +211,9 @@ public class LoadingScreenState extends GameState {
 		} else if (!finishedLoading) {
 			double percentage = loadTask.getProgressPercentage();
 			if (percentage < 100) {
-				// System.out.println("Reading Files: " + Math.round(percentage) + "%");
-				System.out.print(".");
+				System.out.println("Reading Files: " + Math.round(percentage) + "%");
 			} else {
-				System.out.print("!!!!!");
+				System.out.println("Reading Files: 100%");
 				finishedLoading = true;
 			}
 		} else if (!connectingData) {
@@ -222,7 +222,7 @@ public class LoadingScreenState extends GameState {
 		} else if (!finishedConnectingData) {
 			double percentage = connectTask.getProgressPercentage();
 			if (percentage < 100) {
-				System.out.print(".");
+				System.out.println("Loading: " + Math.round(percentage) + "%");
 			} else {
 				System.out.println("Loading: 100%");
 				finishedConnectingData = true;

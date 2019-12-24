@@ -24,7 +24,6 @@ public class ByteBufferImageRawData implements RawData {
 			IntBuffer comp = stack.mallocInt(1); // Buffer to store number of components
 			imageBuffer = STBImage.stbi_load("src/main/resources/" + filePath, w, h, comp, 4); // Load the image
 			if (imageBuffer == null) {
-				System.out.println("Failed to load image at " + filePath);
 				throw new RuntimeException("Failed to load image." + System.lineSeparator() + STBImage.stbi_failure_reason()); // Print problem if error occurs
 			}
 			imageWidth = w.get();
