@@ -1,7 +1,5 @@
 package logics.state;
 
-import org.lwjgl.glfw.GLFW;
-
 import graphics.gui.GUI;
 import graphics.light.DirectionalLight;
 import graphics.light.PointLight;
@@ -125,46 +123,42 @@ public class PlayGameState extends GameState {
 		Command returnToTableViewCommand = new Command(() -> {
 			globeEntity.defocusGlobe();
 			getCamera().setTargetPosition(0, 9f, 1f);
-//			getCamera().setRotation(30, 0, 0);
+			// getCamera().setRotation(30, 0, 0);
 		});
 		testGUI2.setOnReleaseCommand(getMouse(), returnToTableViewCommand, getProjectionWrapper());
 		addGUI(testGUI2);
 
 		setMouseGlobeSelectionCommands();
 
-//		MouseScrollObserver mouseScrollObserver = new MouseScrollObserver();
-//		addMouseScrollObserver(mouseScrollObserver);
+		// MouseScrollObserver mouseScrollObserver = new MouseScrollObserver();
+		// addMouseScrollObserver(mouseScrollObserver);
 
-		Texture tableSpecularTexture = resourcePack.getTexture("tableSpecularMap");
-		VAO tableMesh = resourcePack.getMesh("tableMesh");
-		Model model = ModelBuilder.newInstance().setMesh(tableMesh).setDiffuseTexture(wood).setSpecularTexture(tableSpecularTexture).create();
-		WorldTransformation tableWorldTransformation = new WorldTransformation(0, 0, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1);
-		RoomEntity tableEntity = new RoomEntity(model, tableWorldTransformation);
-		addGameEntity(tableEntity);
+		addRoomEntityIntoScene("tableTexture", "tableSpecularMap", "tableMesh", new WorldTransformation(0, 0, -5, new Vector3f(0, 1, 0), 0, 1, 1, 1));
+		addRoomEntityIntoScene("roomTexture", "roomSpecularMap", "roomMesh", new WorldTransformation(-2, 0, -4, new Vector3f(0, 1, 0), -90, 1.2f, 1.2f, 1.4f));
+		addRoomEntityIntoScene("globeStandTexture", "globeStandSpecularMap", "globeStandMesh", new WorldTransformation(-1.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0), -45, 0.3f, 0.3f, 0.3f));
+		addRoomEntityIntoScene("treeSummerTexture", "treeSummerSpecularMap", "treeSummerMesh", new WorldTransformation(3f, 4.9633f, -6f, new Vector3f(0, 1, 0), 0, 0.05f, 0.05f, 0.05f));
+		addRoomEntityIntoScene("treeSpringTexture", "treeSpringSpecularMap", "treeSpringMesh", new WorldTransformation(1f, 4.9633f, -6f, new Vector3f(0, 1, 0), 0, 0.05f, 0.05f, 0.05f));
+		addRoomEntityIntoScene("treeFallTexture", "treeFallSpecularMap", "treeFallMesh", new WorldTransformation(-1f, 4.9633f, -6f, new Vector3f(0, 1, 0), 0, 0.05f, 0.05f, 0.05f));
+		addRoomEntityIntoScene("treeWinterTexture", "treeWinterSpecularMap", "treeWinterMesh", new WorldTransformation(-3f, 4.9633f, -6f, new Vector3f(0, 1, 0), 0, 0.05f, 0.05f, 0.05f));
+		addRoomEntityIntoScene("candleTexture", "candleSpecularMap", "candleMesh", new WorldTransformation(-3.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0), -45, 1f, 1f, 1f));
+	}
 
-		Texture roomTexture = resourcePack.getTexture("roomTexture");
-		Texture roomSpecularTexture = resourcePack.getTexture("roomSpecularMap");
-		VAO roomMesh = resourcePack.getMesh("roomMesh");
-		Model roomModel = ModelBuilder.newInstance().setMesh(roomMesh).setDiffuseTexture(roomTexture).setSpecularTexture(roomSpecularTexture).create();
-		WorldTransformation roomTransformation = new WorldTransformation(-2, 0, -4, new Vector3f(0, 1, 0), -90, 1.2f, 1.2f, 1.4f);
-		RoomEntity roomEntity = new RoomEntity(roomModel, roomTransformation);
-		addGameEntity(roomEntity);
-
-		Texture globeStandTexture = resourcePack.getTexture("globeStandTexture");
-		Texture globeStandSpecularTexture = resourcePack.getTexture("globeStandSpecularMap");
-		VAO globeStandMesh = resourcePack.getMesh("globeStandMesh");
-		Model globeStandModel = ModelBuilder.newInstance().setMesh(globeStandMesh).setDiffuseTexture(globeStandTexture).setSpecularTexture(globeStandSpecularTexture).create();
-		WorldTransformation globeStandTransformation = new WorldTransformation(-1.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0), -45, 0.3f, 0.3f, 0.3f);
-		RoomEntity globeStandEntity = new RoomEntity(globeStandModel, globeStandTransformation);
-		addGameEntity(globeStandEntity);
-
-		Texture candleTexture = resourcePack.getTexture("candleTexture");
-		Texture candleSpecularTexture = resourcePack.getTexture("candleSpecularMap");
-		VAO candleMesh = resourcePack.getMesh("candleMesh");
-		Model candleModel = ModelBuilder.newInstance().setMesh(candleMesh).setDiffuseTexture(candleTexture).setSpecularTexture(candleSpecularTexture).create();
-		WorldTransformation candleTransformation = new WorldTransformation(-3.0f, 4.9633f, -5.2f, new Vector3f(0, 1, 0), -45, 1f, 1f, 1f);
-		RoomEntity candleEntity = new RoomEntity(candleModel, candleTransformation);
-		addGameEntity(candleEntity);
+	public void addRoomEntityIntoScene(String textureName, String specularTextureName, String meshName, WorldTransformation transformation) {
+		Texture texture = resourcePack.getTexture(textureName);
+		if (texture == null) {
+			throw new RuntimeException("Texture '" + textureName + "' not found");
+		}
+		Texture specularTexture = resourcePack.getTexture(specularTextureName);
+		if (specularTexture == null) {
+			throw new RuntimeException("Specular texture '" + specularTextureName + "' not found");
+		}
+		VAO mesh = resourcePack.getMesh(meshName);
+		if (mesh == null) {
+			throw new RuntimeException("Mesh '" + meshName + "' not found");
+		}
+		Model model = ModelBuilder.newInstance().setMesh(mesh).setDiffuseTexture(texture).setSpecularTexture(specularTexture).create();
+		RoomEntity entity = new RoomEntity(model, transformation);
+		addGameEntity(entity);
 	}
 
 	@Override
@@ -172,7 +166,8 @@ public class PlayGameState extends GameState {
 
 	@Override
 	public void update() {
-		directionalLight1.setStrength((float) (0.3f + Math.sin(GLFW.glfwGetTime())));
+		// directionalLight1.setStrength((float) (0.3f +
+		// Math.sin(GLFW.glfwGetTime())));
 		globeEntity.update();
 		getCamera().update();
 	}
