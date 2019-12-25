@@ -43,16 +43,19 @@ public class MouseButtonObserver extends InputObserver {
 
 	@Override
 	public boolean handleEvent(InputEvent event) {
-//		System.out.println(this);
+		// System.out.println(this);
 		if (event instanceof MouseButtonEvent) {
 			MouseButtonEvent mouseButtonEvent = (MouseButtonEvent) event;
 			Key input = mouseButtonEvent.getButton();
 			Action action = mouseButtonEvent.getAction();
-			Map<MouseCheck, Command> mouseCheckMap = commandMap.get(input).get(action);
-			for (MouseCheck check : ordering.get(input).get(action)) {
-				if (check.checkMouse()) {
-					mouseCheckMap.get(check).execute();
-					return true;
+			Map<Action, Map<MouseCheck, Command>> actionMap = commandMap.get(input);
+			if (actionMap != null) {
+				Map<MouseCheck, Command> mouseCheckMap = actionMap.get(action);
+				for (MouseCheck check : ordering.get(input).get(action)) {
+					if (check.checkMouse()) {
+						mouseCheckMap.get(check).execute();
+						return true;
+					}
 				}
 			}
 		}
@@ -61,8 +64,8 @@ public class MouseButtonObserver extends InputObserver {
 
 	/**
 	 * Adds an observer that listens for the specific mouseKey and action
-	 * combination. It performs the mouseCheck, and if it returns true, it executes
-	 * the command.
+	 * combination. It performs the mouseCheck, and if it returns true, it
+	 * executes the command.
 	 * 
 	 * @param mouseKey
 	 * @param action
