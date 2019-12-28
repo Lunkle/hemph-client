@@ -3,7 +3,7 @@ package loading.framebuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
-import graphics.texture.Texture;
+import graphics.texture.FramebufferTexture;
 import loading.loader.InterpretedData;
 
 public class EmptyDepthAttachmentRawData extends EmptyTextureRawData {
@@ -29,7 +29,7 @@ public class EmptyDepthAttachmentRawData extends EmptyTextureRawData {
 
 	@Override
 	public InterpretedData newInterpretedData() {
-		return new Texture();
+		return new FramebufferTexture();
 	}
 
 }

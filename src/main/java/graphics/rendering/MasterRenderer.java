@@ -7,6 +7,7 @@ import graphics.framebuffer.DoubleBuffer;
 import graphics.framebuffer.FBO;
 import graphics.gui.GUIRenderer;
 import graphics.postProcessing.ScreenRenderer;
+import graphics.skybox.SkyboxRenderer;
 import graphics.transformation.ProjectionTransformation;
 import graphics.transformation.ProjectionWrapper;
 import logics.state.GameStateWrapper;
@@ -19,6 +20,7 @@ public class MasterRenderer {
 	private EntityRenderer entityRenderer;
 //	private BlurRenderer blurRenderer;
 	private GUIRenderer guiRenderer;
+	private SkyboxRenderer skyboxRenderer;
 	private ScreenRenderer screenRenderer;
 	private ProjectionWrapper projectionWrapper;
 
@@ -28,8 +30,8 @@ public class MasterRenderer {
 		this.projectionWrapper = new ProjectionWrapper();
 		loadWindowDimensions(windowWidth, windowHeight);
 
-		entityRenderer = new EntityRenderer();
-		entityRenderer.setProjectionWrapper(projectionWrapper);
+		entityRenderer = new EntityRenderer(projectionWrapper);
+		skyboxRenderer = new SkyboxRenderer(projectionWrapper);
 		guiRenderer = new GUIRenderer();
 		screenRenderer = new ScreenRenderer();
 	}
@@ -37,9 +39,9 @@ public class MasterRenderer {
 	public void render() {
 		doubleBuffer.bindNextBuffer();
 		FBO.clearCurrentFBOData();
-		entityRenderer.loadUniforms(stateWrapper.getState());
-		entityRenderer.render(stateWrapper.getState().getMeshLists());
-		guiRenderer.render(stateWrapper.getState().getGuis());
+		skyboxRenderer.render(stateWrapper.getState());
+		entityRenderer.render(stateWrapper.getState());
+		guiRenderer.render(stateWrapper.getState());
 
 		FBO.bindDefaultFBO();
 		FBO.clearCurrentFBOData();

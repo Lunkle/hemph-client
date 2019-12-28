@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL20;
 
 import graphics.vao.VAO;
 import loading.screen.ScreenRawMeshData;
+import logics.state.GameState;
 
 public class GUIRenderer {
 
@@ -22,7 +23,8 @@ public class GUIRenderer {
 		guiVAO.interpret(quadData); // Interpreting the raw quad data
 	}
 
-	public void render(List<GUI> guis) {
+	public void render(GameState gameState) {
+		List<GUI> guis = gameState.getGuis();
 		shader.start();
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		guiVAO.bindVAO();

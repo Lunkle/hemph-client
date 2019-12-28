@@ -2,7 +2,7 @@ package loading.framebuffer;
 
 import org.lwjgl.opengl.GL11;
 
-import graphics.texture.Texture;
+import graphics.texture.FramebufferTexture;
 import loading.loader.InterpretedData;
 
 public class EmptyColourAttachmentRawData extends EmptyTextureRawData {
@@ -28,7 +28,7 @@ public class EmptyColourAttachmentRawData extends EmptyTextureRawData {
 
 	@Override
 	public InterpretedData newInterpretedData() {
-		return new Texture();
+		return new FramebufferTexture();
 	}
 
 }

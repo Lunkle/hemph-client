@@ -6,7 +6,7 @@ import java.nio.IntBuffer;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
-import graphics.texture.Texture;
+import graphics.texture.ModelTexture;
 import loading.loader.InterpretedData;
 import loading.loader.RawData;
 
@@ -31,11 +31,6 @@ public class ByteBufferImageRawData implements RawData {
 		}
 	}
 
-	@Override
-	public InterpretedData newInterpretedData() {
-		return new Texture();
-	}
-
 	public ByteBuffer getImageBuffer() {
 		return imageBuffer;
 	}
@@ -55,6 +50,11 @@ public class ByteBufferImageRawData implements RawData {
 	@Override
 	public void accept(InterpretedData data) {
 		data.interpret(this);
+	}
+
+	@Override
+	public InterpretedData newInterpretedData() {
+		return new ModelTexture();
 	}
 
 }

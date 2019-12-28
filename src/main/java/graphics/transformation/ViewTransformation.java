@@ -46,6 +46,7 @@ public class ViewTransformation extends Transformation {
 		pitch = rotX;
 		roll = rotY;
 		yaw = rotZ;
+		raiseFlag();
 	}
 
 	@Override

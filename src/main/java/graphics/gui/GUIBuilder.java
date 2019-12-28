@@ -3,7 +3,7 @@ package graphics.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import graphics.texture.Texture;
+import graphics.texture.ModelTexture;
 import math.Vector2f;
 
 public class GUIBuilder {
@@ -62,7 +62,7 @@ public class GUIBuilder {
 		return this;
 	}
 
-	public GUIBuilder setTexture(Texture texture) {
+	public GUIBuilder setTexture(ModelTexture texture) {
 		texture.setAsDiffuseTexture();
 		gui.setTexture(texture);
 		return this;

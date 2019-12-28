@@ -1,6 +1,6 @@
 package graphics.model;
 
-import graphics.texture.Texture;
+import graphics.texture.ModelTexture;
 import graphics.vao.VAO;
 
 public class ModelBuilder {
@@ -20,12 +20,12 @@ public class ModelBuilder {
 		return this;
 	}
 
-	public ModelBuilder setDiffuseTexture(Texture diffuseTexture) {
+	public ModelBuilder setDiffuseTexture(ModelTexture diffuseTexture) {
 		model.setDiffuseTexture(diffuseTexture);
 		return this;
 	}
 
-	public ModelBuilder setSpecularTexture(Texture specularTexture) {
+	public ModelBuilder setSpecularTexture(ModelTexture specularTexture) {
 		model.setSpecularTexture(specularTexture);
 		return this;
 	}

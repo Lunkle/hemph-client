@@ -2,7 +2,6 @@ package logics.state;
 
 import org.lwjgl.glfw.GLFW;
 
-import graphics.vao.VAO;
 import input.command.Command;
 import input.command.KeyCommand;
 import input.information.Key;
@@ -10,7 +9,6 @@ import input.observer.KeyObserver;
 import loading.loader.ResourceLoadingTask;
 import loading.loader.ResourcePack;
 import loading.loader.UnconnectedData;
-import logics.globe.GlobeRawData;
 
 public class LoadingScreenState extends GameState {
 
@@ -24,9 +22,6 @@ public class LoadingScreenState extends GameState {
 	private UnconnectedData connectTask;
 	private ResourcePack resourcePack;
 	private String loadFilePath;
-
-	private GlobeRawData globeRawMeshData;
-	private VAO globeMesh;
 
 	public LoadingScreenState(String filePath) {
 		super();
@@ -54,8 +49,6 @@ public class LoadingScreenState extends GameState {
 		for (String name : resourcePack.getNameList()) {
 			loadTask.addItem(resourcePack.getRawData(name), resourcePack.getFilepath(name));
 		}
-		globeRawMeshData = new GlobeRawData();
-		loadTask.addItem(globeRawMeshData, "");
 
 		getLoaderThread().queueTask(loadTask);
 	}
@@ -66,13 +59,7 @@ public class LoadingScreenState extends GameState {
 		for (String name : resourcePack.getNameList()) {
 			connectTask.addData(resourcePack.getData(name), resourcePack.getRawData(name));
 		}
-		globeMesh = new VAO();
-		connectTask.addData(globeMesh, globeRawMeshData);
 		getConnecter().queueTask(connectTask);
-	}
-
-	private void finalizeResourcePack() {
-		resourcePack.addData(globeMesh, "globeMesh");
 	}
 
 	@Override
@@ -103,7 +90,6 @@ public class LoadingScreenState extends GameState {
 				finishedConnectingData = true;
 			}
 		} else {
-			finalizeResourcePack();
 			double endTime = GLFW.glfwGetTime();
 			double timeTaken = endTime - startTime;
 			System.out.println("Finished loading in " + timeTaken + " seconds.");

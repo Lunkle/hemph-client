@@ -1,6 +1,6 @@
 package graphics.framebuffer;
 
-import graphics.texture.Texture;
+import graphics.texture.FramebufferTexture;
 
 public class DoubleBuffer {
 
@@ -35,8 +35,24 @@ public class DoubleBuffer {
 		return buffers[index];
 	}
 
-	public Texture getColourTexture() {
+	/**
+	 * Gets the current buffer's colour texture. It will have whatever was rendered
+	 * onto it since the last time it was cleared.
+	 * 
+	 * @return the current buffer's colour texture
+	 */
+	public FramebufferTexture getColourTexture() {
 		return getCurrentBuffer().getColourTexture();
+	}
+
+	/**
+	 * Gets the current buffer's depth texture. It will have whatever was rendered
+	 * onto it since the last time it was cleared.
+	 * 
+	 * @return the current buffer's depth texture
+	 */
+	public FramebufferTexture getDepthTexture() {
+		return getCurrentBuffer().getDepthTexture();
 	}
 
 	/**

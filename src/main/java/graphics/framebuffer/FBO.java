@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
-import graphics.texture.Texture;
+import graphics.texture.FramebufferTexture;
 import loading.framebuffer.EmptyColourAttachmentRawData;
 import loading.framebuffer.EmptyDepthAttachmentRawData;
 import loading.framebuffer.EmptyTextureRawData;
@@ -16,8 +16,8 @@ public class FBO {
 
 	private static List<Integer> fbos = new ArrayList<>();
 
-	private Texture colourTexture;
-	private Texture depthTexture;
+	private FramebufferTexture colourTexture;
+	private FramebufferTexture depthTexture;
 
 	private int fboID;
 	private int frameWidth;
@@ -34,14 +34,14 @@ public class FBO {
 	}
 
 	private void attachColourTexture() {
-		colourTexture = new Texture();
+		colourTexture = new FramebufferTexture();
 		EmptyTextureRawData emptyColourAttachmentRawData = new EmptyColourAttachmentRawData(getFrameWidth(), getFrameHeight());
 		colourTexture.interpret(emptyColourAttachmentRawData);
 		GL32.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, colourTexture.getID(), 0);
 	}
 
 	private void attachDepthTexture() {
-		depthTexture = new Texture();
+		depthTexture = new FramebufferTexture();
 		EmptyTextureRawData emptyDepthAttachmentRawData = new EmptyDepthAttachmentRawData(getFrameWidth(), getFrameHeight());
 		depthTexture.interpret(emptyDepthAttachmentRawData);
 		GL32.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthTexture.getID(), 0);
@@ -51,6 +51,9 @@ public class FBO {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fboID);
 	}
 
+	/**
+	 * Binds the default FBO, which has ID of 0.
+	 */
 	public static void bindDefaultFBO() {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 	}
@@ -63,11 +66,11 @@ public class FBO {
 		return frameHeight;
 	}
 
-	public Texture getColourTexture() {
+	public FramebufferTexture getColourTexture() {
 		return colourTexture;
 	}
 
-	public Texture getDepthTexture() {
+	public FramebufferTexture getDepthTexture() {
 		return depthTexture;
 	}
 

@@ -22,6 +22,10 @@ bbrd globeSpecularMap.png globeSpecularMap
 bbrd arrowSpecularMap.png arrowSpecularMap
 bbrd worldTexture.png worldTexture
 
+gmrd a globeMesh
+
+sbtrd download skybox
+
 objmrd table.obj tableMesh
 objmrd room.obj roomMesh
 objmrd globeStand.obj globeStandMesh

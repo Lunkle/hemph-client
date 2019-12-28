@@ -12,6 +12,7 @@ import graphics.light.DirectionalLight;
 import graphics.light.PointLight;
 import graphics.light.SpotLight;
 import graphics.rendering.Camera;
+import graphics.skybox.Skybox;
 import graphics.transformation.ProjectionWrapper;
 import graphics.vao.VAO;
 import input.Input;
@@ -40,6 +41,8 @@ public abstract class GameState {
 	private Octree octree;
 	private Map<VAO, List<GameEntity>> roomMeshEntityMap;
 
+	private List<Skybox> skyboxes;
+
 	public GameState() {
 		camera = new Camera();
 		guis = new ArrayList<>();
@@ -48,6 +51,7 @@ public abstract class GameState {
 		spotLights = new ArrayList<>();
 		octree = new Octree();
 		roomMeshEntityMap = new HashMap<>();
+		skyboxes = new ArrayList<>();
 	}
 
 	public void setGameStateWrapper(GameStateWrapper gameStateWrapper) {
@@ -88,6 +92,14 @@ public abstract class GameState {
 
 	public GameStateWrapper getGameStateWrapper() {
 		return gameStateWrapper;
+	}
+
+	public List<Skybox> getSkyboxes() {
+		return skyboxes;
+	}
+
+	public void addSkybox(Skybox skybox) {
+		skyboxes.add(skybox);
 	}
 
 	protected void addGUI(GUI gui) {
@@ -224,5 +236,4 @@ public abstract class GameState {
 	 * Will be called continually by the logics thread.
 	 */
 	public abstract void update();
-
 }

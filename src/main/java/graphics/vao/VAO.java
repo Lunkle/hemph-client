@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL30;
 
 import loading.loader.InterpretedData;
 import loading.screen.ScreenRawMeshData;
+import loading.skybox.SkyboxMeshRawData;
 import loading.vao.RawMeshData;
 
 /**
@@ -27,8 +28,8 @@ public class VAO implements InterpretedData {
 
 	/**
 	 * Must bind and unbind VAO before attaching VBO/EBOs. The VAO is already
-	 * deafult bound upon creation so do not create any other. VAOs until
-	 * finished attaching VBO and EBOs for the most recently created vao.
+	 * deafult bound upon creation so do not create any other. VAOs until finished
+	 * attaching VBO and EBOs for the most recently created vao.
 	 * 
 	 * @param data
 	 */
@@ -69,8 +70,8 @@ public class VAO implements InterpretedData {
 	}
 
 	/**
-	 * Method for deleting all the attribute objects when program is closing
-	 * Called in Visual class's cleanUp method.
+	 * Method for deleting all the attribute objects when program is closing Called
+	 * in Visual class's cleanUp method.
 	 */
 	public static void cleanUp() {
 		for (int vao : vaos) {
@@ -99,6 +100,16 @@ public class VAO implements InterpretedData {
 		bindVAO();
 		attachVBO(0, 2, data.getQuadVertices());
 		vertexCount = 6;
+		unbindVAO();
+	}
+
+	@Override
+	public void interpret(SkyboxMeshRawData data) {
+		vaoID = GL30.glGenVertexArrays();
+		vaos.add(vaoID);
+		bindVAO();
+		attachVBO(0, 3, data.getBoxVertices());
+		vertexCount = 36;
 		unbindVAO();
 	}
 

@@ -2,6 +2,8 @@ package loading.loader;
 
 import loading.framebuffer.EmptyTextureRawData;
 import loading.screen.ScreenRawMeshData;
+import loading.skybox.SkyboxMeshRawData;
+import loading.skybox.SkyboxTextureRawData;
 import loading.texture.ByteBufferImageRawData;
 import loading.vao.RawMeshData;
 
@@ -14,6 +16,8 @@ import loading.vao.RawMeshData;
  */
 public interface InterpretedData {
 
+	public default void interpret(SkyboxMeshRawData data) {}
+
 	public default void interpret(ByteBufferImageRawData data) {}
 
 	public default void interpret(RawMeshData data) {}
@@ -21,5 +25,7 @@ public interface InterpretedData {
 	public default void interpret(ScreenRawMeshData data) {}
 
 	public default void interpret(EmptyTextureRawData data) {}
+
+	public default void interpret(SkyboxTextureRawData data) {}
 
 }

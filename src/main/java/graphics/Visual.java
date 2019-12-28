@@ -76,7 +76,7 @@ public class Visual {
 		VAO.cleanUp();
 		EBO.cleanUp();
 		VBO.cleanUp();
-		Texture.cleanup();
+		Texture.cleanUp();
 		Callbacks.glfwFreeCallbacks(windowID); // Release window callbacks
 		GLFW.glfwDestroyWindow(windowID); // Release window
 		GLFW.glfwTerminate(); // Terminate GLFW

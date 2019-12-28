@@ -9,10 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import graphics.texture.ModelTexture;
+import graphics.texture.SkyboxTexture;
 import graphics.texture.Texture;
 import graphics.vao.VAO;
+import loading.skybox.SkyboxTextureRawData;
 import loading.texture.ByteBufferImageRawData;
 import loading.vao.OBJMeshRawData;
+import logics.globe.GlobeRawData;
 
 /**
  * Just a clean way to "transport" interpreted data across states. Without this
@@ -66,6 +70,10 @@ public class ResourcePack {
 						data = new ByteBufferImageRawData();
 					} else if (currentLine[0].equals("objmrd")) {
 						data = new OBJMeshRawData();
+					} else if (currentLine[0].equals("gmrd")) {
+						data = new GlobeRawData();
+					} else if (currentLine[0].equals("sbtrd")) {
+						data = new SkyboxTextureRawData();
 					} else {
 						System.out.println("Resource loading file syntax error at '" + filePath + "', line " + lineNumber);
 					}
@@ -102,8 +110,7 @@ public class ResourcePack {
 	}
 
 	/**
-	 * Attempts to fetch an interpreted data type by name from this resource
-	 * pack.
+	 * Attempts to fetch an interpreted data type by name from this resource pack.
 	 * 
 	 * @return an interpreted data if it exists or null if it doesn't
 	 */
@@ -119,10 +126,26 @@ public class ResourcePack {
 		return null;
 	}
 
+	public ModelTexture getModelTexture(String name) {
+		InterpretedData data = interpretedMap.get(name);
+		if (data instanceof ModelTexture) {
+			return (ModelTexture) data;
+		}
+		return null;
+	}
+
 	public VAO getMesh(String name) {
 		InterpretedData data = interpretedMap.get(name);
 		if (data instanceof VAO) {
 			return (VAO) data;
+		}
+		return null;
+	}
+
+	public SkyboxTexture getSkyboxTexture(String name) {
+		InterpretedData data = interpretedMap.get(name);
+		if (data instanceof SkyboxTexture) {
+			return (SkyboxTexture) data;
 		}
 		return null;
 	}

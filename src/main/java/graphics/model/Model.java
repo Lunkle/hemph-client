@@ -1,5 +1,6 @@
 package graphics.model;
 
+import graphics.texture.ModelTexture;
 import graphics.texture.Texture;
 import graphics.vao.VAO;
 
@@ -24,12 +25,12 @@ public class Model {
 		this.mesh = mesh;
 	}
 
-	protected void setDiffuseTexture(Texture diffuseTexture) {
+	protected void setDiffuseTexture(ModelTexture diffuseTexture) {
 		diffuseTexture.setAsDiffuseTexture();
 		this.diffuseTexture = diffuseTexture;
 	}
 
-	protected void setSpecularTexture(Texture specularTexture) {
+	protected void setSpecularTexture(ModelTexture specularTexture) {
 		specularTexture.setAsSpecularTexture();
 		this.specularTexture = specularTexture;
 	}

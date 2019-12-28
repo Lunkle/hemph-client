@@ -16,8 +16,9 @@ public class EntityRenderer {
 	private EntityShader shader;
 	private ProjectionWrapper projectionWrapper;
 
-	public EntityRenderer() {
+	public EntityRenderer(ProjectionWrapper projectionWrapper) {
 		shader = new EntityShader();
+		this.projectionWrapper = projectionWrapper;
 	}
 
 	/**
@@ -35,7 +36,9 @@ public class EntityRenderer {
 		shader.stop();
 	}
 
-	public void render(Map<VAO, List<GameEntity>> meshEntityMap) {
+	public void render(GameState gameState) {
+		loadUniforms(gameState);
+		Map<VAO, List<GameEntity>> meshEntityMap = gameState.getMeshLists();
 		shader.start();
 		shader.loadProjectionMatrix(projectionWrapper.getTransformation().getMatrix());
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -61,10 +64,6 @@ public class EntityRenderer {
 	public static void enableCulling() {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
-	}
-
-	public void setProjectionWrapper(ProjectionWrapper projectionWrapper) {
-		this.projectionWrapper = projectionWrapper;
 	}
 
 	public void cleanUp() {
