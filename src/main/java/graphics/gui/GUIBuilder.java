@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import graphics.texture.ModelTexture;
-import math.Vector2f;
 
 public class GUIBuilder {
 
@@ -28,19 +27,19 @@ public class GUIBuilder {
 		int previousWindowHeight = this.windowHeight;
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
-		for (GUI gui : builtGuis) {
-			// TODO
-			Vector2f size = gui.getSize();
-			float previousWidth = previousWindowWidth * size.x;
-			float previousHeight = previousWindowHeight * size.y;
-			float scale = (float) Math.sqrt((float) (windowWidth * windowHeight) / (float) (previousWindowWidth * previousWindowHeight));
-			Vector2f newSize = new Vector2f(scale * previousWidth / windowWidth, scale * previousHeight / windowHeight);
-
-			Vector2f centerPosition = gui.getCenterPosition();
-			Vector2f newPosition = new Vector2f(centerPosition.x - newSize.x / 2, centerPosition.y - newSize.y / 2);
-
-			gui.setDimensions(newPosition.x, newPosition.y, newSize.x, newSize.y);
-		}
+//		for (GUI gui : builtGuis) {
+//			// TODO
+//			Vector2f size = gui.getSize();
+//			float previousWidth = previousWindowWidth * size.x;
+//			float previousHeight = previousWindowHeight * size.y;
+//			float scale = (float) Math.sqrt((float) (windowWidth * windowHeight) / (float) (previousWindowWidth * previousWindowHeight));
+//			Vector2f newSize = new Vector2f(scale * previousWidth / windowWidth, scale * previousHeight / windowHeight);
+//
+//			Vector2f centerPosition = gui.getCenterPosition();
+//			Vector2f newPosition = new Vector2f(centerPosition.x - newSize.x / 2, centerPosition.y - newSize.y / 2);
+//
+//			gui.setDimensions(newPosition.x, newPosition.y, newSize.x, newSize.y);
+//		}
 	}
 
 	public GUIBuilder newInstance() {

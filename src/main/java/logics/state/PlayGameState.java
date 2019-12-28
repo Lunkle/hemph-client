@@ -70,7 +70,7 @@ public class PlayGameState extends GameState {
 
 	private void positionCamera() {
 		getCamera().setPosition(0, 9f, 1f);
-		getCamera().setRotation(10, 0, 0);
+		getCamera().setRotation(30, 0, 0);
 	}
 
 	private void setMouseGlobeSelectionCommands() {
@@ -175,7 +175,9 @@ public class PlayGameState extends GameState {
 		directionalLight1.setStrength((float) (0.3f + Math.sin(0.02 * GLFW.glfwGetTime())));
 		globeEntity.update();
 		getCamera().update();
-		getCamera().getViewTransformation().setRotation(getCamera().getViewTransformation().getPitch(), getCamera().getViewTransformation().getRoll() + 0.2f, getCamera().getViewTransformation().getYaw());
+		// getCamera().getViewTransformation().setRotation(getCamera().getViewTransformation().getPitch(),
+		// getCamera().getViewTransformation().getRoll() + 0.2f,
+		// getCamera().getViewTransformation().getYaw());
 	}
 
 }
