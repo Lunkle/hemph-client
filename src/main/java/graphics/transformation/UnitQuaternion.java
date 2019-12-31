@@ -42,8 +42,15 @@ public class UnitQuaternion extends Quaternion {
 		setComponents(w, x, y, z);
 	}
 
-	public UnitQuaternion(Quaternion rotQ) {
-		setComponents(rotQ.w, rotQ.x, rotQ.y, rotQ.z);
+	public UnitQuaternion(Quaternion q) {
+		setComponents(q.w, q.x, q.y, q.z);
+	}
+
+	public UnitQuaternion(UnitQuaternion q) {
+		this.w = q.w;
+		this.x = q.x;
+		this.y = q.y;
+		this.z = q.z;
 	}
 
 	/**
@@ -139,7 +146,7 @@ public class UnitQuaternion extends Quaternion {
 	 * does is transforms the current quaternion by the given quaternion. The given
 	 * quaternion is treated as a rotation.
 	 * 
-	 * @param the rotation quaternion
+	 * @param q the rotation quaternion
 	 * @return the resultant quaternion
 	 */
 	public UnitQuaternion multiply(UnitQuaternion q) {

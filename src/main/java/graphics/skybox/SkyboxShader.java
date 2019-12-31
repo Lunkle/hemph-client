@@ -24,11 +24,10 @@ public class SkyboxShader extends ShaderProgram {
 	}
 
 	public void loadViewMatrix(Matrix4f matrix) {
-		Matrix4f newMatrix = new Matrix4f(matrix);
-		newMatrix.m30 = 0;
-		newMatrix.m31 = 0;
-		newMatrix.m32 = 0;
-		super.loadMatrix(location_viewMatrix, newMatrix);
+		matrix.m30 = 0;
+		matrix.m31 = 0;
+		matrix.m32 = 0;
+		super.loadMatrix(location_viewMatrix, matrix);
 	}
 
 	@Override

@@ -21,7 +21,6 @@ public abstract class GameEntity {
 		return worldTransformation;
 	}
 
-//	public abstract WorldTransformation getAbsoluteWorldTransformation();
 	public WorldTransformation getAbsoluteWorldTransformation() {
 		return worldTransformation;
 	}

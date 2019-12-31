@@ -367,8 +367,8 @@ public class Matrix4f extends Matrix implements Serializable {
 	/**
 	 * Multiply the right matrix by the left and return the result.
 	 * 
-	 * @param left  The left source matrix
-	 * @param right The right source matrix
+	 * @param left  the left source matrix
+	 * @param right the right source matrix
 	 * @return the resulting matrix
 	 */
 	public static Matrix4f multiply(Matrix4f left, Matrix4f right) {

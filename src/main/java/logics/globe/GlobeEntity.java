@@ -33,7 +33,8 @@ public class GlobeEntity extends HeaderEntity {
 
 	public void releaseGlobe(Camera camera) {
 		if (!focused) {
-			camera.setTargetPosition(-0.035147168f, 8.040001f, -3.9139676f);
+			camera.setPosition(1.3f, 8.5f, -4.9f, 0.5f);
+			camera.setRotation(new Vector3f(0, 1, 0), 90, 0.5f);
 		}
 		focused = true;
 	}

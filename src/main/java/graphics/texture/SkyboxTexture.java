@@ -10,14 +10,12 @@ import loading.skybox.SkyboxTextureRawData;
 
 public class SkyboxTexture extends Texture {
 
-	private int textureUnit = GL13.GL_TEXTURE0;
-
 	public void setAsFirstTexture() {
-		textureUnit = GL13.GL_TEXTURE0;
+		setTextureUnit(GL13.GL_TEXTURE0);
 	}
 
 	public void setAsSecondTexture() {
-		textureUnit = GL13.GL_TEXTURE1;
+		setTextureUnit(GL13.GL_TEXTURE1);
 	}
 
 	@Override

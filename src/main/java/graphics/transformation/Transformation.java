@@ -24,7 +24,7 @@ public abstract class Transformation {
 	 * Raise the isDirty flag. Whenever a subclass modifies any variables that are
 	 * used in the calculateMatrix() method it should call the raiseFlag() method as
 	 * well so that the instance knows it has to recalculate the matrix before it is
-	 * queried by the get method.
+	 * getted by the get method.
 	 */
 	public final void raiseFlag() {
 		isDirty = true;
@@ -43,7 +43,7 @@ public abstract class Transformation {
 			calculateMatrix();
 			isDirty = false;
 		}
-		return matrix;
+		return new Matrix4f(matrix);
 	}
 
 }
