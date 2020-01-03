@@ -39,6 +39,17 @@ public class BoundingBox extends BoundingRegion {
 		return corners;
 	}
 
+	/**
+	 * Determines if a box contains a specified point.
+	 * 
+	 * @param boxHalfXLength half of x length of the box
+	 * @param boxHalfYLength half of y length of the box
+	 * @param boxHalfZLength half of z length of the box
+	 * @param boxCenter center of the box
+	 * @param point specified point
+	 * @return True if point is in the box, false otherwise.
+	 * @author Donny
+	 */
 	private static boolean pointInsideBox(float boxHalfXLength, float boxHalfYLength, float boxHalfZLength, Vector3f boxCenter, Vector3f point) {
 		boolean xIn = point.x >= boxCenter.x - boxHalfXLength && point.x <= boxCenter.x + boxHalfXLength;
 		boolean yIn = point.y >= boxCenter.y - boxHalfYLength && point.y <= boxCenter.y + boxHalfYLength;
@@ -56,10 +67,35 @@ public class BoundingBox extends BoundingRegion {
 		return region.intersects(this).invert();
 	}
 
+	/**
+	 * Determines how the box intersects with a given box.
+	 * 
+	 * @param box given box
+	 * @return INTERSECTS, CONTAINS, CONTAINED, and NO_INTERSECTION. All are
+	 * from the perspective of the original box.
+	 * @author Jay
+	 */
 	@Override
 	public IntersectionType intersects(BoundingBox box) {
-		// TODO implement bounding box intersection.
-		return IntersectionType.NO_INTERSECTION;
+		boolean xFail = Math.abs(box.center.x - this.center.x) > box.halfXLength + this.halfXLength;
+		boolean yFail = Math.abs(box.center.y - this.center.y) > box.halfYLength + this.halfYLength;
+		boolean zFail = Math.abs(box.center.z - this.center.z) > box.halfZLength + this.halfZLength;
+
+		if (xFail || yFail || zFail) {
+			return IntersectionType.NO_INTERSECTION;
+		}
+
+		Vector3f boxCorner1 = Vector3f.add(box.center, new Vector3f(box.halfXLength, box.halfYLength, box.halfZLength));
+		Vector3f boxCorner2 = Vector3f.add(box.center, new Vector3f(-box.halfXLength, -box.halfYLength, -box.halfZLength));
+		Vector3f thisCorner1 = Vector3f.add(center, new Vector3f(halfXLength, halfYLength, halfZLength));
+		Vector3f thisCorner2 = Vector3f.add(center, new Vector3f(-halfXLength, -halfYLength, -halfZLength));
+
+		if (pointInsideBox(box.halfXLength, box.halfYLength, box.halfZLength, box.center, thisCorner1) && pointInsideBox(box.halfXLength, box.halfYLength, box.halfZLength, box.center, thisCorner2)) {
+			return IntersectionType.CONTAINED;
+		} else if (pointInsideBox(halfXLength, halfYLength, halfZLength, center, boxCorner1) && pointInsideBox(halfXLength, halfYLength, halfZLength, center, boxCorner2)) {
+			return IntersectionType.CONTAINS;
+		}
+		return IntersectionType.INTERSECT;
 	}
 
 	@Override
