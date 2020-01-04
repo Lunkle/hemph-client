@@ -1,10 +1,11 @@
 package logics.state;
 
-import org.lwjgl.glfw.GLFW;
-
 import graphics.gui.GUI;
 import graphics.light.DirectionalLight;
 import graphics.light.PointLight;
+import graphics.light.lightRegulator.LightRegulator;
+import graphics.light.lightRegulator.LightRegulatorFactory;
+import graphics.light.lightRegulator.LightRegulatorType;
 import graphics.model.Model;
 import graphics.model.ModelBuilder;
 import graphics.rendering.Camera.Directions;
@@ -33,8 +34,7 @@ public class PlayGameState extends GameState {
 	private MouseButtonObserver globeReleaseObserver;
 	private MouseMovementObserver globeRotationObserver;
 
-	// Testing varying light cycles, should probably delete later
-	private DirectionalLight directionalLight1;
+	private LightRegulator reg;
 
 	public PlayGameState(ResourcePack resourcePack) {
 		super();
@@ -42,7 +42,7 @@ public class PlayGameState extends GameState {
 	}
 
 	private void setLights() {
-		// DirectionalLight directionalLight1 = new DirectionalLight(0, -1, 1f);
+		DirectionalLight directionalLight1 = new DirectionalLight(0, -1, 1f);
 		directionalLight1 = new DirectionalLight(0, -1, 1f);
 		directionalLight1.setAmbient(0.45f, 0.3f, 0.3f);
 		directionalLight1.setDiffuse(1f, 1f, 1f);
@@ -66,6 +66,9 @@ public class PlayGameState extends GameState {
 		pointLight1.setStrength(10);
 		pointLight1.setConstants(1.8f, 0.7f, 1.0f);
 		addLight(pointLight1);
+
+		LightRegulatorFactory factory = new LightRegulatorFactory();
+		reg = factory.getLightRegulator(directionalLight2, LightRegulatorType.DISCO);
 	}
 
 	private void positionCamera() {
@@ -171,7 +174,7 @@ public class PlayGameState extends GameState {
 
 	@Override
 	public void update() {
-		directionalLight1.setStrength((float) (0.3f + Math.sin(0.02 * GLFW.glfwGetTime())));
+		reg.update();
 		globeEntity.update();
 		getCamera().update();
 	}
