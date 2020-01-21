@@ -8,7 +8,7 @@ public class LightRegulatorFactory {
 		if (type == LightRegulatorType.SEIZURE) {
 			return new SeizureLightRegulator(light);
 		} else if (type == LightRegulatorType.NATURAL) {
-			return new NaturalLightRegulator(light);
+			return new NoneLightRegulator(light);
 		} else if (type == LightRegulatorType.DISCO) {
 			return new DiscoLightRegulator(light);
 		} else if (type == LightRegulatorType.NONE) {
