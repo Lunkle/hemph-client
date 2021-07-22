@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import graphics.transformation.ProjectionWrapper;
 import graphics.vao.VAO;
@@ -45,17 +44,11 @@ public class EntityRenderer {
 		enableCulling();
 		for (VAO mesh : meshEntityMap.keySet()) {
 			mesh.bindVAO();
-			GL20.glEnableVertexAttribArray(0);
-			GL20.glEnableVertexAttribArray(1);
-			GL20.glEnableVertexAttribArray(2);
 			for (GameEntity entity : meshEntityMap.get(mesh)) {
 				entity.getModel().activateTextures();
 				shader.loadModelMatrix(entity.getAbsoluteWorldTransformation().getMatrix());
 				GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 			}
-			GL20.glDisableVertexAttribArray(0);
-			GL20.glDisableVertexAttribArray(1);
-			GL20.glDisableVertexAttribArray(2);
 			mesh.unbindVAO();
 		}
 		shader.stop();

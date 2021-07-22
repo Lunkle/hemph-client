@@ -44,6 +44,7 @@ public class VAO implements InterpretedData {
 		vbo.bindVBO();
 		vbo.loadData(data);
 		GL20.glVertexAttribPointer(attributeIndex, dimensions, GL11.GL_FLOAT, false, 0, 0);
+		GL20.glEnableVertexAttribArray(attributeIndex);
 		vbo.unbindVBO();
 	}
 
