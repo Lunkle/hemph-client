@@ -1,4 +1,13 @@
-.classpath
-.settings/
-target/
-bin/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+bin/*
+target/*
+/bin/
+*.classpath
+*.project
