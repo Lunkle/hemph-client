@@ -8,7 +8,7 @@ uniform sampler2D textureSampler;
 
 void main() {
           
-    vec2 textureOffset = 1.0 / textureSize(image, 0); // gets size of single texel
+    vec2 textureOffset = 1.0 / textureSize(textureSampler, 0); // gets size of single texel
     vec3 result = texture(textureSampler, fragmentTextureCoordinates).rgb * weight[0]; // current fragment's contribution
     if(horizontal)
     {

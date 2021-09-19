@@ -15,28 +15,28 @@ import math.Vector3f;
 
 public abstract class ShaderProgram {
 
-	private int programID;
-	private int vertexShaderID;
-	private int fragmentShaderID;
+	private int programId;
+	private int vertexShaderId;
+	private int fragmentShaderId;
 
 	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
 	public ShaderProgram(String vertexFile, String fragmentFile) {
-		programID = GL20.glCreateProgram();
-		vertexShaderID = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
-		fragmentShaderID = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
-		GL20.glAttachShader(programID, vertexShaderID);
-		GL20.glAttachShader(programID, fragmentShaderID);
-		GL20.glLinkProgram(programID);
-		GL20.glDetachShader(programID, vertexShaderID);
-		GL20.glDetachShader(programID, fragmentShaderID);
-		GL20.glDeleteShader(vertexShaderID);
-		GL20.glDeleteShader(fragmentShaderID);
-		GL20.glValidateProgram(programID);
+		programId = GL20.glCreateProgram();
+		vertexShaderId = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
+		fragmentShaderId = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
+		GL20.glAttachShader(programId, vertexShaderId);
+		GL20.glAttachShader(programId, fragmentShaderId);
+		GL20.glLinkProgram(programId);
+		GL20.glDetachShader(programId, vertexShaderId);
+		GL20.glDetachShader(programId, fragmentShaderId);
+		GL20.glDeleteShader(vertexShaderId);
+		GL20.glDeleteShader(fragmentShaderId);
+		GL20.glValidateProgram(programId);
 	}
 
 	public void start() {
-		GL20.glUseProgram(programID);
+		GL20.glUseProgram(programId);
 	}
 
 	public void stop() {
@@ -45,7 +45,7 @@ public abstract class ShaderProgram {
 
 	public void cleanUp() {
 		stop();
-		GL20.glDeleteProgram(programID);
+		GL20.glDeleteProgram(programId);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public abstract class ShaderProgram {
 	protected abstract void getAllUniformLocations();
 
 	protected int getUniformLocation(String uniformName) {
-		return GL20.glGetUniformLocation(programID, uniformName);
+		return GL20.glGetUniformLocation(programId, uniformName);
 	}
 
 	protected void loadInt(int location, int value) {
