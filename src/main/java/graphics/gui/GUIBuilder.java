@@ -23,8 +23,8 @@ public class GUIBuilder {
 	}
 
 	public void loadWindowDimensions(int windowWidth, int windowHeight) {
-		int previousWindowWidth = this.windowWidth;
-		int previousWindowHeight = this.windowHeight;
+//		int previousWindowWidth = this.windowWidth;
+//		int previousWindowHeight = this.windowHeight;
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
 //		for (GUI gui : builtGuis) {

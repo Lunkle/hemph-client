@@ -11,3 +11,5 @@ target/*
 /bin/
 *.classpath
 *.project
+/target/
+.settings/org.eclipse.jdt.core.prefs

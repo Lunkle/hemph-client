@@ -236,4 +236,8 @@ public abstract class GameState {
 	 * Will be called continually by the logics thread.
 	 */
 	public abstract void update();
+
+	public Octree getOctree() {
+		return octree;
+	}
 }
